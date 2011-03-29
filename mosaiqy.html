@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Mosaiqy: a nice jQuery plugin</title>
+
+  <!-- jquery -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"> </script>
+  <script>document.documentElement.className = 'js'</script>
+  <link rel="stylesheet" media="screen" href="mosaiqy.css" />
+  
+
+</head>
+
+<body>
+
+    <div class="mosaiqy">
+        <ul>
+            <li>
+                <figure><a href="#"><img src="thumb/1.jpg">
+                    <figcaption>a</figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/2.jpg">
+                    <figcaption></figcaption></a>           
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/3.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/4.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/5.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/6.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/7.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/8.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/3.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/4.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/5.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+            <li>
+                <figure><a href="#"><img src="thumb/6.jpg">
+                    <figcaption></figcaption></a>            
+                </figure>
+            </li>
+        </ul>
+     </div> 
+     
+    <script src="mosaiqy.js" id="mosaiqy_tpl">
+        <figure><a href="#"><img src="${img}">
+          <figcaption>${desc}</figcaption></a>            
+        </figure>        
+    </script>
+    
+    <script type="text/x-mosaiqy-template" id="pmosaiqy_tpl">
+        <figure><a href="#"><img src="${img}">
+          <figcaption>${desc}</figcaption></a>            
+        </figure>
+    </script>
+     
+    <script>
+    $('.mosaiqy').mosaiqy({
+        template  : '#mosaiqy_tpl'
+    });     
+    </script>
+
+     
+</body>
+</html>

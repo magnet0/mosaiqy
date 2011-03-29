@@ -1,0 +1,73 @@
+.mosaiqy {
+    overflow        : hidden;   
+    position        : relative;
+    z-index         : 1;
+}
+
+.mosaiqy * {
+    margin      : 0;
+    padding     : 0;
+}
+
+
+.mosaiqy ul {
+    list-style      : none;
+    padding         : 0;
+    margin          : 0;    
+}
+
+.js .mosaiqy li {
+    position        : absolute;
+    z-index         : 1;
+    display         : block;
+    padding         : 2px;
+}
+
+.mosaiqy figure {  
+    display         : block;
+}
+
+.mosaiqy img {
+    display         : block;
+    border          : 0;
+    float           : left;
+
+}
+
+.js .mosaiqy img { display: none; }
+
+.mosaiqy figcaption {
+    display         : none;    
+    position        : absolute;
+    z-index         : 2;
+    top             : 0;
+    left            : 0;
+    background      : rgba(68,167,203, 0.6);      
+    height          : 100%;
+    width           : 100%;
+}
+
+.mosaiqy a:hover figcaption {
+    display         : block;    
+}
+
+.mosaiqy .GPUtransition {
+    -moz-transition-property     : top, left;
+    -o-transition-property       : top, left;
+    -webkit-transition-property  : top, left;
+    transition-property          : top, left;
+    
+    -moz-transition-timing-function     : ease-out;
+    -o-transition-timing-function       : ease-out;
+    -webkit-transition-timing-function  : ease-out;
+    -transition-timing-function         : ease-out;
+    transition-timing-function          : ease-out;
+}
+
+/* *  * */
+.mosaiqy li,
+.mosaiqy img {
+    width           : 200px;
+    height          : 135px;
+}
+
