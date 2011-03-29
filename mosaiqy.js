@@ -31,15 +31,14 @@
      * property { Bool } isEnabled True if acceleration is available, false otherwise.
      * property { String } transitionEnd Event available on current browser.
      */
-    GPUAcceleration = (function() {
+    GPUAcceleration = (function($b) {
         var div         = document.createElement('div'),
             style       = '',
             listProps   = {
-                msie    : '-ms-transition ',
+                msie    : '-ms-transition ', /* Yes, I laughed so much here... */
                 opera   : '-o-transition',
                 mozilla : '-moz-transition',
-                webkit  : '-webkit-transition',
-                css3    : 'transition'
+                webkit  : '-webkit-transition'
             },
             vendorProp,
             computedStyle   = function(s) {
@@ -47,30 +46,26 @@
                     return hyphen.toUpperCase() })
             };
             
-        for (p in listProps) { style += [listProps[p], ':top 1s ease;'].join('') }
-        for (p in $.browser) {
-            if (p in listProps) {
-                vendorProp = listProps[p]; break;
-            }
-        }
+        for (p in listProps) { style += [listProps[p], ':top 1s ease;'].join(''); }
+        for (p in $b) { if (p in listProps) { vendorProp = listProps[p]; break; } }
         div.setAttribute('style', style);
         appDebug("info", "GPU Acceleration Detection:");
         
         return {
             isEnabled           : (function() {
-                appDebug("log", "CSS3 transition (standard event):", !!div.style[listProps.css3]);
+                appDebug("log", "CSS3 transition (standard event):", !!div.style.transition);
                 appDebug("log", "Vendor transition:", !!div.style[computedStyle(vendorProp)]);
-                return !!(div.style[listProps.css3] || div.style[computedStyle(vendorProp)]);
+                return !!(div.style.transition || div.style[computedStyle(vendorProp)]);
             }()),
             transitionEnd   : (function() {
                 var evt = 'transitionend';
-                if ($.browser.opera) { evt = 'oTransitionEnd' }
-                if ($.browser.webkit) { evt = 'webkitTransitionEnd' }
+                if ($b) { evt = 'oTransitionEnd';      }
+                if ($b) { evt = 'webkitTransitionEnd'; }
                 appDebug("log", "Transitionend event: %s", evt);
                 return evt;
             }())
         }
-    }()),
+    }($.browser)),
 
     /**
      * @name Mosaiqy
@@ -215,13 +210,13 @@
                 _points.push({ prop: 'top', selector : s, node : n,
                     position : {
                         top     : -thumb.h,
-                        left    : (thumb.w * n)
+                        left    : thumb.w * n
                     }
                 });
                 _points.push({ prop: 'top', selector : s, node : _s.cols * (_s.rows - 1) + n,
                     position : {
                         top     : thumb.h * _s.rows,
-                        left    : (thumb.w * n)
+                        left    : thumb.w * n
                     }
                 });
             }
@@ -234,14 +229,14 @@
                     
                 _points.push({ prop: 'left', selector : s, node : c,
                     position : {
-                        top     : (thumb.h * n),
+                        top     : thumb.h * n,
                         left    : -thumb.w
                     }
                 });
                 _points.push({ prop: 'left', selector : s, node : c += _s.cols,
                     position : {
-                        top     : (thumb.h * n),
-                        left    : (thumb.w * _s.cols)
+                        top     : thumb.h * n,
+                        left    : thumb.w * _s.cols
                     }
                 });
             }
@@ -454,10 +449,10 @@
                         var
                         imageDfd    = $.Deferred(),
                         /**
-                        * This interval limits the maximum amount of time (e.g. too
-                        * much of latency, network issues) before triggering the error
-                        * handler for a given image. The interval is then unset on then()
-                        * branch of deferred execution.
+                        * This interval limits the maximum amount of time (e.g. network
+                        * excessive latency or failure) before triggering the error
+                        * handler for a given image. The interval is then unset when
+                        * the image has loaded or if error event has been triggered.
                         */
                         intv  = setTimeout(function() {  $(i).trigger('error.mosaiqy') }, timeout);
                         
