@@ -33,21 +33,26 @@
      */
     GPUAcceleration = (function($b) {
         var div         = document.createElement('div'),
-            style       = '',
             listProps   = {
                 msie    : '-ms-transition ', /* Yes, I laughed so much here... */
                 opera   : '-o-transition',
                 mozilla : '-moz-transition',
                 webkit  : '-webkit-transition'
             },
+            style       = 'transition :top 1s ease;',
             vendorProp,
             computedStyle   = function(s) {
                 return s.replace(/\-(\w)/g, function(m, hyphen) {
                     return hyphen.toUpperCase() })
             };
             
-        for (p in listProps) { style += [listProps[p], ':top 1s ease;'].join(''); }
-        for (p in $b) { if (p in listProps) { vendorProp = listProps[p]; break; } }
+        for (p in $b) {
+            if (p in listProps) {
+                vendorProp  = listProps[p];
+                style       += vendorProp + ':top 1s ease;';
+                break;
+            }
+        }
         div.setAttribute('style', style);
         appDebug("info", "GPU Acceleration Detection:");
         
@@ -59,15 +64,18 @@
             }()),
             transitionEnd   : (function() {
                 var evt = 'transitionend';
-                if ($b) { evt = 'oTransitionEnd';      }
-                if ($b) { evt = 'webkitTransitionEnd'; }
+                if ($b.opera)  { evt = 'oTransitionEnd';      }
+                if ($b.webkit) { evt = 'webkitTransitionEnd'; }
                 appDebug("log", "Transitionend event: %s", evt);
                 return evt;
             }())
         }
     }($.browser)),
-
-    /**
+    
+    
+    
+    
+     /**
      * @name Mosaiqy
      * @constructor
      * @namespace
@@ -349,7 +357,7 @@
         
         /** @scope Mosaiqy */
         return {
-            init        : function(cnt, options) {
+            init    : function(cnt, options) {
                 
                 _s = $.extend(_s, options);
                 
@@ -447,14 +455,14 @@
                 $.when(
                     (function asyncImageLoader() {
                         var
-                        imageDfd    = $.Deferred(),
                         /**
                         * This interval limits the maximum amount of time (e.g. network
                         * excessive latency or failure) before triggering the error
                         * handler for a given image. The interval is then unset when
                         * the image has loaded or if error event has been triggered.
                         */
-                        intv  = setTimeout(function() {  $(i).trigger('error.mosaiqy') }, timeout);
+                        intv        = setTimeout(function() {  $(i).trigger('error.mosaiqy') }, timeout),
+                        imageDfd    = $.Deferred();
                         
                         /* single image main events */
                         $(i).one('load.mosaiqy', function() {
@@ -490,7 +498,6 @@
         }
         
         return dfd.promise();
-
     };
     
     /**
