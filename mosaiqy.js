@@ -31,26 +31,28 @@
      * property { Bool } isEnabled True if acceleration is available, false otherwise.
      * property { String } transitionEnd Event available on current browser.
      */
-    GPUAcceleration = (function($b) {
+    GPUAcceleration = (function(ua) {
         var div         = document.createElement('div'),
-            listProps   = {
-                msie    : '-ms-transition ', /* Yes, I laughed so much here... */
-                opera   : '-o-transition',
-                mozilla : '-moz-transition',
-                webkit  : '-webkit-transition'
-            },
-            style       = 'transition :top 1s ease;',
-            vendorProp,
-            computedStyle   = function(s) {
+            compStyle   = function(s) {
                 return s.replace(/\-(\w)/g, function(m, hyphen) {
                     return hyphen.toUpperCase() })
-            };
-            
-        for (p in $b) {
-            if (p in listProps) {
-                vendorProp  = listProps[p];
-                style       += vendorProp + ':top 1s ease;';
-                break;
+            },
+            list = {
+                msie    : '-ms-transition',     /* Yes, I laughed so much here. */
+                opera   : '-o-transition',
+                mozilla : '-moz-transition',
+                webkit  : '-webkit-transition',
+                css3    : 'transition'
+            },
+            style,
+            value   = ': top 1s ease;',
+            vendor  = list.css3;
+        
+        
+        for (p in list) {
+            if (list.hasOwnProperty(p)) {
+                style   = [style,  list[p] + value].join('');
+                vendor  = (ua[p])? list[p] : vendor;
             }
         }
         div.setAttribute('style', style);
@@ -59,13 +61,13 @@
         return {
             isEnabled           : (function() {
                 appDebug("log", "CSS3 transition (standard event):", !!div.style.transition);
-                appDebug("log", "Vendor transition:", !!div.style[computedStyle(vendorProp)]);
-                return !!(div.style.transition || div.style[computedStyle(vendorProp)]);
+                appDebug("log", "Vendor transition:", vendor, !!div.style[compStyle(vendor)]);
+                return !!(div.style.transition || div.style[compStyle(vendor)]);
             }()),
             transitionEnd   : (function() {
                 var evt = 'transitionend';
-                if ($b.opera)  { evt = 'oTransitionEnd';      }
-                if ($b.webkit) { evt = 'webkitTransitionEnd'; }
+                if (ua.opera)  { evt = 'oTransitionEnd';      }
+                if (ua.webkit) { evt = 'webkitTransitionEnd'; }
                 appDebug("log", "Transitionend event: %s", evt);
                 return evt;
             }())
