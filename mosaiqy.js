@@ -107,7 +107,9 @@
         },
         
         _cnt, _li, _img,
+        
         _points             = [],
+        _tplCache           = {},
         _animationPaused    = false,
         _dataIndex          = _s.dataIndex || 0,
         
@@ -290,14 +292,17 @@
                  * Generate template to append, replacing object placeholders
                  * with user data
                  */
-                tpl = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
-                    if (typeof _s.data[_dataIndex][key] === 'undefined') {
-                        //appDebug("warn", 'undefined template key `%s` at index %i', key, _dataIndex);
-                        //appDebug("warn", _s.data[_dataIndex]);
-                        return key;
-                    }
-                    return _s.data[_dataIndex][key];
-                });
+                if (typeof _tplCache[_dataIndex] === 'undefined') {
+                    _tplCache[_dataIndex] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
+                        if (typeof _s.data[_dataIndex][key] === 'undefined') {
+                            //appDebug("warn", 'undefined template key `%s` at index %i', key, _dataIndex);
+                            //appDebug("warn", _s.data[_dataIndex]);
+                            return key;
+                        }
+                        return _s.data[_dataIndex][key];
+                    });
+                }
+                tpl = _tplCache[_dataIndex];
                 
                 /**
                  * rnd is in the range [0 .. _points.length - 1]
@@ -429,6 +434,7 @@
             loaded      = [],
             failed      = [],
             timeout     = 4819.78,
+            /* waiting about 5 seconds before discarding image */
             
             /**
              * Check wheter to resolve or reject main deferred object
