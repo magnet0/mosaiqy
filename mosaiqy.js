@@ -21,60 +21,58 @@
             } 
         }
     },
-
+    
     /**
      * @function
-     * @description
-     * Detect if GPU acceleration is enabled for transitions
-     *
-     * @returns 
+     * @returns
      * property { Bool } isEnabled True if acceleration is available, false otherwise.
+     * property { String } vendorTransition Vendor specific property.
+     * property { String } vendorTransform Vendor specific property.
      * property { String } transitionEnd Event available on current browser.
+     *
+     * @description
+     * Detect if GPU acceleration is enabled for transitions.
+     * code gist mantained at https://gist.github.com/892739
+     *
      */
     GPUAcceleration = (function(ua) {
-        var div         = document.createElement('div'),
-            compStyle   = function(s) {
-                return s.replace(/\-(\w)/g, function(m, hyphen) {
-                    return hyphen.toUpperCase() })
+    
+        var div = document.createElement('div'),
+            hyp = function(p) {
+                return p.replace(/([A-Z])/g, function(match, upper) {
+                    return "-" + upper.toLowerCase();
+                })
             },
-            list = {
-                msie    : '-ms-transition',     /* Yes, I laughed so much here. */
-                opera   : '-o-transition',
-                mozilla : '-moz-transition',
-                webkit  : '-webkit-transition',
-                css3    : 'transition'
-            },
-            style,
-            value   = ': top 1s ease;',
-            vendor  = list.css3;
-        
-        
-        for (p in list) {
-            if (list.hasOwnProperty(p)) {
-                style   = [style,  list[p] + value].join('');
-                vendor  = (ua[p])? list[p] : vendor;
+            v = { tt : 'Transition', tf : 'Transform' },
+            uaList = {
+                msie    : 'Ms',
+                opera   : 'O',
+                mozilla : 'Moz',
+                webkit  : 'Webkit'
+            };
+            
+        for (b in uaList) {
+            if (uaList.hasOwnProperty(b)) {
+                if (ua[b]) {
+                    v.tt = uaList[b] + 'Transition';
+                    v.tf = uaList[b] + 'Transform';
+                    break;
+                }
             }
         }
-        div.setAttribute('style', style);
-        appDebug("info", "GPU Acceleration Detection:");
         
-        return {
-            isEnabled           : (function() {
-                appDebug("log", "CSS3 transition (standard event):", !!div.style.transition);
-                appDebug("log", "Vendor transition:", vendor, !!div.style[compStyle(vendor)]);
-                return !!(div.style.transition || div.style[compStyle(vendor)]);
-            }()),
-            transitionEnd   : (function() {
-                var evt = 'transitionend';
-                if (ua.opera)  { evt = 'oTransitionEnd';      }
-                if (ua.webkit) { evt = 'webkitTransitionEnd'; }
-                appDebug("log", "Transitionend event: %s", evt);
-                return evt;
+       return {
+            isEnabled           : (function(s) {
+                return !!((s.transition || v.tt in s) && (s.transform || v.tf in s))
+                       ||(ua.opera && parseFloat(ua.version) > 10.49);
+            }(div.style)),
+            vendorTransition    : hyp(v.tt),
+            vendorTransform     : hyp(v.tf),
+            transitionEnd       : (function() {
+                return (ua.opera)? 'oTransitionEnd' : ((ua.webkit)? 'webkitTransitionEnd' : 'transitionend');
             }())
-        }
-    }($.browser)),
-    
-    
+       }
+   }($.browser));
     
     
      /**
