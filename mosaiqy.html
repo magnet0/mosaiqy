@@ -5,16 +5,14 @@
   <title>Mosaiqy: a nice jQuery plugin</title>
 
   <!-- jquery -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"> </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"> </script>
   <script>document.documentElement.className = 'js'</script>
   <link rel="stylesheet" media="screen" href="mosaiqy.css" />
-  
-
 </head>
 
 <body>
 
-    <div class="mosaiqy">
+    <div class="loading mosaiqy">
         <ul>
             <li>
                 <figure><a href="#"><img src="thumb/1.jpg">
@@ -80,20 +78,58 @@
      </div> 
      
     <script src="mosaiqy.js" id="mosaiqy_tpl">
-        <figure><a href="#"><img src="${img}">
+        <figure><a href="#"><img src="thumb/${img}">
           <figcaption>${desc}</figcaption></a>            
         </figure>        
-    </script>
-    
-    <script type="text/x-mosaiqy-template" id="pmosaiqy_tpl">
-        <figure><a href="#"><img src="${img}">
-          <figcaption>${desc}</figcaption></a>            
-        </figure>
     </script>
      
     <script>
     $('.mosaiqy').mosaiqy({
-        template  : '#mosaiqy_tpl'
+        template  : '#mosaiqy_tpl',
+        loop      : false,
+        data      : [
+            {
+                img     : "1.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            }
+            ,
+            {
+                img     : "2.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            },
+            {
+                img     : "3.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            }/*,
+            {
+                img     : "4.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            },
+            {
+                img     : "5.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            },
+            {
+                img     : "6.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            },
+            {
+                img     : "7.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            },
+            {
+                img     : "8.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            },
+            {
+                img     : "9.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            },
+            {
+                img     : "10.jpg",
+                desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."
+            }*/
+        ]
     });     
     </script>
 

@@ -66,7 +66,7 @@
                 return !!((s.transition || v.tt in s) && (s.transform || v.tf in s))
                        ||(ua.opera && parseFloat(ua.version) > 10.49);
             }(div.style)),
-            vendorTransition    : hyp(v.tt),
+            vendorTransition    : hyp(v.tt) + '-duration',
             vendorTransform     : hyp(v.tf),
             transitionEnd       : (function() {
                 return (ua.opera)? 'oTransitionEnd' : ((ua.webkit)? 'webkitTransitionEnd' : 'transitionend');
@@ -97,8 +97,8 @@
         
         _s = {
             animationDelay      : 3000,
+            animationSpeed      : 2000,
             cols                : 4,
-            data                : [{ foo: 'bar' }],        /* array of objects */
             dataIndex           : 0,
             loop                : true,
             rows                : 3,
@@ -108,11 +108,13 @@
         
         _cnt, _li, _img,
         
+        _G                  = GPUAcceleration;
         _points             = [],
         _tplCache           = {},
         _animationPaused    = false,
         _dataIndex          = _s.dataIndex || 0,
-        
+        _amountX            = 0,
+        _amountY            = 0,
         
         /**
          * @private
@@ -125,7 +127,10 @@
          */
         _setInitialImageCoords  = function() {
             var li          = _li.eq(0),
-                thumbsize   = { w : li.outerWidth(true), h : li.outerHeight(true) };
+                thumbSize   = { w : li.outerWidth(true), h : li.outerHeight(true) };
+            
+            _amountX    = thumbSize.w;
+            _amountY    = thumbSize.h;
             
             /**
              * defining li X,Y offset
@@ -134,18 +139,18 @@
              */
             _li.each(function(i, el) {
                 $(el).css({
-                    top     : thumbsize.h * (~~(i/_s.cols)),
-                    left    : thumbsize.w * (i%_s.cols)
+                    top     : thumbSize.h * (~~(i/_s.cols)),
+                    left    : thumbSize.w * (i%_s.cols)
                 });
             });
             
             /* defining container size */
             _cnt.css({
-                height  : thumbsize.h * _s.rows,
-                width   : thumbsize.w * _s.cols
+                height  : thumbSize.h * _s.rows,
+                width   : thumbSize.w * _s.cols
             });
             
-            return thumbsize;
+            return thumbSize;
         },
     
         /**
@@ -250,6 +255,8 @@
                     }
                 });
             }
+            
+            _points[_points.length - 1].node -= 1;
             appDebug("groupCollapsed", 'points information');
             appDebug(($.browser.mozilla)?"table":"dir", _points);
             appDebug("groupEnd");
@@ -262,8 +269,7 @@
          */
         _animate = function() {
             
-            var rnd, tpl,
-                placeholder, node,
+            var rnd, tpl, referral, node, animatedSelection,
                 continueAnimation = function(inc) {
                     setTimeout(function() {
                         if (inc) {  _dataIndex += 1; }
@@ -283,14 +289,16 @@
                     if (_s.loop) {
                         _dataIndex = 0;
                     }
-                    else return false;
+                    else {
+                        appDebug("groupEnd", 'loop end');
+                        return false;
+                    }
                 }
                 
                 appDebug("info", 'Dataindex is', _dataIndex);
                 
                 /**
-                 * Generate template to append, replacing object placeholders
-                 * with user data
+                 * Generate template to append with user data
                  */
                 if (typeof _tplCache[_dataIndex] === 'undefined') {
                     _tplCache[_dataIndex] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
@@ -311,24 +319,29 @@
                  */
                 rnd = ~~(Math.random() * _points.length);
                 
+                
+                animatedSelection = _cnt.find(_points[rnd].selector);
                 /**
                  * append new <li> element
                  * if the random entry point is the last one then we append the
                  * new node after the last <li>, otherwise we place it before.
                  */
-                appDebug("info", "Random position is %d and his placeholder is node %d", _points[rnd].node, rnd);
-                placeholder = _li.eq(_points[rnd].node);
+                referral    = _cnt.find('li').eq(_points[rnd].node);
                 node        = (rnd < _points.length - 1)?
-                      $('<li />').insertBefore(placeholder)
-                    : $('<li />').insertAfter(placeholder);
+                      $('<li />').insertBefore(referral)
+                    : $('<li />').insertAfter(referral);
                     
-                $(tpl).appendTo(node);
+                $(tpl).appendTo(node.css(_points[rnd].position));
+                appDebug("info", "Random position is %d and its referral is node", rnd, referral);
+                
                 
                 
                 /**
                  * find and preload template images 
                  */
-                $.when(node.find('img').mosaiqyImagesLoad())
+                $.when(node.find('img:first-child').mosaiqyImagesLoad(
+                        function() {  _cnt.width(_cnt.width()); }
+                    ))
                     .fail(function() {
                         /**
                          * No image/s can be loaded. Just increase the data index then
@@ -339,17 +352,69 @@
                         //continueAnimation(true);
                     })
                     .done(function() {
-                        appDebug("groupEnd");
                         
-                        /* animation */
-                        if (GPUAcceleration.isEnabled) {
-                         
+                        var verse = _points[rnd].prop, css3,
+                            animatedQueue, animatedNodes, removedNode;
+                        
+                        /**
+                         * select nodes to move, then reverse the resulting collection
+                         * if random point is odd (as described in _getPoints method
+                         * description
+                         * */
+                        removedNode = (rnd & 1)
+                            ? animatedSelection.first()
+                            : animatedSelection.last();
+                        
+                        /**
+                         * add new node into animatedNodes collection and change
+                         * previous collection
+                         */
+                        animatedNodes = animatedSelection.add(node)
+                        appDebug("log", 'Queue:', animatedQueue);
+                        appDebug("log", 'Animated Nodes:', animatedNodes);
+                        
+                        /* If CSS3 transition and trasform are enabled then we use them */
+                        if (_G.isEnabled) {
+                            
+                            css3    = {
+                                duration    : (_s.animationSpeed / 1000) + 's',
+                                amount      : (verse === 'left')? _amountX : _amountY,
+                                direction   : (verse === 'left')? 'translateX' : 'translateY'
+                            }
+                            if (rnd & 1) { css3.amount = -css3.amount; }
+                            
+                            /* set translation function */
+                            css3.translateFunc = [css3.direction, '(', css3.amount, 'px)'].join('');
+                          
+                            animatedQueue = animatedNodes.length;
+                            animatedNodes.each(function() {
+                                $(this)
+                                /* add transitionend event handler */
+                                .bind(_G.transitionEnd, function() {
+                                    var $this       = $(this),
+                                        position    = $this.position();
+                                    
+                                    $this.css(verse, position[verse] + css3.amount)
+                                         .css(_G.vendorTransition, '')
+                                         .css(_G.vendorTransform, '')
+                                         .attr('data-ok', 'ok')
+                                         
+                                    
+                                    if (--animatedQueue === 0) {
+                                        //TODO updateOrderNode()
+                                        removedNode.remove();
+                                        //continueAnimation(true);
+                                    }
+                                })
+                                .css(_G.vendorTransition, css3.duration)
+                                .css(_G.vendorTransform,  css3.translateFunc);
+                            });
                         }
                         else {
                         
                         }
                         
-                        
+                        appDebug("groupEnd");
                         //continueAnimation(true);
                     });
             }
@@ -385,6 +450,7 @@
                 _li     = cnt.find('li');
                 _img    = cnt.find('img');
                    
+                               
                 /* define image position and retrieve entry points */
                 _getPoints(_setInitialImageCoords());
                 
@@ -401,7 +467,9 @@
                 )
                 .done(function() {
                     appDebug("info", 'All images have been successfully loaded');
-                    _animate();
+                    setTimeout(function() {
+                        _cnt.removeClass('loading'); _animate();
+                    }, _s.animationDelay);
                 })
                 .fail(function() {
                     appDebug("warn", 'One or more image have not been loaded');
@@ -506,13 +574,6 @@
         return dfd.promise();
     };
     
-    /**
-     * @class 
-     * @memberOf sub$
-     * @namespace sub$.fn
-     */
-    sub$.fn.mosaiqyReverseCollection = [].reverse; 
-    /* or function() { return $(this.get().reverse()); } */
     
     /**
      * @class 
