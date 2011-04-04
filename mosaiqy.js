@@ -72,7 +72,7 @@
                 return (ua.opera)? 'oTransitionEnd' : ((ua.webkit)? 'webkitTransitionEnd' : 'transitionend');
             }())
        }
-   }($.browser));
+   }($.browser)),
     
     
      /**
