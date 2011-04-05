@@ -337,7 +337,7 @@
                 /**
                  * find and preload template images 
                  */
-                $.when(node.find('img:first-child').mosaiqyImagesLoad(
+                $.when(node.find('img').mosaiqyImagesLoad(
                         function() {
                             /**
                              * Forcing a useless reflow to see CSS3 animation properly
@@ -383,7 +383,6 @@
                          */
                         animatedNodes.css3animate(move , _s.animationSpeed,
                             function() {
-                                var nnsel;
                                 
                                 if (--animatedQueue) return;
                                 
@@ -411,7 +410,7 @@
                                             curpos  = _li.index(node),
                                             shfpos  = (rnd & 1)
                                                 ? -(_s.cols - ((!!i)? 1 : 0))
-                                                : (_s.cols + ((!!i)? 1 : 0))
+                                                : +(_s.cols + ((!!i)? 1 : 0))
                                                 
                                             newpos  = curpos + shfpos;
                                         
@@ -546,8 +545,8 @@
                     (function asyncImageLoader() {
                         var
                         /**
-                        * This interval limits the maximum amount of time (e.g. network
-                        * excessive latency or failure) before triggering the error
+                        * This interval bounds the maximum amount of time (e.g. network
+                        * excessive latency or failure, 404) before triggering the error
                         * handler for a given image. The interval is then unset when
                         * the image has loaded or if error event has been triggered.
                         */
