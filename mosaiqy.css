@@ -1,4 +1,4 @@
-.mosaiqy {
+.mosaiqy { 
     overflow        : hidden;
     position        : relative;
     z-index         : 1;
@@ -30,12 +30,12 @@
 .mosaiqy img {
     display         : block;
     border          : 0;
-    float           : left;
-
 }
 
-.js .mosaiqy img { display: block; }
-.js .loading.mosaiqy img { display: none; }
+
+.js .loading.mosaiqy img {
+    display           : none;
+}
 
 
 .mosaiqy figcaption {
@@ -44,7 +44,7 @@
     z-index         : 2;
     top             : 0;
     left            : 0;
-    background      : rgba(68,167,203, 0.6);      
+    background      : rgba(245, 245, 245, 0.3);      
     height          : 100%;
     width           : 100%;
 }
@@ -53,20 +53,21 @@
     display         : block;    
 }
 
-.mosaiqy .CSS3transition {
-      -moz-transition-property              : top, left;
+.mosaiqy li,
+.mosaiqy li img {
+      -moz-transition-property              : all;
       -moz-transition-timing-function       : ease-out;
       -moz-transition-delay                 : 0s;
       
-      -o-transition-property                : top, left;
+      -o-transition-property                : all;
       -o-transition-timing-function         : ease-out;
       -o-transition-delay                   : 0s;
       
-      -webkit-transition-property           : top, left;
+      -webkit-transition-property           : all;
       -webkit-transition-timing-function    : ease-out;
       -webkit-transition-delay              : 0s;
       
-      transition-property                   : top, left;
+      transition-property                   : all;
       transition-timing-function            : ease-out;
       transition-delay                      : 0s;
 }

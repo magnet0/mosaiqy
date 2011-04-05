@@ -43,7 +43,7 @@
                     return "-" + upper.toLowerCase();
                 })
             },
-            v = { tt : 'Transition', tf : 'Transform' },
+            v   = 'Transition',
             uaList = {
                 msie    : 'Ms',
                 opera   : 'O',
@@ -54,8 +54,7 @@
         for (b in uaList) {
             if (uaList.hasOwnProperty(b)) {
                 if (ua[b]) {
-                    v.tt = uaList[b] + 'Transition';
-                    v.tf = uaList[b] + 'Transform';
+                    v = uaList[b] + 'Transition';
                     break;
                 }
             }
@@ -63,11 +62,9 @@
         
        return {
             isEnabled           : (function(s) {
-                return !!((s.transition || v.tt in s) && (s.transform || v.tf in s))
-                       ||(ua.opera && parseFloat(ua.version) > 10.49);
+                return !!(s.transition || v in s) || (ua.opera && parseFloat(ua.version) > 10.49);
             }(div.style)),
-            vendorTransition    : hyp(v.tt) + '-duration',
-            vendorTransform     : hyp(v.tf),
+            vendorTransition    : hyp(v) + '-duration',
             transitionEnd       : (function() {
                 return (ua.opera)? 'oTransitionEnd' : ((ua.webkit)? 'webkitTransitionEnd' : 'transitionend');
             }())
@@ -97,7 +94,7 @@
         
         _s = {
             animationDelay      : 3000,
-            animationSpeed      : 2000,
+            animationSpeed      : 1000,
             cols                : 4,
             dataIndex           : 0,
             loop                : true,
@@ -107,8 +104,7 @@
         },
         
         _cnt, _li, _img,
-        
-        _G                  = GPUAcceleration;
+
         _points             = [],
         _tplCache           = {},
         _animationPaused    = false,
@@ -282,6 +278,8 @@
             
             if (!_animationPaused) {
                 
+                _li = _cnt.find('li');
+                
                 $.data(_cnt, 'mosaiqy-animated', 'true');
                 
                 /* end of data? restart loop */
@@ -326,7 +324,7 @@
                  * if the random entry point is the last one then we append the
                  * new node after the last <li>, otherwise we place it before.
                  */
-                referral    = _cnt.find('li').eq(_points[rnd].node);
+                referral    = _li.eq(_points[rnd].node);
                 node        = (rnd < _points.length - 1)?
                       $('<li />').insertBefore(referral)
                     : $('<li />').insertAfter(referral);
@@ -340,82 +338,98 @@
                  * find and preload template images 
                  */
                 $.when(node.find('img:first-child').mosaiqyImagesLoad(
-                        function() {  _cnt.width(_cnt.width()); }
+                        function() {
+                            /**
+                             * Forcing a useless reflow to see CSS3 animation properly
+                             * on Firefox 4.0
+                             */
+                            if (GPUAcceleration.isEnabled) {
+                                _cnt.width(_cnt.width());
+                            }
+                        }
                     ))
                     .fail(function() {
                         /**
-                         * No image/s can be loaded. Just increase the data index then
-                         * call soon the _animate method
+                         * No image/s can be loaded. Increase the data index then
+                         * call again the _animate method
                          */
                         appDebug("warn", 'Skip dataindex %d, call _animate()', _dataIndex);
                         appDebug("groupEnd");
-                        //continueAnimation(true);
+                        continueAnimation(true);
                     })
+                    
                     .done(function() {
-                        
-                        var verse = _points[rnd].prop, css3,
-                            animatedQueue, animatedNodes, removedNode;
-                        
-                        /**
-                         * select nodes to move, then reverse the resulting collection
-                         * if random point is odd (as described in _getPoints method
-                         * description
-                         * */
-                        removedNode = (rnd & 1)
-                            ? animatedSelection.first()
-                            : animatedSelection.last();
-                        
-                        /**
-                         * add new node into animatedNodes collection and change
-                         * previous collection
-                         */
-                        animatedNodes = animatedSelection.add(node)
-                        appDebug("log", 'Queue:', animatedQueue);
+                        var prop            = _points[rnd].prop,
+                            amount          = (prop === 'left')? _amountX : _amountY,
+                            /**
+                             * add new node into animatedNodes collection and change
+                             * previous collection
+                             */
+                            animatedNodes   = animatedSelection.add(node),
+                            animatedQueue   = animatedNodes.length,
+                            move;
+                            
+                       
+                        if (rnd & 1) { amount = -amount; }
+                        move    = (prop === 'left')
+                            ? { left : '+=' + amount + 'px'}
+                            : { top  : '+=' + amount + 'px'};
                         appDebug("log", 'Animated Nodes:', animatedNodes);
                         
-                        /* If CSS3 transition and trasform are enabled then we use them */
-                        if (_G.isEnabled) {
-                            
-                            css3    = {
-                                duration    : (_s.animationSpeed / 1000) + 's',
-                                amount      : (verse === 'left')? _amountX : _amountY,
-                                direction   : (verse === 'left')? 'translateX' : 'translateY'
+                        
+                        /**
+                         * $.animate() function has been extended to support css transition
+                         * on modern browser. See code below
+                         */
+                        animatedNodes.css3animate(move , _s.animationSpeed,
+                            function() {
+                                var nnsel;
+                                
+                                if (--animatedQueue) return;
+                                
+                                /**
+                                 * Node removal
+                                 */
+                                if (rnd & 1) {
+                                    animatedSelection.first().remove();
+                                }
+                                else {
+                                    animatedSelection.last().remove();
+                                }
+                                
+                                /**
+                                 * Node repositioning if animation affected a column. Shifting
+                                 * node must change order inside <li> collection, otherwise next
+                                 * node selection to move won't be properly addressed.
+                                 * 
+                                 * If the animation affected a row, repositioning is not needed
+                                 * because insertion is sequential.
+                                 */
+                                if (prop === 'top') {
+                                    animatedSelection.each(function(i, n) {
+                                        var node    = $(n),
+                                            curpos  = _li.index(node),
+                                            shfpos  = (rnd & 1)
+                                                ? -(_s.cols - ((!!i)? 1 : 0))
+                                                : (_s.cols + ((!!i)? 1 : 0))
+                                                
+                                            newpos  = curpos + shfpos;
+                                        
+                                        if (-1 < newpos && newpos <= _li.length) {
+                                            if (newpos < _li.length) {
+                                                node.insertBefore(_li.eq(newpos));
+                                            }
+                                            else {
+                                                node.appendTo(_cnt.find('ul'));
+                                            }
+                                        }
+                                    });
+                                }
+                                
+                                appDebug("groupEnd");
+                                continueAnimation(true);
                             }
-                            if (rnd & 1) { css3.amount = -css3.amount; }
-                            
-                            /* set translation function */
-                            css3.translateFunc = [css3.direction, '(', css3.amount, 'px)'].join('');
-                          
-                            animatedQueue = animatedNodes.length;
-                            animatedNodes.each(function() {
-                                $(this)
-                                /* add transitionend event handler */
-                                .bind(_G.transitionEnd, function() {
-                                    var $this       = $(this),
-                                        position    = $this.position();
-                                    
-                                    $this.css(verse, position[verse] + css3.amount)
-                                         .css(_G.vendorTransition, '')
-                                         .css(_G.vendorTransform, '')
-                                         .attr('data-ok', 'ok')
-                                         
-                                    
-                                    if (--animatedQueue === 0) {
-                                        //TODO updateOrderNode()
-                                        removedNode.remove();
-                                        //continueAnimation(true);
-                                    }
-                                })
-                                .css(_G.vendorTransition, css3.duration)
-                                .css(_G.vendorTransform,  css3.translateFunc);
-                            });
-                        }
-                        else {
-                        
-                        }
-                        
-                        appDebug("groupEnd");
-                        //continueAnimation(true);
+                        )
                     });
             }
             else {
@@ -423,7 +437,11 @@
                 appDebug("info", 'animation is in pause...');
                 continueAnimation(false);
             }
+            
+            return this;
         };
+        
+        
         
         /** @scope Mosaiqy */
         return {
@@ -460,16 +478,14 @@
                 });
                 
                 
+                
                 $.when(_img.mosaiqyImagesLoad(
-                    function(img) {
-                        setTimeout(function() { img.fadeIn(_s.startFade); }, 500);
-                    })
+                    function(img) { img.fadeIn(_s.startFade); })
                 )
                 .done(function() {
                     appDebug("info", 'All images have been successfully loaded');
-                    setTimeout(function() {
-                        _cnt.removeClass('loading'); _animate();
-                    }, _s.animationDelay);
+                    _cnt.removeClass('loading');
+                    setTimeout(function() { _animate(); }, _s.animationDelay);
                 })
                 .fail(function() {
                     appDebug("warn", 'One or more image have not been loaded');
@@ -574,6 +590,60 @@
         return dfd.promise();
     };
     
+    
+    /**
+     * Extends jQuery animation to support CSS3 animation if available.
+     */     
+    $.fn.extend({  
+        css3animate     : function(props, speed, easing, callback) {
+            var options = (speed && typeof speed === "object")
+                ? $sub.extend({}, speed)
+                : {  
+                    duration    : speed,  
+                    complete    : callback || !callback && easing || $.isFunction(speed) && speed,
+                    easing      : callback && easing || easing && !$.isFunction(easing) && easing
+                }
+            
+            return $(this).each(function() {  
+                var $this   = $(this),
+                    pos     = $this.position(),
+                    cssprops = { },
+                    match;
+                    
+                if (GPUAcceleration.isEnabled) {
+                    appDebug("info", 'GPU Animation' );
+                    
+                    /**
+                     * If a value is specified as a relative delta (e.g.+'=200px') for
+                     * left or top property, we need to sum the current left (or top)
+                     * position with delta.
+                     */ 
+                    if (typeof props === 'object') {
+                        for (p in props) {
+                            if (p === 'left' || p === 'top') {
+                                match = props[p].match(/^(?:\+|\-)=(\-?\d+)/);
+                                if (match && match.length) {
+                                    cssprops[p] = pos[p] + parseInt(match[1], 10);
+                                }
+                            }
+                        }
+                    }
+                    $this.bind(GPUAcceleration.transitionEnd, function() {
+                        if ($.isFunction(options.complete)) {  
+                            options.complete();
+                        }  
+                    })
+                    .css(cssprops)
+                    .css(GPUAcceleration.vendorTransition, (speed / 1000) + 's');
+                     
+                }  
+                else {
+                    appDebug("info", 'jQuery Animation' );
+                    $this.animate(props, speed, easing, callback);  
+                }
+            })
+        }
+    });    
     
     /**
      * @class 
