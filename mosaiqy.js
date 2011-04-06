@@ -25,51 +25,48 @@
     /**
      * @function
      * @returns
-     * property { Bool } isEnabled True if acceleration is available, false otherwise.
-     * property { String } vendorTransition Vendor specific property.
-     * property { String } vendorTransform Vendor specific property.
+     * property { Bool   } isEnabled True if acceleration is available, false otherwise.
      * property { String } transitionEnd Event available on current browser.
+     * property { String } duration Vendor specific CSS property.
      *
      * @description
      * Detect if GPU acceleration is enabled for transitions.
      * code gist mantained at https://gist.github.com/892739
-     *
      */
-    GPUAcceleration = (function(ua) {
+    GPUAcceleration = (function(ua, prop) {
     
-        var div = document.createElement('div'),
-            hyp = function(p) {
+        var div     = document.createElement('div'),
+            cssProp = function(p) {
                 return p.replace(/([A-Z])/g, function(match, upper) {
                     return "-" + upper.toLowerCase();
                 })
             },
-            v   = 'Transition',
-            uaList = {
-                msie    : 'Ms',
-                opera   : 'O',
-                mozilla : 'Moz',
-                webkit  : 'Webkit'
+            vendorProp,
+            uaList  = {
+                msie    : 'MsTransition',
+                opera   : 'OTransition',
+                mozilla : 'MozTransition',
+                webkit  : 'WebkitTransition'
             };
             
         for (b in uaList) {
             if (uaList.hasOwnProperty(b)) {
-                if (ua[b]) {
-                    v = uaList[b] + 'Transition';
-                    break;
-                }
+                if (ua[b]) { vendorProp = uaList[b]; }
             }
         }
-        
-       return {
-            isEnabled           : (function(s) {
-                return !!(s.transition || v in s) || (ua.opera && parseFloat(ua.version) > 10.49);
+                
+        return {
+            isEnabled       : (function(s) {
+                return !!(s[prop] || vendorProp in s  || (ua.opera && parseFloat(ua.version) > 10.49));
             }(div.style)),
-            vendorTransition    : hyp(v) + '-duration',
-            transitionEnd       : (function() {
-                return (ua.opera)? 'oTransitionEnd' : ((ua.webkit)? 'webkitTransitionEnd' : 'transitionend');
-            }())
-       }
-   }($.browser)),
+            transitionEnd   : (function() {
+                return (ua.opera)
+                    ? 'oTransitionEnd'
+                    : (ua.webkit)? 'webkitTransitionEnd' : 'transitionend';
+            }()),
+            duration        : cssProp(vendorProp) + '-duration'
+        }
+   }($.browser, 'transition')),
     
     
      /**
@@ -84,6 +81,7 @@
          * @private
          * @property { Object } _s Settings for this instance
          * @property { jQuery } _cnt Mosaiqy main container
+         * @property { jQuery } _ul Mosaiqy list 
          * @property { jQuery } _li Mosaiqy list items
          * @property { jQuery } _img Mosaiqy thumbnail images
          * @property { Object } _points Entry point object information
@@ -103,7 +101,7 @@
             template            : null
         },
         
-        _cnt, _li, _img,
+        _cnt, _ul, _li, _img,
 
         _points             = [],
         _tplCache           = {},
@@ -332,104 +330,109 @@
                 $(tpl).appendTo(node.css(_points[rnd].position));
                 appDebug("info", "Random position is %d and its referral is node", rnd, referral);
                 
-                
-                
                 /**
-                 * find and preload template images 
+                 * Looking for images inside template fragment, wait the deferred
+                 * execution and checking a promise status.
                  */
-                $.when(node.find('img').mosaiqyImagesLoad(
-                        function() {
-                            /**
-                             * Forcing a useless reflow to see CSS3 animation properly
-                             * on Firefox 4.0
-                             */
-                            if (GPUAcceleration.isEnabled) {
-                                _cnt.width(_cnt.width());
-                            }
-                        }
-                    ))
-                    .fail(function() {
+                $.when(node.find('img').mosaiqyImagesLoad())
+                /**
+                 * No image/s can be loaded, remove the node inserted, then call
+                 * again the _animate method
+                 */
+                .fail(function() {
+                    appDebug("warn", 'Skip dataindex %d, call _animate()', _dataIndex);
+                    appDebug("groupEnd");
+                    node.remove();
+                    continueAnimation(true);
+                })
+                /**
+                 * Image/s inside template fragment have been successfully loaded so
+                 * we can apply the slide transition on the selected nodes and the
+                 * added node
+                 */ 
+                .done(function() {
+                    var prop            = _points[rnd].prop,
+                        amount          = (prop === 'left')? _amountX : _amountY,
                         /**
-                         * No image/s can be loaded. Increase the data index then
-                         * call again the _animate method
+                         * add new node into animatedNodes collection and change
+                         * previous collection
                          */
-                        appDebug("warn", 'Skip dataindex %d, call _animate()', _dataIndex);
-                        appDebug("groupEnd");
-                        continueAnimation(true);
-                    })
+                        animatedNodes   = animatedSelection.add(node),
+                        animatedQueue   = animatedNodes.length,
+                        move = {};
                     
-                    .done(function() {
-                        var prop            = _points[rnd].prop,
-                            amount          = (prop === 'left')? _amountX : _amountY,
-                            /**
-                             * add new node into animatedNodes collection and change
-                             * previous collection
-                             */
-                            animatedNodes   = animatedSelection.add(node),
-                            animatedQueue   = animatedNodes.length,
-                            move;
+                    move[prop] = '+=' + ((rnd & 1)? -amount : amount) + 'px';
+                    appDebug("log", 'Animated Nodes:', animatedNodes);
+                    
+                    /**
+                     * $.animate() function has been extended to support css transition
+                     * on modern browser. See code below
+                     */
+                    animatedNodes.css3animate(move , _s.animationSpeed,
+                        function() {
                             
-                       
-                        if (rnd & 1) { amount = -amount; }
-                        move    = (prop === 'left')
-                            ? { left : '+=' + amount + 'px'}
-                            : { top  : '+=' + amount + 'px'};
-                        appDebug("log", 'Animated Nodes:', animatedNodes);
-                        
-                        
-                        /**
-                         * $.animate() function has been extended to support css transition
-                         * on modern browser. See code below
-                         */
-                        animatedNodes.css3animate(move , _s.animationSpeed,
-                            function() {
-                                
-                                if (--animatedQueue) return;
-                                
-                                /**
-                                 * Node removal
-                                 */
-                                if (rnd & 1) {
-                                    animatedSelection.first().remove();
-                                }
-                                else {
-                                    animatedSelection.last().remove();
-                                }
-                                
-                                /**
-                                 * Node repositioning if animation affected a column. Shifting
-                                 * node must change order inside <li> collection, otherwise next
-                                 * node selection to move won't be properly addressed.
-                                 * 
-                                 * If the animation affected a row, repositioning is not needed
-                                 * because insertion is sequential.
-                                 */
-                                if (prop === 'top') {
-                                    animatedSelection.each(function(i, n) {
-                                        var node    = $(n),
-                                            curpos  = _li.index(node),
-                                            shfpos  = (rnd & 1)
-                                                ? -(_s.cols - ((!!i)? 1 : 0))
-                                                : +(_s.cols + ((!!i)? 1 : 0))
-                                                
-                                            newpos  = curpos + shfpos;
-                                        
-                                        if (-1 < newpos && newpos <= _li.length) {
-                                            if (newpos < _li.length) {
-                                                node.insertBefore(_li.eq(newpos));
-                                            }
-                                            else {
-                                                node.appendTo(_cnt.find('ul'));
-                                            }
-                                        }
-                                    });
-                                }
-                                
-                                appDebug("groupEnd");
-                                continueAnimation(true);
+                            if (--animatedQueue) return;
+                            
+                            /**
+                             * Opposite node removal. "Opposite" is related on sliding direction
+                             * e.g. on 2->[159] (down) opposite has index 9
+                             *      on 3->[159] (up) opposite has index 1
+                             */
+                            if (rnd & 1) {
+                                animatedSelection.first().remove();
                             }
-                        )
-                    });
+                            else {
+                                animatedSelection.last().remove();
+                            }
+                            
+                            /**
+                             * <p>Node rearrangement when animation affects a column. In this case
+                             * a slide must change order inside «li» collection, otherwise the next
+                             * node selection won't be properly calculated.
+                             * Algorithm is quite simple:</p>
+                             *
+                             * <ol>
+                             *   <li>The offset displacement of shifted nodes is always
+                             *       determined by the number of columns except for the first node;</li>
+                             *   <li>offset is negative on odd entry point (down and right) and
+                             *       positive otherwise (top and left);</li>
+                             *   <li>the first node left of «animatedSelection» collection represents
+                             *       an exception because its position is affected by the presence
+                             *       of the new node.</li>
+                             *   <li>The new position must be in range [0...n] where «n» is the number
+                             *       of the elements in the grid
+                             * </ol>
+                             * 
+                             * <p>If the animation affected a row, rearrangement of nodes is not needed
+                             * at all, because insertion is sequential, thus the new node and shifted
+                             * nodes already have the right index.</p>
+                             */
+                            if (prop === 'top') {
+                                animatedSelection.each(function(i, n) {
+                                    var node    = $(n),
+                                        curpos  = _li.index(node),
+                                        shfpos  = (rnd & 1)
+                                            ? -(_s.cols - ((!!i)? 1 : 0))
+                                            : +(_s.cols + ((!!i)? 1 : 0))
+                                            
+                                        newpos  = curpos + shfpos;
+                                    
+                                    if (-1 < newpos && newpos <= _li.length) {
+                                        if (newpos < _li.length) {
+                                            node.insertBefore(_li.eq(newpos));
+                                        }
+                                        else {
+                                            node.appendTo(_ul);
+                                        }
+                                    }
+                                });
+                            }
+                            
+                            appDebug("groupEnd");
+                            continueAnimation(true);
+                        }
+                    )
+                });
             }
             else {
                 appDebug("groupEnd");
@@ -464,6 +467,7 @@
                 
                 
                 _cnt    = cnt;
+                _ul     = cnt.find('ul');
                 _li     = cnt.find('li');
                 _img    = cnt.find('img');
                    
@@ -478,14 +482,18 @@
                 
                 
                 
-                $.when(_img.mosaiqyImagesLoad(
-                    function(img) { img.fadeIn(_s.startFade); })
-                )
+                $.when(_img.mosaiqyImagesLoad(function(img) { img.fadeIn(_s.startFade); }))
+                /**
+                 * All images have been successfully loaded
+                 */
                 .done(function() {
                     appDebug("info", 'All images have been successfully loaded');
                     _cnt.removeClass('loading');
                     setTimeout(function() { _animate(); }, _s.animationDelay);
                 })
+                /**
+                 * One or more image have not been loaded
+                 */
                 .fail(function() {
                     appDebug("warn", 'One or more image have not been loaded');
                     return false;
@@ -633,7 +641,7 @@
                         }  
                     })
                     .css(cssprops)
-                    .css(GPUAcceleration.vendorTransition, (speed / 1000) + 's');
+                    .css(GPUAcceleration.duration, (speed / 1000) + 's');
                      
                 }  
                 else {
