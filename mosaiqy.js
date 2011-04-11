@@ -368,7 +368,7 @@
                      * $.animate() function has been extended to support css transition
                      * on modern browser. See code below
                      */
-                    animatedNodes.css3animate(move , _s.animationSpeed,
+                    animatedNodes.animate(move , _s.animationSpeed,
                         function() {
                             
                             if (--animatedQueue) return;
@@ -601,10 +601,10 @@
     /**
      * Extends jQuery animation to support CSS3 animation if available.
      */     
-    $.fn.extend({  
-        css3animate     : function(props, speed, easing, callback) {
+    sub$.fn.extend({
+        animate     : function(props, speed, easing, callback) {
             var options = (speed && typeof speed === "object")
-                ? $sub.extend({}, speed)
+                ? sub$.extend({}, speed)
                 : {  
                     duration    : speed,  
                     complete    : callback || !callback && easing || $.isFunction(speed) && speed,
@@ -621,7 +621,7 @@
                     appDebug("info", 'GPU Animation' );
                     
                     /**
-                     * If a value is specified as a relative delta (e.g.+'=200px') for
+                     * If a value is specified as a relative delta (e.g. '+=200px') for
                      * left or top property, we need to sum the current left (or top)
                      * position with delta.
                      */ 
@@ -646,7 +646,7 @@
                 }  
                 else {
                     appDebug("info", 'jQuery Animation' );
-                    $this.animate(props, speed, easing, callback);  
+                    $.animate(props, options);
                 }
             })
         }
