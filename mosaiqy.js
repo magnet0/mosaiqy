@@ -261,16 +261,17 @@
          * @private
          * @function 
          */
-        _animate = function() {
+        _animate = function(entries) {
             
             var rnd, tpl, referral, node, animatedSelection,
                 continueAnimation = function(inc) {
                     setTimeout(function() {
                         if (inc) {  _dataIndex += 1; }
-                        _animate();
+                        _animate(entries);
                     }, _s.animationDelay);
                 };
-                
+            
+            if (entries && entries.length === 0) return;
             appDebug("groupCollapsed", 'call animate()');
             appDebug("info", 'animation %s running', ((_animationPaused)? 'is not ' : 'is'));
             
@@ -313,7 +314,9 @@
                  * [~~] is the bitwise op quickest equivalent to Math.floor()
                  * http://jsperf.com/bitwise-not-not-vs-math-floor
                  */
-                rnd = ~~(Math.random() * _points.length);
+                rnd = (entries && entries.length)
+                  ?  entries.pop()
+                  : ~~(Math.random() * _points.length);
                 
                 
                 animatedSelection = _cnt.find(_points[rnd].selector);
@@ -370,20 +373,30 @@
                      */
                     animatedNodes.animate(move , _s.animationSpeed,
                         function() {
+                            var isEven, len;
                             
                             if (--animatedQueue) return;
+                            
+                            isEven = ((rnd & 1) === 0);
                             
                             /**
                              * Opposite node removal. "Opposite" is related on sliding direction
                              * e.g. on 2->[159] (down) opposite has index 9
                              *      on 3->[159] (up) opposite has index 1
                              */
-                            if (rnd & 1) {
-                                animatedSelection.first().remove();
-                            }
-                            else {
+                            if (isEven) {
                                 animatedSelection.last().remove();
                             }
+                            else {
+                                animatedSelection.first().remove();
+                            }
+                            
+                            appDebug("log", 'Animated Selection:', animatedSelection);
+                            animatedSelection = (isEven) 
+                                ? animatedSelection.slice(0, animatedSelection.length - 1)
+                                : animatedSelection.slice(1, animatedSelection.length);
+                            
+                            appDebug("log", 'Animated Selection:', animatedSelection);
                             
                             /**
                              * <p>Node rearrangement when animation affects a column. In this case
@@ -408,16 +421,23 @@
                              * nodes already have the right index.</p>
                              */
                             if (prop === 'top') {
-                                animatedSelection.each(function(i, n) {
-                                    var node    = $(n),
-                                        curpos  = _li.index(node),
-                                        shfpos  = (rnd & 1)
-                                            ? -(_s.cols - ((!!i)? 1 : 0))
-                                            : +(_s.cols + ((!!i)? 1 : 0))
-                                            
-                                        newpos  = curpos + shfpos;
+                                len = animatedSelection.length;
+                                
+                                animatedSelection.each(function(i) {
+                                    var node, curpos, shfpos, newpos;
                                     
-                                    if (-1 < newpos && newpos <= _li.length) {
+                                    /**
+                                     * Retrieve node after each new insertion and rearrangement
+                                     * of selected animating nodes 
+                                     */ 
+                                    _li     = _cnt.find("li");
+                                    
+                                    node    = $(this);
+                                    curpos  = _li.index(node);
+                                    shfpos  = (isEven) ? _s.cols : -(_s.cols - ((1 === len - i)? 0 : 1));
+                                            
+                                    if (!!shfpos) { 
+                                        newpos  = curpos + shfpos;
                                         if (newpos < _li.length) {
                                             node.insertBefore(_li.eq(newpos));
                                         }
@@ -489,7 +509,7 @@
                 .done(function() {
                     appDebug("info", 'All images have been successfully loaded');
                     _cnt.removeClass('loading');
-                    setTimeout(function() { _animate(); }, _s.animationDelay);
+                    setTimeout(function() { _animate(/* [1].reverse() */); }, _s.animationDelay);
                 })
                 /**
                  * One or more image have not been loaded
