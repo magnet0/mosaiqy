@@ -400,20 +400,20 @@
                             
                             /**
                              * <p>Node rearrangement when animation affects a column. In this case
-                             * a slide must change order inside «li» collection, otherwise the next
-                             * node selection won't be properly calculated.
+                             * a shift must change order inside «li» collection, otherwise the 
+                             * subsequent node selection won't be properly calculated.
                              * Algorithm is quite simple:</p>
                              *
                              * <ol>
                              *   <li>The offset displacement of shifted nodes is always
-                             *       determined by the number of columns except for the first node;</li>
+                             *       determined by the number of columns except when shift direction is
+                             *       bottom-up: in fact the last node of animatedSelection collection
+                             *       represents an exception because its position is affected by the
+                             *       presence of the new node (placed just before it);</li>
                              *   <li>offset is negative on odd entry point (down and right) and
                              *       positive otherwise (top and left);</li>
-                             *   <li>the first node left of «animatedSelection» collection represents
-                             *       an exception because its position is affected by the presence
-                             *       of the new node.</li>
-                             *   <li>The new position must be in range [0...n] where «n» is the number
-                             *       of the elements in the grid
+                             *   <li>at each iteration we retrieve the current <li> nodes in the
+                             *       grid so we can work with actual node position.</li>
                              * </ol>
                              * 
                              * <p>If the animation affected a row, rearrangement of nodes is not needed
@@ -424,7 +424,7 @@
                                 len = animatedSelection.length;
                                 
                                 animatedSelection.each(function(i) {
-                                    var node, curpos, shfpos, newpos;
+                                    var node, curpos, offset, newpos;
                                     
                                     /**
                                      * Retrieve node after each new insertion and rearrangement
@@ -434,10 +434,10 @@
                                     
                                     node    = $(this);
                                     curpos  = _li.index(node);
-                                    shfpos  = (isEven) ? _s.cols : -(_s.cols - ((1 === len - i)? 0 : 1));
+                                    offset  = (isEven) ? _s.cols : -(_s.cols - ((1 === len - i)? 0 : 1));
                                             
-                                    if (!!shfpos) { 
-                                        newpos  = curpos + shfpos;
+                                    if (!!offset) { 
+                                        newpos  = curpos + offset;
                                         if (newpos < _li.length) {
                                             node.insertBefore(_li.eq(newpos));
                                         }
@@ -465,7 +465,9 @@
         
         
         
-        /** @scope Mosaiqy */
+        /**
+         * @scope Mosaiqy
+         */
         return {
             init    : function(cnt, options) {
                 
@@ -621,10 +623,11 @@
     /**
      * Extends jQuery animation to support CSS3 animation if available.
      */     
-    sub$.fn.extend({
-        animate     : function(props, speed, easing, callback) {
+        sub$.fn.extend({
+        _animate    : $.fn.animate,
+        animate           : function(props, speed, easing, callback) {
             var options = (speed && typeof speed === "object")
-                ? sub$.extend({}, speed)
+                ? $.extend({}, speed)
                 : {  
                     duration    : speed,  
                     complete    : callback || !callback && easing || $.isFunction(speed) && speed,
@@ -632,7 +635,7 @@
                 }
             
             return $(this).each(function() {  
-                var $this   = $(this),
+                var $this   = sub$(this),
                     pos     = $this.position(),
                     cssprops = { },
                     match;
@@ -666,11 +669,11 @@
                 }  
                 else {
                     appDebug("info", 'jQuery Animation' );
-                    $.animate(props, options);
+                    $this._animate(props, options);
                 }
             })
         }
-    });    
+    });
     
     /**
      * @class 
