@@ -480,7 +480,7 @@
                 }
                 /* Template must not be empty and provided as a script element */
                 if (!!_s.template && $(_s.template).is('script')) {
-                    _s.template = $(_s.template).text();
+                    _s.template = $(_s.template).text() || $(_s.template).html();
                 }
                 else {
                     appDebug("error", 'user template is not defined');
