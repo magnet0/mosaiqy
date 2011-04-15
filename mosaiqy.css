@@ -1,19 +1,15 @@
-.mosaiqy { 
-    overflow        : hidden;
-    position        : relative;
-    z-index         : 1;
-}
-
 .mosaiqy * {
     margin      : 0;
     padding     : 0;
 }
 
-
 .mosaiqy ul {
     list-style      : none;
     padding         : 0;
     margin          : 0;    
+    position        : relative;
+    z-index         : 1;
+    overflow        : hidden;
 }
 
 .js .mosaiqy li {
@@ -38,22 +34,22 @@
 
 
 .mosaiqy figcaption {
-    display         : none;    
-    position        : absolute;
-    z-index         : 2;
-    top             : 0;
-    left            : 0;
-    background      : rgba(245, 245, 245, 0.3);      
-    height          : 100%;
-    width           : 100%;
+    display             : none;    
+    position            : absolute;
+    z-index             : 2;
+    top                 : 0;
+    left                : 0;
 }
 
-.mosaiqy a:hover figcaption {
+.mosaiqy li:hover {
+    z-index             : 20;    
+}
+
+.mosaiqy li:hover figcaption {
     display         : block;    
 }
 
-.mosaiqy li,
-.mosaiqy li img {
+.mosaiqy li {
       -moz-transition-property              : all;
       -moz-transition-timing-function       : ease-out;
       -moz-transition-delay                 : 0s;
@@ -71,13 +67,49 @@
       transition-delay                      : 0s;
 }
 
-/* *  * */
+
+
+/* User styles */
+
+.mosaiqy  {
+    border          : 1px #d8d8d8 solid;
+    padding         : 4px;
+    margin          : 30px auto;
+}
+
 .mosaiqy li,
 .mosaiqy img {
     width           : 200px;
     height          : 135px;
 }
 
-.mosaiqy li {
-    padding         : 0;
+
+.mosaiqy li figcaption {
+    background          : rgba(255, 255, 255, 0.55);
+    color               : #20213A;
+    font                : 14px Arial, Verdana, sans-serif;
+    cursor              : pointer;
+    height              : 100%;
+    width               : 100%;
 }
+
+
+.mosaiqy {
+    -webkit-box-shadow  : 0 0 15px rgba(0, 0, 0, .4); 
+	-moz-box-shadow     : 0 0 15px rgba(0, 0, 0, .4); 
+	box-shadow          : 0 0 15px rgba(0, 0, 0, .4);
+}
+
+.mosaiqy li figcaption {
+    opacity             : 0;
+    -webkit-transition  : opacity .5s ease;
+    -moz-transition     : opacity .5s ease;
+    -ms-transition      : opacity .5s ease;
+    -o-transition       : opacity .5s ease;
+	transition          : opacity .5s ease;
+}
+
+.mosaiqy li figcaption:hover  {
+    opacity             : 1;
+}
+

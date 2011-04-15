@@ -15,81 +15,82 @@
     <div class="loading mosaiqy">
         <ul>
             <li>
-                <figure><a href="#"><img src="thumb/1.jpg">
-                    <figcaption>a</figcaption></a>            
+                <figure><a href="#"><img src="thumb/1.jpg"></a>
+                    <figcaption>a</figcaption>      
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/2.jpg">
-                    <figcaption></figcaption></a>           
+                <figure><a href="#"><img src="thumb/2.jpg"></a>
+                    <figcaption></figcaption>           
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/3.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/3.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/4.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/4.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/5.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/5.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/6.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/6.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/7.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/7.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/8.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/8.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/9.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/9.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/10.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/10.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/9.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/9.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
             <li>
-                <figure><a href="#"><img src="thumb/8.jpg">
-                    <figcaption></figcaption></a>            
+                <figure><a href="#"><img src="thumb/8.jpg"></a>
+                    <figcaption></figcaption>            
                 </figure>
             </li>
         </ul>
      </div> 
      
     <script src="mosaiqy.js" id="mosaiqy_tpl">
-        <figure><a href="#"><img src="thumb/${img}">
-          <figcaption>${desc}</figcaption></a>            
+        <figure><a href="#"><img src="thumb/${img}"></a>
+          <figcaption>${desc}</figcaption>          
         </figure>        
     </script>
      
     <script>
     $('.mosaiqy').mosaiqy({
-        template  : '#mosaiqy_tpl',
-        rows      : 3,
-        cols      : 4,
-        loop      : true,
-        data      : [
+        template        : '#mosaiqy_tpl',
+        rows            : 3,
+        cols            : 4,
+        animationDelay  : 500,
+        loop            : true,
+        data            : [
             {
                 img     : "1.jpg",
                 desc    : "Lorem ipsum sit dolor amet, consequitur adhunc."

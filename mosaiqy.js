@@ -139,6 +139,10 @@
             });
             
             /* defining container size */
+            _ul.css({
+                height  : thumbSize.h * _s.rows,
+                width   : thumbSize.w * _s.cols
+            });
             _cnt.css({
                 height  : thumbSize.h * _s.rows,
                 width   : thumbSize.w * _s.cols
@@ -498,8 +502,10 @@
                 _getPoints(_setInitialImageCoords());
                 
                 /* set mouseenter event on container */
-                _cnt.delegate("li", "hover.mosaiqy", function() {
-                    _animationPaused = !_animationPaused;
+                _cnt.delegate("li", "mouseenter.mosaiqy", function() {
+                    _animationPaused = true;
+                }).delegate("li", "mouseleave.mosaiqy", function() {
+                    _animationPaused = false;
                 });
                 
                 
