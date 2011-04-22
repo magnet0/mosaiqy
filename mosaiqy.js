@@ -70,27 +70,21 @@
     
     
      /**
+     * @class
+     * @final
      * @name Mosaiqy
-     * @constructor
-     * @namespace
      * @returns public methods of Mosaiqy object for its instances.
      */
     Mosaiqy = function($) {
 
         /**
+         * @name MyClass-_s
+         * @type {Object}
          * @private
-         * @property { Object } _s Settings for this instance
-         * @property { jQuery } _cnt Mosaiqy main container
-         * @property { jQuery } _ul Mosaiqy list 
-         * @property { jQuery } _li Mosaiqy list items
-         * @property { jQuery } _img Mosaiqy thumbnail images
-         * @property { Object } _points Entry point object information
-         *
-         * @property { Bool } _animationPaused true on main container mouseenter, false otherwise
+         * @description
+         * Settings for current instance
          */
-        var
-        
-        _s = {
+        var _s = {
             animationDelay      : 3000,
             animationSpeed      : 1000,
             cols                : 4,
@@ -109,11 +103,13 @@
         _dataIndex          = _s.dataIndex || 0,
         _amountX            = 0,
         _amountY            = 0,
-        
+
+            
         /**
+         * @name Mosaiqy#_setInitialImageCoords
          * @private
-         * @function
          * @description
+         * 
          * Sets initial position (offset X|Y) of each list items and the width
          * and height of the container.
          *
@@ -152,9 +148,10 @@
         },
     
         /**
+         * @name Mosaiqy#_getPoints
          * @private
-         * @memberOf Mosaiqy
-         *
+         * @description
+         * 
          * _getPoints object stores 4 information
          * <ol>
          *   <li>The direction of movement (css property)</li>
@@ -189,10 +186,9 @@
          *      (it's easier to retrieve this information)</li>
          *   <li>If a random point is even (i & 1 === 0) then the 'direction' property of node
          *      selection is going to be increased during slide animation. Otherwise is going
-         *      to be decreased and then, collection returned by the selector is also reversed
-         *      applying the .mosaiqyReverse() chained method (if random number is 9, then the
-         *      collection has to be [3210] and not [0123], since we always remove last node
-         *      when the animation has completed.)</li>
+         *      to be decreased and then we remove first or last element (if random number is 9,
+         *      then the collection has to be [3210] and not [0123], since we always remove the
+         *      disappeared node when the animation has completed.)</li>
          * </ol>
          *
          * @example
@@ -206,7 +202,7 @@
          *   10 |_6_|_7_| 11
          *        1   3
          */
-         _getPoints = function(thumb) {
+        _getPoints = function(thumb) {
             
             var c, n, s, /* internal counters */
                 selectors = {
@@ -262,12 +258,12 @@
         
         
         /**
+         * @name Mosaiqy#_animate
          * @private
-         * @function 
          */
         _animate = function(entries) {
             
-            var rnd, tpl, referral, node, animatedSelection,
+            var rnd, tpl, referral, node, animatedSelection, isEven,
                 continueAnimation = function(inc) {
                     setTimeout(function() {
                         if (inc) {  _dataIndex += 1; }
@@ -323,9 +319,11 @@
                   : ~~(Math.random() * _points.length);
                 
                 
+                isEven = ((rnd & 1) === 0);
+                
                 animatedSelection = _cnt.find(_points[rnd].selector);
                 /**
-                 * append new <li> element
+                 * append new «li» element
                  * if the random entry point is the last one then we append the
                  * new node after the last <li>, otherwise we place it before.
                  */
@@ -368,7 +366,7 @@
                         animatedQueue   = animatedNodes.length,
                         move = {};
                     
-                    move[prop] = '+=' + ((rnd & 1)? -amount : amount) + 'px';
+                    move[prop] = '+=' + (isEven? amount : -amount) + 'px';
                     appDebug("log", 'Animated Nodes:', animatedNodes);
                     
                     /**
@@ -377,11 +375,9 @@
                      */
                     animatedNodes.animate(move , _s.animationSpeed,
                         function() {
-                            var isEven, len;
+                            var len;
                             
                             if (--animatedQueue) return;
-                            
-                            isEven = ((rnd & 1) === 0);
                             
                             /**
                              * Opposite node removal. "Opposite" is related on sliding direction
@@ -534,19 +530,20 @@
     
     
     /**
+     * @name _$.fn
+     * @description
+     * 
      * Some chained methods are needed internally but it's better avoid jQuery.fn
      * unnecessary pollution. Only mosaiqy plugin/function is exposed as jQuery
      * prototype.
      */
-    sub$ = $.sub();
+    _$ = $.sub();
     
     
     /**
-     * @class
-     * @memberOf sub$
-     * @namespace sub$.fn
+     * @lends _$.fn
      */
-    sub$.fn.mosaiqyImagesLoad = function(imgCallback) {
+    _$.fn.mosaiqyImagesLoad = function(imgCallback) {
         
         var dfd         = $.Deferred(),
             imgLength   = this.length,
@@ -627,9 +624,10 @@
     
     
     /**
+     * @lends _$.fn
      * Extends jQuery animation to support CSS3 animation if available.
      */     
-        sub$.fn.extend({
+    _$.fn.extend({
         _animate    : $.fn.animate,
         animate           : function(props, speed, easing, callback) {
             var options = (speed && typeof speed === "object")
@@ -641,7 +639,7 @@
                 }
             
             return $(this).each(function() {  
-                var $this   = sub$(this),
+                var $this   = _$(this),
                     pos     = $this.position(),
                     cssprops = { },
                     match;
@@ -682,15 +680,13 @@
     });
     
     /**
-     * @class 
-     * @memberOf jQuery
-     * @namespace jQuery.fn
+     * @lends jQuery.prototype
      */    
     $.fn.mosaiqy = function(options) {
         if (this.length) {
             return this.each(function() {
-                var obj = new Mosaiqy(sub$);
-                obj.init(sub$(this), options);
+                var obj = new Mosaiqy(_$);
+                obj.init(_$(this), options);
                 $.data(this, 'mosaiqy', obj);
             });
         }
