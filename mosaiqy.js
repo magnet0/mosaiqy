@@ -11,6 +11,7 @@
      * This function enable logging where available on dev version.
      * If console object is undefined then log messages fail silently
      * @function
+     * @returns { Undefined }
      */
     appDebug = function() {
         var args = Array.prototype.slice.call(arguments),
@@ -24,11 +25,15 @@
     
     /**
      * @function
-     * @returns
-     * property { Bool   } isEnabled True if acceleration is available, false otherwise.
-     * property { String } transitionEnd Event available on current browser.
-     * property { String } duration Vendor specific CSS property.
-     *
+     * @param { String } ua     Current user agent specific string
+     * @param { String } prop   The property we want to check
+     * 
+     * @returns { Object }
+     * <pre>
+     *      isEnabled       : True if acceleration is available, false otherwise;
+     *      transitionEnd   : Event available on current browser;
+     *      duration        : Vendor specific CSS property.
+     * </pre>
      * @description
      * Detect if GPU acceleration is enabled for transitions.
      * code gist mantained at https://gist.github.com/892739
@@ -78,9 +83,9 @@
     Mosaiqy = function($) {
 
         /**
-         * @name MyClass-_s
-         * @type {Object}
          * @private
+         * @name MyClass-_s
+         * @type { Object }
          * @description
          * Settings for current instance
          */
@@ -106,8 +111,8 @@
 
             
         /**
-         * @name Mosaiqy#_setInitialImageCoords
          * @private
+         * @name Mosaiqy#_setInitialImageCoords
          * @description
          * 
          * Sets initial position (offset X|Y) of each list items and the width
@@ -148,8 +153,8 @@
         },
     
         /**
-         * @name Mosaiqy#_getPoints
          * @private
+         * @name Mosaiqy#_getPoints
          * @description
          * 
          * _getPoints object stores 4 information
@@ -258,8 +263,8 @@
         
         
         /**
-         * @name Mosaiqy#_animate
          * @private
+         * @name Mosaiqy#_animate
          */
         _animate = function(entries) {
             
@@ -310,6 +315,7 @@
                 tpl = _tplCache[_dataIndex];
                 
                 /**
+                 * @ignore
                  * rnd is in the range [0 .. _points.length - 1]
                  * [~~] is the bitwise op quickest equivalent to Math.floor()
                  * http://jsperf.com/bitwise-not-not-vs-math-floor
@@ -323,9 +329,10 @@
                 
                 animatedSelection = _cnt.find(_points[rnd].selector);
                 /**
+                 * @ignore
                  * append new «li» element
                  * if the random entry point is the last one then we append the
-                 * new node after the last <li>, otherwise we place it before.
+                 * new node after the last «li», otherwise we place it before.
                  */
                 referral    = _li.eq(_points[rnd].node);
                 node        = (rnd < _points.length - 1)?
@@ -359,6 +366,7 @@
                     var prop            = _points[rnd].prop,
                         amount          = (prop === 'left')? _amountX : _amountY,
                         /**
+                         * @ignore
                          * add new node into animatedNodes collection and change
                          * previous collection
                          */
@@ -412,7 +420,7 @@
                              *       presence of the new node (placed just before it);</li>
                              *   <li>offset is negative on odd entry point (down and right) and
                              *       positive otherwise (top and left);</li>
-                             *   <li>at each iteration we retrieve the current <li> nodes in the
+                             *   <li>at each iteration we retrieve the current «li» nodes in the
                              *       grid so we can work with actual node position.</li>
                              * </ol>
                              * 
@@ -427,6 +435,7 @@
                                     var node, curpos, offset, newpos;
                                     
                                     /**
+                                     * @ignore
                                      * Retrieve node after each new insertion and rearrangement
                                      * of selected animating nodes 
                                      */ 
@@ -553,6 +562,7 @@
             /* waiting about 5 seconds before discarding image */
             
             /**
+             * @ignore
              * Check wheter to resolve or reject main deferred object
              */
             dfdFinally  = function(alwaysReject) {
@@ -578,11 +588,12 @@
                     (function asyncImageLoader() {
                         var
                         /**
-                        * This interval bounds the maximum amount of time (e.g. network
-                        * excessive latency or failure, 404) before triggering the error
-                        * handler for a given image. The interval is then unset when
-                        * the image has loaded or if error event has been triggered.
-                        */
+                         * @ignore
+                         * This interval bounds the maximum amount of time (e.g. network
+                         * excessive latency or failure, 404) before triggering the error
+                         * handler for a given image. The interval is then unset when
+                         * the image has loaded or if error event has been triggered.
+                         */
                         intv        = setTimeout(function() {  $(i).trigger('error.mosaiqy') }, timeout),
                         imageDfd    = $.Deferred();
                         
