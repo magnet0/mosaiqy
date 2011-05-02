@@ -18,6 +18,12 @@
     display         : block;
 }
 
+    .js .mosaiqy.zoom li {
+        float           : left;
+        position        : static;
+    }
+
+
 .mosaiqy figure {  
     display         : block;
 }

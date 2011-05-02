@@ -141,12 +141,12 @@
             
             /* defining container size */
             _ul.css({
-                height  : thumbSize.h * _s.rows,
-                width   : thumbSize.w * _s.cols
+                minHeight   : thumbSize.h * _s.rows,
+                width       : thumbSize.w * _s.cols
             });
             _cnt.css({
-                height  : thumbSize.h * _s.rows,
-                width   : thumbSize.w * _s.cols
+                minHeight   : thumbSize.h * _s.rows,
+                width       : thumbSize.w * _s.cols
             });
             
             return thumbSize;
