@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @fileOverview Mosaiqy for jQuery
  * @version 0.1
@@ -54,7 +55,7 @@
                 webkit  : 'WebkitTransition'
             };
             
-        for (b in uaList) {
+        for (var b in uaList) {
             if (uaList.hasOwnProperty(b)) {
                 if (ua[b]) { vendorProp = uaList[b]; }
             }
@@ -106,8 +107,7 @@
         _tplCache           = {},
         _animationPaused    = false,
         _dataIndex          = _s.dataIndex || 0,
-        _amountX            = 0,
-        _amountY            = 0,
+        _thumbSize          = {},
 
             
         /**
@@ -116,17 +116,14 @@
          * @description
          * 
          * Sets initial position (offset X|Y) of each list items and the width
-         * and height of the container.
-         *
-         * @returns { Object } width and height of thumbnails
+         * and min-height of the container. It doesn't set the height property
+         * so the wrapper can easily expand when a zoom image has been
+         * requested.
          */
         _setInitialImageCoords  = function() {
-            var li          = _li.eq(0),
-                thumbSize   = { w : li.outerWidth(true), h : li.outerHeight(true) };
+            var li          = _li.eq(0);
             
-            _amountX    = thumbSize.w;
-            _amountY    = thumbSize.h;
-            
+            _thumbSize   = { w : li.outerWidth(true), h : li.outerHeight(true) };
             /**
              * defining li X,Y offset
              * [~~] is the bitwise op quickest equivalent to Math.floor()
@@ -134,22 +131,20 @@
              */
             _li.each(function(i, el) {
                 $(el).css({
-                    top     : thumbSize.h * (~~(i/_s.cols)),
-                    left    : thumbSize.w * (i%_s.cols)
+                    top     : _thumbSize.h * (~~(i/_s.cols)),
+                    left    : _thumbSize.w * (i%_s.cols)
                 });
             });
             
             /* defining container size */
             _ul.css({
-                minHeight   : thumbSize.h * _s.rows,
-                width       : thumbSize.w * _s.cols
+                minHeight   : _thumbSize.h * _s.rows,
+                width       : _thumbSize.w * _s.cols
             });
             _cnt.css({
-                minHeight   : thumbSize.h * _s.rows,
-                width       : thumbSize.w * _s.cols
+                minHeight   : _thumbSize.h * _s.rows,
+                width       : _thumbSize.w * _s.cols
             });
-            
-            return thumbSize;
         },
     
         /**
@@ -175,13 +170,12 @@
          *   10 |_4_|_5_|_6_|_7_| 11
          *   12 |_8_|_9_|_10|_11| 13    
          *        1   3   5   7
-         *
          * </pre></code>
          * 
          * <p>
          * In earlier versions of this algorithm, the order of nodes was counterclockwise
          * (tlbr) and then alternating (tblr). Now this enumeration pattern (alternating
-         * tb and lr) performs a couple of improvements on code logic and readability:
+         * tb and lr) performs a couple of improvements on code logic and on readability:
          * </p>
          *
          * <ol>
@@ -197,7 +191,7 @@
          * </ol>
          *
          * @example
-         *    Example (4x2)
+         *    Another Example (4x2)
          *    [0,6,1,7, 0,2,2,4,4,6,6,8*]   * = append after
          *
          *        0   2
@@ -207,7 +201,7 @@
          *   10 |_6_|_7_| 11
          *        1   3
          */
-        _getPoints = function(thumb) {
+        _getPoints = function() {
             
             var c, n, s, /* internal counters */
                 selectors = {
@@ -223,14 +217,14 @@
                     
                 _points.push({ prop: 'top', selector : s, node : n,
                     position : {
-                        top     : -thumb.h,
-                        left    : thumb.w * n
+                        top     : -(_thumbSize.h),
+                        left    : _thumbSize.w * n
                     }
                 });
                 _points.push({ prop: 'top', selector : s, node : _s.cols * (_s.rows - 1) + n,
                     position : {
-                        top     : thumb.h * _s.rows,
-                        left    : thumb.w * n
+                        top     : _thumbSize.h * _s.rows,
+                        left    : _thumbSize.w * n
                     }
                 });
             }
@@ -243,14 +237,14 @@
                     
                 _points.push({ prop: 'left', selector : s, node : c,
                     position : {
-                        top     : thumb.h * n,
-                        left    : -thumb.w
+                        top     : _thumbSize.h * n,
+                        left    : -(_thumbSize.w)
                     }
                 });
                 _points.push({ prop: 'left', selector : s, node : c += _s.cols,
                     position : {
-                        top     : thumb.h * n,
-                        left    : thumb.w * _s.cols
+                        top     : _thumbSize.h * n,
+                        left    : _thumbSize.w * _s.cols
                     }
                 });
             }
@@ -265,6 +259,10 @@
         /**
          * @private
          * @name Mosaiqy#_animate
+         *
+         * @description
+         *
+         * This method runs the animation cycle.
          */
         _animate = function(entries) {
             
@@ -278,13 +276,11 @@
             
             if (entries && entries.length === 0) return;
             appDebug("groupCollapsed", 'call animate()');
-            appDebug("info", 'animation %s running', ((_animationPaused)? 'is not ' : 'is'));
+            appDebug("info", 'animation is%s running', ((_animationPaused)? ' not' : ''));
             
             if (!_animationPaused) {
                 
                 _li = _cnt.find('li');
-                
-                $.data(_cnt, 'mosaiqy-animated', 'true');
                 
                 /* end of data? restart loop */
                 if (_dataIndex === _s.data.length) {
@@ -305,8 +301,6 @@
                 if (typeof _tplCache[_dataIndex] === 'undefined') {
                     _tplCache[_dataIndex] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
                         if (typeof _s.data[_dataIndex][key] === 'undefined') {
-                            //appDebug("warn", 'undefined template key `%s` at index %i', key, _dataIndex);
-                            //appDebug("warn", _s.data[_dataIndex]);
                             return key;
                         }
                         return _s.data[_dataIndex][key];
@@ -364,7 +358,7 @@
                  */ 
                 .done(function() {
                     var prop            = _points[rnd].prop,
-                        amount          = (prop === 'left')? _amountX : _amountY,
+                        amount          = (prop === 'left')? _thumbSize.w : _thumbSize.h,
                         /**
                          * @ignore
                          * add new node into animatedNodes collection and change
@@ -504,7 +498,8 @@
                    
                                
                 /* define image position and retrieve entry points */
-                _getPoints(_setInitialImageCoords());
+                _setInitialImageCoords();
+                _getPoints();
                 
                 /* set mouseenter event on container */
                 _cnt.delegate("li", "mouseenter.mosaiqy", function() {
@@ -664,7 +659,7 @@
                      * position with delta.
                      */ 
                     if (typeof props === 'object') {
-                        for (p in props) {
+                        for (var p in props) {
                             if (p === 'left' || p === 'top') {
                                 match = props[p].match(/^(?:\+|\-)=(\-?\d+)/);
                                 if (match && match.length) {
