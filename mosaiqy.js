@@ -108,8 +108,9 @@
         _animationPaused    = false,
         _dataIndex          = _s.dataIndex || 0,
         _thumbSize          = {},
-
-            
+        _intvAnimation,
+        _zoomAvailable      = true,
+        
         /**
          * @private
          * @name Mosaiqy#_setInitialImageCoords
@@ -255,215 +256,258 @@
             appDebug("groupEnd");
         },
         
+        /*
+        _setNodeZoomEvent   = function(node) {
+            node.bind('click', function() {
+                var idx, nodeph, nodezoom, $this = $(this);
+                
+                if (_zoomAvailable) {
+                    
+                    _cnt.addClass('zoom');
+                    
+                    idx    = _li.index($this);
+                    nodeph = _s.cols * (Math.ceil(idx / _s.cols));
+                    
+                    nodezoom = $('<li id="mosaiqy-zoom"></li>');
+                    if (nodeph < _li.length) {
+                        //alert(nodeph)
+                        nodezoom.insertBefore(_li.eq(nodeph));
+                    }
+                    else {
+                        nodezoom.appendTo(_ul);
+                    }
+                    
+                    nodezoom.slideDown(200);
+                    
+                    
+                }
+            })
+        },
+        */
+        
+        _continueAnimation = function() {
+            if (!_animationPaused) {
+                $.when(_animateSelection())
+                .done(function() {
+                    _dataIndex = _dataIndex + 1;
+                })
+                .always(function () {
+                    if (_dataIndex === _s.data.length) {
+                        if (!_s.loop) {
+                            return _pauseAnimation();
+                        }
+                        else {
+                            _dataIndex = 0;
+                        }
+                    }
+                    _intvAnimation = setTimeout(function() {
+                        _continueAnimation();
+                    }, _s.animationDelay)
+                });
+            }
+            else {
+                _intvAnimation = setTimeout(function() {
+                    _continueAnimation();
+                }, _s.animationDelay)
+            }
+        },
+        
+        _pauseAnimation = function() {
+            if (!!_intvAnimation) {
+                clearInterval(_intvAnimation);
+            }
+        },
+        
+        _startAnimation = function() {
+            _continueAnimation();
+        },
+        
         
         /**
          * @private
-         * @name Mosaiqy#_animate
-         *
+         * @name Mosaiqy#_animateSelection
+         * @return a deferred promise
          * @description
          *
          * This method runs the animation cycle.
          */
-        _animate = function(entries) {
+        _animateSelection = function() {
             
             var rnd, tpl, referral, node, animatedSelection, isEven,
-                continueAnimation = function(inc) {
-                    setTimeout(function() {
-                        if (inc) {  _dataIndex += 1; }
-                        _animate(entries);
-                    }, _s.animationDelay);
-                };
-            
-            if (entries && entries.length === 0) return;
+                dfd = $.Deferred();
+           
             appDebug("groupCollapsed", 'call animate()');
-            appDebug("info", 'animation is%s running', ((_animationPaused)? ' not' : ''));
+            appDebug("info", 'Dataindex is', _dataIndex);
             
-            if (!_animationPaused) {
-                
-                _li = _cnt.find('li');
-                
-                /* end of data? restart loop */
-                if (_dataIndex === _s.data.length) {
-                    if (_s.loop) {
-                        _dataIndex = 0;
+            _li = _cnt.find('li');
+            
+            /**
+             * Generate template to append with user data
+             */
+            if (typeof _tplCache[_dataIndex] === 'undefined') {
+                _tplCache[_dataIndex] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
+                    if (typeof _s.data[_dataIndex][key] === 'undefined') {
+                        return key;
                     }
-                    else {
-                        appDebug("groupEnd", 'loop end');
-                        return false;
-                    }
-                }
-                
-                appDebug("info", 'Dataindex is', _dataIndex);
-                
-                /**
-                 * Generate template to append with user data
-                 */
-                if (typeof _tplCache[_dataIndex] === 'undefined') {
-                    _tplCache[_dataIndex] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
-                        if (typeof _s.data[_dataIndex][key] === 'undefined') {
-                            return key;
-                        }
-                        return _s.data[_dataIndex][key];
-                    });
-                }
-                tpl = _tplCache[_dataIndex];
-                
-                /**
-                 * @ignore
-                 * rnd is in the range [0 .. _points.length - 1]
-                 * [~~] is the bitwise op quickest equivalent to Math.floor()
-                 * http://jsperf.com/bitwise-not-not-vs-math-floor
-                 */
-                rnd = (entries && entries.length)
-                  ?  entries.pop()
-                  : ~~(Math.random() * _points.length);
-                
-                
-                isEven = ((rnd & 1) === 0);
-                
-                animatedSelection = _cnt.find(_points[rnd].selector);
-                /**
-                 * @ignore
-                 * append new «li» element
-                 * if the random entry point is the last one then we append the
-                 * new node after the last «li», otherwise we place it before.
-                 */
-                referral    = _li.eq(_points[rnd].node);
-                node        = (rnd < _points.length - 1)?
-                      $('<li />').insertBefore(referral)
-                    : $('<li />').insertAfter(referral);
-                    
-                $(tpl).appendTo(node.css(_points[rnd].position));
-                appDebug("info", "Random position is %d and its referral is node", rnd, referral);
-                
-                /**
-                 * Looking for images inside template fragment, wait the deferred
-                 * execution and checking a promise status.
-                 */
-                $.when(node.find('img').mosaiqyImagesLoad())
-                /**
-                 * No image/s can be loaded, remove the node inserted, then call
-                 * again the _animate method
-                 */
-                .fail(function() {
-                    appDebug("warn", 'Skip dataindex %d, call _animate()', _dataIndex);
-                    appDebug("groupEnd");
-                    node.remove();
-                    continueAnimation(true);
-                })
-                /**
-                 * Image/s inside template fragment have been successfully loaded so
-                 * we can apply the slide transition on the selected nodes and the
-                 * added node
-                 */ 
-                .done(function() {
-                    var prop            = _points[rnd].prop,
-                        amount          = (prop === 'left')? _thumbSize.w : _thumbSize.h,
-                        /**
-                         * @ignore
-                         * add new node into animatedNodes collection and change
-                         * previous collection
-                         */
-                        animatedNodes   = animatedSelection.add(node),
-                        animatedQueue   = animatedNodes.length,
-                        move = {};
-                    
-                    move[prop] = '+=' + (isEven? amount : -amount) + 'px';
-                    appDebug("log", 'Animated Nodes:', animatedNodes);
-                    
-                    /**
-                     * $.animate() function has been extended to support css transition
-                     * on modern browser. See code below
-                     */
-                    animatedNodes.animate(move , _s.animationSpeed,
-                        function() {
-                            var len;
-                            
-                            if (--animatedQueue) return;
-                            
-                            /**
-                             * Opposite node removal. "Opposite" is related on sliding direction
-                             * e.g. on 2->[159] (down) opposite has index 9
-                             *      on 3->[159] (up) opposite has index 1
-                             */
-                            if (isEven) {
-                                animatedSelection.last().remove();
-                            }
-                            else {
-                                animatedSelection.first().remove();
-                            }
-                            
-                            appDebug("log", 'Animated Selection:', animatedSelection);
-                            animatedSelection = (isEven) 
-                                ? animatedSelection.slice(0, animatedSelection.length - 1)
-                                : animatedSelection.slice(1, animatedSelection.length);
-                            
-                            appDebug("log", 'Animated Selection:', animatedSelection);
-                            
-                            /**
-                             * <p>Node rearrangement when animation affects a column. In this case
-                             * a shift must change order inside «li» collection, otherwise the 
-                             * subsequent node selection won't be properly calculated.
-                             * Algorithm is quite simple:</p>
-                             *
-                             * <ol>
-                             *   <li>The offset displacement of shifted nodes is always
-                             *       determined by the number of columns except when shift direction is
-                             *       bottom-up: in fact the last node of animatedSelection collection
-                             *       represents an exception because its position is affected by the
-                             *       presence of the new node (placed just before it);</li>
-                             *   <li>offset is negative on odd entry point (down and right) and
-                             *       positive otherwise (top and left);</li>
-                             *   <li>at each iteration we retrieve the current «li» nodes in the
-                             *       grid so we can work with actual node position.</li>
-                             * </ol>
-                             * 
-                             * <p>If the animation affected a row, rearrangement of nodes is not needed
-                             * at all, because insertion is sequential, thus the new node and shifted
-                             * nodes already have the right index.</p>
-                             */
-                            if (prop === 'top') {
-                                len = animatedSelection.length;
-                                
-                                animatedSelection.each(function(i) {
-                                    var node, curpos, offset, newpos;
-                                    
-                                    /**
-                                     * @ignore
-                                     * Retrieve node after each new insertion and rearrangement
-                                     * of selected animating nodes 
-                                     */ 
-                                    _li     = _cnt.find("li");
-                                    
-                                    node    = $(this);
-                                    curpos  = _li.index(node);
-                                    offset  = (isEven) ? _s.cols : -(_s.cols - ((1 === len - i)? 0 : 1));
-                                            
-                                    if (!!offset) { 
-                                        newpos  = curpos + offset;
-                                        if (newpos < _li.length) {
-                                            node.insertBefore(_li.eq(newpos));
-                                        }
-                                        else {
-                                            node.appendTo(_ul);
-                                        }
-                                    }
-                                });
-                            }
-                            
-                            appDebug("groupEnd");
-                            continueAnimation(true);
-                        }
-                    )
+                    return _s.data[_dataIndex][key];
                 });
             }
-            else {
-                appDebug("groupEnd");
-                appDebug("info", 'animation is in pause...');
-                continueAnimation(false);
-            }
+            tpl = _tplCache[_dataIndex];
             
-            return this;
+            /**
+             * @ignore
+             * rnd is in the range [0 .. _points.length - 1]
+             * [~~] is the bitwise op quickest equivalent to Math.floor()
+             * http://jsperf.com/bitwise-not-not-vs-math-floor
+             */
+            rnd = ~~(Math.random() * _points.length);
+            
+            
+            isEven = ((rnd & 1) === 0);
+            
+            animatedSelection = _cnt.find(_points[rnd].selector);
+            /**
+             * @ignore
+             * append new «li» element
+             * if the random entry point is the last one then we append the
+             * new node after the last «li», otherwise we place it before.
+             */
+            referral    = _li.eq(_points[rnd].node);
+            node        = (rnd < _points.length - 1)?
+                  $('<li />').insertBefore(referral)
+                : $('<li />').insertAfter(referral);
+                
+            $(tpl).appendTo(node.css(_points[rnd].position));
+            appDebug("info", "Random position is %d and its referral is node", rnd, referral);
+            
+            /**
+             * Looking for images inside template fragment, wait the deferred
+             * execution and checking a promise status.
+             */
+            $.when(node.find('img').mosaiqyImagesLoad())
+            /**
+             * No image/s can be loaded, remove the node inserted, then call
+             * again the _animate method
+             */
+            .fail(function() {
+                appDebug("warn", 'Skip dataindex %d, call _animate()', _dataIndex);
+                appDebug("groupEnd");
+                node.remove();
+                dfd.reject();
+            })
+            /**
+             * Image/s inside template fragment have been successfully loaded so
+             * we can apply the slide transition on the selected nodes and the
+             * added node
+             */ 
+            .done(function() {
+                var prop            = _points[rnd].prop,
+                    amount          = (prop === 'left')? _thumbSize.w : _thumbSize.h,
+                    /**
+                     * @ignore
+                     * add new node into animatedNodes collection and change
+                     * previous collection
+                     */
+                    animatedNodes   = animatedSelection.add(node),
+                    animatedQueue   = animatedNodes.length,
+                    move = {};
+                
+                move[prop] = '+=' + (isEven? amount : -amount) + 'px';
+                appDebug("log", 'Animated Nodes:', animatedNodes);
+                
+                /**
+                 * $.animate() function has been extended to support css transition
+                 * on modern browser. For this reason I cannot use deferred animation,
+                 * because if GPUacceleration is enabled then, the code wil not use native
+                 * animation. I could return a promise() in my custom animate() method
+                 * but in this case is not worth the effort.
+                 *
+                 * See code below
+                 */
+                animatedNodes.animate(move , _s.animationSpeed,
+                    function() {
+                        var len;
+                        
+                        if (--animatedQueue) return;
+                        
+                        /**
+                         * Opposite node removal. "Opposite" is related on sliding direction
+                         * e.g. on 2->[159] (down) opposite has index 9
+                         *      on 3->[159] (up) opposite has index 1
+                         */
+                        if (isEven) {
+                            animatedSelection.last().remove();
+                        }
+                        else {
+                            animatedSelection.first().remove();
+                        }
+                        
+                        appDebug("log", 'Animated Selection:', animatedSelection);
+                        animatedSelection = (isEven) 
+                            ? animatedSelection.slice(0, animatedSelection.length - 1)
+                            : animatedSelection.slice(1, animatedSelection.length);
+                        
+                        appDebug("log", 'Animated Selection:', animatedSelection);
+                        
+                        /**
+                         * <p>Node rearrangement when animation affects a column. In this case
+                         * a shift must change order inside «li» collection, otherwise the 
+                         * subsequent node selection won't be properly calculated.
+                         * Algorithm is quite simple:</p>
+                         *
+                         * <ol>
+                         *   <li>The offset displacement of shifted nodes is always
+                         *       determined by the number of columns except when shift direction is
+                         *       bottom-up: in fact the last node of animatedSelection collection
+                         *       represents an exception because its position is affected by the
+                         *       presence of the new node (placed just before it);</li>
+                         *   <li>offset is negative on odd entry point (down and right) and
+                         *       positive otherwise (top and left);</li>
+                         *   <li>at each iteration we retrieve the current «li» nodes in the
+                         *       grid so we can work with actual node position.</li>
+                         * </ol>
+                         * 
+                         * <p>If the animation affected a row, rearrangement of nodes is not needed
+                         * at all, because insertion is sequential, thus the new node and shifted
+                         * nodes already have the right index.</p>
+                         */
+                        if (prop === 'top') {
+                            len = animatedSelection.length;
+                            
+                            animatedSelection.each(function(i) {
+                                var node, curpos, offset, newpos;
+                                
+                                /**
+                                 * @ignore
+                                 * Retrieve node after each new insertion and rearrangement
+                                 * of selected animating nodes 
+                                 */ 
+                                _li     = _cnt.find("li");
+                                
+                                node    = $(this);
+                                curpos  = _li.index(node);
+                                offset  = (isEven) ? _s.cols : -(_s.cols - ((1 === len - i)? 0 : 1));
+                                        
+                                if (!!offset) { 
+                                    newpos  = curpos + offset;
+                                    if (newpos < _li.length) {
+                                        node.insertBefore(_li.eq(newpos));
+                                    }
+                                    else {
+                                        node.appendTo(_ul);
+                                    }
+                                }
+                            
+                            });
+                        };
+                        appDebug("groupEnd");
+                        dfd.resolve();
+                        //_setNodeZoomEvent(node);
+                    }
+                )
+            });
+            
+            return dfd.promise();
         };
         
         
@@ -472,6 +516,7 @@
          * @scope Mosaiqy
          */
         return {
+            
             init    : function(cnt, options) {
                 
                 _s = $.extend(_s, options);
@@ -502,10 +547,12 @@
                 _getPoints();
                 
                 /* set mouseenter event on container */
-                _cnt.delegate("li", "mouseenter.mosaiqy", function() {
+                _cnt.delegate("ul", "mouseenter.mosaiqy", function() {
                     _animationPaused = true;
-                }).delegate("li", "mouseleave.mosaiqy", function() {
-                    _animationPaused = false;
+                }).delegate("ul", "mouseleave.mosaiqy", function() {
+                    if (!_cnt.hasClass('zoom')) {
+                        _animationPaused = false;
+                    }
                 });
                 
                 
@@ -517,7 +564,9 @@
                 .done(function() {
                     appDebug("info", 'All images have been successfully loaded');
                     _cnt.removeClass('loading');
-                    setTimeout(function() { _animate(/* [1].reverse() */); }, _s.animationDelay);
+                    
+                    //_setNodeZoomEvent(_li);
+                    _startAnimation();
                 })
                 /**
                  * One or more image have not been loaded
@@ -528,7 +577,10 @@
                 });
                 
                 return this;
-            }   
+            },
+            
+            pauseAnimation      : _pauseAnimation,
+            continueAnimation   : _continueAnimation
         };
     },
     
@@ -553,24 +605,9 @@
             imgLength   = this.length,
             loaded      = [],
             failed      = [],
-            timeout     = 4819.78,
+            timeout     = 4819.78;
             /* waiting about 5 seconds before discarding image */
             
-            /**
-             * @ignore
-             * Check wheter to resolve or reject main deferred object
-             */
-            dfdFinally  = function(alwaysReject) {
-                if (imgLength === 0) {
-                    appDebug("groupEnd");
-                    if (failed.length || alwaysReject) {
-                        dfd.reject();
-                    } else {
-                        dfd.resolve();
-                    }
-                }
-            };
-        
         appDebug("groupCollapsed", 'Start deferred load of %d image/s:', imgLength);
         
         if (imgLength) {
@@ -595,11 +632,11 @@
                         /* single image main events */
                         $(i).one('load.mosaiqy', function() {
                                 clearInterval(intv);
-                                imageDfd.resolveWith(--imgLength);
+                                imageDfd.resolve();
                             })
                             .bind('error.mosaiqy', function() {
                                 clearInterval(intv);
-                                imageDfd.rejectWith(--imgLength);
+                                imageDfd.reject();
                             }).attr('src', i.src);
                         
                         if (i.complete) { $(i).trigger('load.mosaiqy'); }
@@ -607,24 +644,34 @@
                         return imageDfd.promise();
                     })()
                 )
+                /*
+                .always(function() {
+                    imgLength = imgLength - 1;
+                })
+                */
                 .done(function() {
                     loaded.push(i.src);
                     appDebug("log", 'Loaded', i.src);
                     if (imgCallback) { imgCallback($(i)); }
-                    dfdFinally();
                 })
                 .fail(function() {
                     failed.push(i.src);
                     appDebug("warn", 'Not loaded', i.src);
-                    dfdFinally();
+                })
+                .always(function() {
+                    imgLength = imgLength - 1;
+                    if (imgLength === 0) {
+                        appDebug("groupEnd");
+                        if (failed.length) {
+                            dfd.reject();
+                        }
+                        else {
+                            dfd.resolve();
+                        }
+                    }
                 })
             })
         }
-        else {
-            /* no images to load, deferred fail */
-            dfdFinally(true);
-        }
-        
         return dfd.promise();
     };
     
