@@ -92,7 +92,7 @@
          */
         var _s = {
             animationDelay      : 3000,
-            animationSpeed      : 1000,
+            animationSpeed      : 800,
             cols                : 4,
             dataIndex           : 0,
             loop                : true,
@@ -106,10 +106,10 @@
         _points             = [],
         _tplCache           = {},
         _animationPaused    = false,
+        _animationRunning   = false,
         _dataIndex          = _s.dataIndex || 0,
         _thumbSize          = {},
         _intvAnimation,
-        _zoomAvailable      = true,
         
         /**
          * @private
@@ -256,37 +256,46 @@
             appDebug("groupEnd");
         },
         
-        /*
+        
         _setNodeZoomEvent   = function(node) {
-            node.bind('click', function() {
+            
+            node.live('click', function(evt) {
+                
                 var idx, nodeph, nodezoom, $this = $(this);
                 
-                if (_zoomAvailable) {
-                    
+                if (_animationRunning) {
+                    evt.preventDefault();
+                }
+                
+                if (!_cnt.hasClass('zoom')) {
                     _cnt.addClass('zoom');
+                    $this.addClass('zoom')
                     
+                    _li    = _ul.find('li')
                     idx    = _li.index($this);
-                    nodeph = _s.cols * (Math.ceil(idx / _s.cols));
+                    nodeph = _s.cols * (Math.ceil((idx + 1)/ _s.cols));
                     
+                    console.log(idx, nodeph)
                     nodezoom = $('<li id="mosaiqy-zoom"></li>');
                     if (nodeph < _li.length) {
-                        //alert(nodeph)
                         nodezoom.insertBefore(_li.eq(nodeph));
                     }
                     else {
                         nodezoom.appendTo(_ul);
                     }
                     
-                    nodezoom.slideDown(200);
-                    
-                    
+                    nodezoom.animate({ height : '+=200px' }, 500);
                 }
+                
+                evt.preventDefault();
+
             })
         },
-        */
+       
         
         _continueAnimation = function() {
             if (!_animationPaused) {
+                _animationRunning = true;
                 $.when(_animateSelection())
                 .done(function() {
                     _dataIndex = _dataIndex + 1;
@@ -300,6 +309,7 @@
                             _dataIndex = 0;
                         }
                     }
+                    _animationRunning = false;
                     _intvAnimation = setTimeout(function() {
                         _continueAnimation();
                     }, _s.animationDelay)
@@ -418,7 +428,7 @@
                 /**
                  * $.animate() function has been extended to support css transition
                  * on modern browser. For this reason I cannot use deferred animation,
-                 * because if GPUacceleration is enabled then, the code wil not use native
+                 * because if GPUacceleration is enabled the code will not use native
                  * animation. I could return a promise() in my custom animate() method
                  * but in this case is not worth the effort.
                  *
@@ -502,7 +512,6 @@
                         };
                         appDebug("groupEnd");
                         dfd.resolve();
-                        //_setNodeZoomEvent(node);
                     }
                 )
             });
@@ -564,9 +573,10 @@
                 .done(function() {
                     appDebug("info", 'All images have been successfully loaded');
                     _cnt.removeClass('loading');
-                    
-                    //_setNodeZoomEvent(_li);
-                    _startAnimation();
+                    _setNodeZoomEvent(_li);
+                    _intvAnimation = setTimeout(function() {
+                        _startAnimation();
+                    }, _s.animationDelay + 2000)
                 })
                 /**
                  * One or more image have not been loaded
@@ -577,10 +587,7 @@
                 });
                 
                 return this;
-            },
-            
-            pauseAnimation      : _pauseAnimation,
-            continueAnimation   : _continueAnimation
+            }
         };
     },
     
@@ -644,11 +651,6 @@
                         return imageDfd.promise();
                     })()
                 )
-                /*
-                .always(function() {
-                    imgLength = imgLength - 1;
-                })
-                */
                 .done(function() {
                     loaded.push(i.src);
                     appDebug("log", 'Loaded', i.src);
@@ -682,7 +684,7 @@
      */     
     _$.fn.extend({
         _animate    : $.fn.animate,
-        animate           : function(props, speed, easing, callback) {
+        animate     : function(props, speed, easing, callback) {
             var options = (speed && typeof speed === "object")
                 ? $.extend({}, speed)
                 : {  
@@ -711,6 +713,12 @@
                                 match = props[p].match(/^(?:\+|\-)=(\-?\d+)/);
                                 if (match && match.length) {
                                     cssprops[p] = pos[p] + parseInt(match[1], 10);
+                                }
+                            }
+                            if (p === 'height') {
+                                match = props[p].match(/^(?:\+|\-)=(\-?\d+)/);
+                                if (match && match.length) {
+                                    cssprops[p] = this.offsetHeight + parseInt(match[1], 10);
                                 }
                             }
                         }

@@ -16,6 +16,7 @@
     position        : absolute;
     z-index         : 1;
     display         : block;
+    text-align      : left;
 }
 
     .js .mosaiqy li > div {
@@ -58,6 +59,7 @@
     z-index             : 20;    
 }
 
+.mosaiqy li.zoom figcaption,
 .mosaiqy li:hover figcaption {
     display         : block;    
 }
@@ -80,27 +82,17 @@
       transition-delay                      : 0s;
 }
 
-    .js .mosaiqy li#mosaiqy-zoom {
-        -moz-transition-property              : none;
-        -moz-transition-timing-function       : ease-out;
-        -moz-transition-delay                 : 0s;
-        
-        -o-transition-property                : none;
-        -o-transition-timing-function         : ease-out;
-        -o-transition-delay                   : 0s;
-        
-        -webkit-transition-property           : none;
-        -webkit-transition-timing-function    : ease-out;
-        -webkit-transition-delay              : 0s;
-        
-        transition-property                   : none;
-        transition-timing-function            : ease-out;
-        transition-delay                      : 0s;
-      
+    .mosaiqy li#mosaiqy-zoom {
+        /*
+        -moz-transition     : none;
+        -o-transition       : none;
+        -webkit-transition  : none;
+        transition          : none;
+        */
         clear           : left;
         width           : 100%;
-        height          : 200px;
-        background      : #414141 url();
+        height          : 0;
+        background      : #f0f1f4  url();
     }
 
 /* User styles */
@@ -143,7 +135,13 @@
 	transition          : opacity .5s ease;
 }
 
+.mosaiqy li figure a {
+    display         : block;
+    height          : 100%;
+    width           : 100%;
+}
+
+.mosaiqy li.zoom figcaption,
 .mosaiqy li figcaption:hover  {
     opacity             : 1;
 }
-
