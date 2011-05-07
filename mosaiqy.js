@@ -271,7 +271,6 @@
                     _cnt.addClass('zoom');
                     $this.addClass('zoom')
                     
-                    _li    = _ul.find('li')
                     idx    = _li.index($this);
                     nodeph = _s.cols * (Math.ceil((idx + 1)/ _s.cols));
                     
@@ -297,23 +296,24 @@
             if (!_animationPaused) {
                 _animationRunning = true;
                 $.when(_animateSelection())
-                .done(function() {
-                    _dataIndex = _dataIndex + 1;
-                })
-                .always(function () {
-                    if (_dataIndex === _s.data.length) {
-                        if (!_s.loop) {
-                            return _pauseAnimation();
+                    .done(function() {
+                        _li = _ul.find('li');
+                        _dataIndex = _dataIndex + 1;
+                    })
+                    .always(function () {
+                        if (_dataIndex === _s.data.length) {
+                            if (!_s.loop) {
+                                return _pauseAnimation();
+                            }
+                            else {
+                                _dataIndex = 0;
+                            }
                         }
-                        else {
-                            _dataIndex = 0;
-                        }
-                    }
-                    _animationRunning = false;
-                    _intvAnimation = setTimeout(function() {
-                        _continueAnimation();
-                    }, _s.animationDelay)
-                });
+                        _animationRunning = false;
+                        _intvAnimation = setTimeout(function() {
+                            _continueAnimation();
+                        }, _s.animationDelay)
+                    });
             }
             else {
                 _intvAnimation = setTimeout(function() {
@@ -349,7 +349,7 @@
             appDebug("groupCollapsed", 'call animate()');
             appDebug("info", 'Dataindex is', _dataIndex);
             
-            _li = _cnt.find('li');
+            //_li = _cnt.find('li');
             
             /**
              * Generate template to append with user data
