@@ -263,7 +263,7 @@
             var $nodezoom, $this, $current, i, zoomRunning,
                 pagePos, targetPos, diffPos;
             
-            node.live('click', function(evt) {
+            node.live('click.openMosaiqyZoom', function(evt) {
 
                 $this = $(this);
                 
@@ -627,7 +627,7 @@
                 
                 _cnt    = cnt;
                 _ul     = cnt.find('ul');
-                _li     = cnt.find('li');
+                _li     = cnt.find('li:not(#mosaiqy-zoom)');
                 _img    = cnt.find('img');
                    
                                

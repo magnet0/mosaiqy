@@ -86,7 +86,7 @@
         clear           : left;
         width           : 100%;
         height          : 0;
-        background      : #f0f1f4  url();
+        background      : #f0f1f4  url(ajax-loader.gif) center center no-repeat;
     }
 
     .mosaiqy #mosaiqy-zoom-image {
