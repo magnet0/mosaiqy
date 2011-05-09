@@ -109,6 +109,7 @@
         _animationRunning   = false,
         _dataIndex          = _s.dataIndex || 0,
         _thumbSize          = {},
+        _page               = ($.browser.opera)? $("html") : $("html,body"),
         _intvAnimation,
         
         /**
@@ -258,37 +259,113 @@
         
         
         _setNodeZoomEvent   = function(node) {
+                
+            var $nodezoom, $this, $current, i, zoomRunning,
+                pagePos, targetPos, diffPos;
             
             node.live('click', function(evt) {
+
+                $this = $(this);
                 
-                var idx, nodeph, nodezoom, $this = $(this);
-                
-                if (_animationRunning) {
-                    evt.preventDefault();
-                }
-                
-                if (!_cnt.hasClass('zoom')) {
-                    _cnt.addClass('zoom');
-                    $this.addClass('zoom')
+                if (!_animationRunning && !zoomRunning) {
+                    /**
+                     * find the index of «li» selected, then retrieve the element placeholder
+                     * to append the zoom node.
+                     */ 
+                    i = _s.cols * (Math.ceil((_li.index($this) + 1) / _s.cols));
                     
-                    idx    = _li.index($this);
-                    nodeph = _s.cols * (Math.ceil((idx + 1)/ _s.cols));
-                    
-                    console.log(idx, nodeph)
-                    nodezoom = $('<li id="mosaiqy-zoom"></li>');
-                    if (nodeph < _li.length) {
-                        nodezoom.insertBefore(_li.eq(nodeph));
+                    if (!_cnt.hasClass('zoom')) {
+                        /* no zoom has already opened */
+                        openZoom();
                     }
                     else {
-                        nodezoom.appendTo(_ul);
+                        /* a zoom is currently opened */
+                        if (!$this.hasClass('zoom')) {
+                            openZoom(closeZoom())
+                        }
                     }
-                    
-                    nodezoom.animate({ height : '+=200px' }, 500);
                 }
-                
                 evt.preventDefault();
-
-            })
+            });
+            
+            
+            function closeZoom() {
+                var dfd = $.Deferred();
+                $current.removeClass('zoom');
+                $.when($nodezoom._animate({ height : '0' }, 750))
+                    .done(function() {
+                        $nodezoom.remove();
+                        _cnt.removeClass('zoom');
+                        dfd.resolve();
+                    });
+                return dfd.promise();
+            };
+            
+            
+            function openZoom(previousClose) {
+                
+                zoomRunning = true;
+                
+                $.when(previousClose)
+                    .done(function() {
+                        
+                        _cnt.addClass('zoom');
+                        $current = $this;
+                        $current.addClass('zoom');
+                        
+                        /**
+                         * webkit bug: http://code.google.com/p/chromium/issues/detail?id=2891 
+                         */                    
+                        targetPos   = $this.offset().top;
+                        pagePos = (document.body.scrollTop != 0)
+                            ? document.body.scrollTop
+                            : document.documentElement.scrollTop;
+                    
+                        diffPos = Math.abs(pagePos - targetPos);
+                    
+                        
+                        /**
+                         * need to create the zoom node then append it and then open it
+                         */
+                        $nodezoom = $('<li id="mosaiqy-zoom"></li>');
+                        if (i < _li.length) {
+                            $nodezoom.insertBefore(_li.eq(i));
+                        }
+                        else {
+                            $nodezoom.appendTo(_ul);
+                        }
+                        
+                        $.when(_page.stop()._animate({ scrollTop: targetPos }, ((diffPos > 0) ? ((diffPos * 1.5) + 400) : 0)))
+                            .done(function() {
+                                viewZoom();
+                            });
+                    })
+            }
+            
+            function viewZoom() {
+                
+                var zoomImage;
+                
+                $nodezoom._animate({ height : '200px' }, 750);
+                
+                $('<img />').attr({
+                        id      : "mosaiqy-zoom-image",
+                        src     : $this.find('a').attr('href')
+                    }).appendTo($nodezoom);
+                zoomImage = $('#mosaiqy-zoom-image');
+                
+                $.when(zoomImage.mosaiqyImagesLoad())
+                    .done(function() {
+                        $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, 750))
+                            .done(function() {
+                                zoomRunning = false;
+                            })
+                    })
+                    .fail(function() {
+                        closeZoom();
+                        zoomRunning = false;
+                    })
+            }
         },
        
         
@@ -713,12 +790,6 @@
                                 match = props[p].match(/^(?:\+|\-)=(\-?\d+)/);
                                 if (match && match.length) {
                                     cssprops[p] = pos[p] + parseInt(match[1], 10);
-                                }
-                            }
-                            if (p === 'height') {
-                                match = props[p].match(/^(?:\+|\-)=(\-?\d+)/);
-                                if (match && match.length) {
-                                    cssprops[p] = this.offsetHeight + parseInt(match[1], 10);
                                 }
                             }
                         }

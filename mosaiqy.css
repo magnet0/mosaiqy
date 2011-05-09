@@ -83,16 +83,15 @@
 }
 
     .mosaiqy li#mosaiqy-zoom {
-        /*
-        -moz-transition     : none;
-        -o-transition       : none;
-        -webkit-transition  : none;
-        transition          : none;
-        */
         clear           : left;
         width           : 100%;
         height          : 0;
         background      : #f0f1f4  url();
+    }
+
+    .mosaiqy li#mosaiqy-zoom img {
+        width           : 100% !important;
+        height          : auto !important;
     }
 
 /* User styles */
