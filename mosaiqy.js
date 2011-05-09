@@ -340,14 +340,14 @@
                                 viewZoom();
                             });
                     })
-            }
+            };
+            
             
             function viewZoom() {
                 
                 var zoomImage;
                 
                 $nodezoom._animate({ height : '200px' }, 750);
-                
                 $('<img />').attr({
                         id      : "mosaiqy-zoom-image",
                         src     : $this.find('a').attr('href')
