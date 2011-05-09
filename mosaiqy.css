@@ -90,6 +90,7 @@
     }
 
     .mosaiqy li#mosaiqy-zoom img {
+        display         : none;
         width           : 100% !important;
         height          : auto !important;
     }

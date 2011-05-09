@@ -351,11 +351,13 @@
                 $('<img />').attr({
                         id      : "mosaiqy-zoom-image",
                         src     : $this.find('a').attr('href')
-                    }).appendTo($nodezoom);
+                    })
+                    .appendTo($nodezoom);
+                    
                 zoomImage = $('#mosaiqy-zoom-image');
-                
                 $.when(zoomImage.mosaiqyImagesLoad())
                     .done(function() {
+                        zoomImage.fadeIn(_s.startFade);
                         $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, 750))
                             .done(function() {
                                 zoomRunning = false;
