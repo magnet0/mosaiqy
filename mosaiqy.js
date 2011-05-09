@@ -356,7 +356,6 @@
                     })
                     .appendTo($nodezoom);
                     
-                //zoomImage = $('#mosaiqy-zoom-image');
                 $.when(zoomImage.mosaiqyImagesLoad(
                     function(img) {
                         setTimeout(function() { img.fadeIn(_s.startFade, function() {
