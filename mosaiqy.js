@@ -296,6 +296,7 @@
                     .done(function() {
                         $nodezoom.remove();
                         _cnt.removeClass('zoom');
+                        zoomRunning = false;
                         dfd.resolve();
                     });
                 return dfd.promise();
@@ -355,17 +356,17 @@
                     .appendTo($nodezoom);
                     
                 zoomImage = $('#mosaiqy-zoom-image');
-                $.when(zoomImage.mosaiqyImagesLoad())
-                    .done(function() {
-                        zoomImage.fadeIn(_s.startFade);
-                        $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, 750))
+                $.when(zoomImage.mosaiqyImagesLoad(
+                    function(img) {
+                        setTimeout(function() { img.fadeIn(_s.startFade); }, _s.startFade * 1.2);
+                        $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade))
                             .done(function() {
                                 zoomRunning = false;
                             })
-                    })
+                    }))
                     .fail(function() {
+                        appDebug('warn', "cannot load ", $this.find('a').attr('href'))
                         closeZoom();
-                        zoomRunning = false;
                     })
             }
         },

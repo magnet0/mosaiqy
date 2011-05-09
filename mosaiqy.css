@@ -89,7 +89,7 @@
         background      : #f0f1f4  url();
     }
 
-    .mosaiqy li#mosaiqy-zoom img {
+    .mosaiqy #mosaiqy-zoom-image {
         display         : none;
         width           : 100% !important;
         height          : auto !important;
