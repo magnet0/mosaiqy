@@ -263,7 +263,7 @@
             var $nodezoom, $this, $current, i, zoomRunning,
                 pagePos, targetPos, diffPos;
             
-            node.live('click.openMosaiqyZoom', function(evt) {
+            node.live('click.mosaiqy', function(evt) {
 
                 $this = $(this);
                 
@@ -296,6 +296,7 @@
                     .done(function() {
                         $nodezoom.remove();
                         _cnt.removeClass('zoom');
+                        _ul.trigger('mouseleave');
                         zoomRunning = false;
                         dfd.resolve();
                     });
@@ -349,18 +350,27 @@
                 var zoomImage;
                 
                 $nodezoom._animate({ height : '200px' }, 750);
-                $('<img />').attr({
+                zoomImage = $('<img />').attr({
                         id      : "mosaiqy-zoom-image",
                         src     : $this.find('a').attr('href')
                     })
                     .appendTo($nodezoom);
                     
-                zoomImage = $('#mosaiqy-zoom-image');
+                //zoomImage = $('#mosaiqy-zoom-image');
                 $.when(zoomImage.mosaiqyImagesLoad(
                     function(img) {
                         setTimeout(function() { img.fadeIn(_s.startFade); }, _s.startFade * 1.2);
                         $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade))
                             .done(function() {
+                                $("<a>Close</a>").attr({
+                                    href    : "#",
+                                    id      : "mosaiqy-zoom-close"
+                                })
+                                .bind("click.mosaiqy", function(evt) {
+                                    closeZoom();
+                                    evt.preventDefault();
+                                })
+                                .appendTo($nodezoom);
                                 zoomRunning = false;
                             })
                     }))
@@ -428,8 +438,6 @@
            
             appDebug("groupCollapsed", 'call animate()');
             appDebug("info", 'Dataindex is', _dataIndex);
-            
-            //_li = _cnt.find('li');
             
             /**
              * Generate template to append with user data
@@ -692,8 +700,8 @@
             imgLength   = this.length,
             loaded      = [],
             failed      = [],
-            timeout     = 4819.78;
-            /* waiting about 5 seconds before discarding image */
+            timeout     = 8419.78;
+            /* waiting about 8 seconds before discarding image */
             
         appDebug("groupCollapsed", 'Start deferred load of %d image/s:', imgLength);
         
