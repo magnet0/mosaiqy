@@ -359,10 +359,8 @@
                 //zoomImage = $('#mosaiqy-zoom-image');
                 $.when(zoomImage.mosaiqyImagesLoad(
                     function(img) {
-                        setTimeout(function() { img.fadeIn(_s.startFade); }, _s.startFade * 1.2);
-                        $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade))
-                            .done(function() {
-                                $("<a>Close</a>").attr({
+                        setTimeout(function() { img.fadeIn(_s.startFade, function() {
+                            $("<a>Close</a>").attr({
                                     href    : "#",
                                     id      : "mosaiqy-zoom-close"
                                 })
@@ -371,6 +369,11 @@
                                     evt.preventDefault();
                                 })
                                 .appendTo($nodezoom);
+                            });
+                        }, _s.startFade / 1.2);
+                        
+                        $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade))
+                            .done(function() {
                                 zoomRunning = false;
                             })
                     }))
