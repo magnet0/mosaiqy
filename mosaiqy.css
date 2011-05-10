@@ -86,10 +86,16 @@
         clear           : left;
         width           : 100%;
         height          : 0;
-        position        : relative;
         z-index         : 100;
         background      : #f0f1f4  url(ajax-loader.gif) center center no-repeat;
     }
+
+        .mosaiqy li#mosaiqy-zoom figure {
+            position        : relative;
+            display         : block;
+            width           : 100%;
+            height          : 100%;
+        }
 
     .mosaiqy #mosaiqy-zoom-image {
         display         : none;

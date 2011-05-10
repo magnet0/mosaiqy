@@ -276,7 +276,7 @@
                     
                     if (!_cnt.hasClass('zoom')) {
                         /* no zoom has already opened */
-                        openZoom();
+                        openZoom($.noop());
                     }
                     else {
                         /* a zoom is currently opened */
@@ -291,13 +291,12 @@
             
             function closeZoom() {
                 var dfd = $.Deferred();
-                $current.removeClass('zoom');
+                appDebug('log', "closing zoom");
+                
                 $.when($nodezoom._animate({ height : '0' }, 750))
                     .done(function() {
                         $nodezoom.remove();
-                        _cnt.removeClass('zoom');
-                        _ul.trigger('mouseleave');
-                        zoomRunning = false;
+                        appDebug('log', "zoom has been removed");
                         dfd.resolve();
                     });
                 return dfd.promise();
@@ -306,10 +305,13 @@
             
             function openZoom(previousClose) {
                 
+                appDebug('log', "opening zoom");
                 zoomRunning = true;
                 
                 $.when(previousClose)
                     .done(function() {
+                        
+                        _li = _cnt.find('li:not(#mosaiqy-zoom)');
                         
                         _cnt.addClass('zoom');
                         $current = $this;
@@ -329,7 +331,7 @@
                         /**
                          * need to create the zoom node then append it and then open it
                          */
-                        $nodezoom = $('<li id="mosaiqy-zoom"></li>');
+                        $nodezoom = $('<li id="mosaiqy-zoom"><figure></figure></li>');
                         if (i < _li.length) {
                             $nodezoom.insertBefore(_li.eq(i));
                         }
@@ -349,12 +351,14 @@
                 
                 var zoomImage;
                 
+                appDebug('log', "viewing zoom");
+
                 $nodezoom._animate({ height : '200px' }, 750);
                 zoomImage = $('<img />').attr({
                         id      : "mosaiqy-zoom-image",
                         src     : $this.find('a').attr('href')
                     })
-                    .appendTo($nodezoom);
+                    .appendTo($nodezoom.find('figure'));
                     
                 $.when(zoomImage.mosaiqyImagesLoad(
                     function(img) {
@@ -364,21 +368,32 @@
                                     id      : "mosaiqy-zoom-close"
                                 })
                                 .bind("click.mosaiqy", function(evt) {
-                                    closeZoom();
+                                    $.when(closeZoom()).then(function() {
+                                        $current.removeClass('zoom');
+                                        _cnt.removeClass('zoom');
+                                        _ul.trigger('mouseleave');
+                                        zoomRunning = false;
+                                    });
                                     evt.preventDefault();
                                 })
-                                .appendTo($nodezoom);
+                                .appendTo($nodezoom.find('figure'));
                             });
                         }, _s.startFade / 1.2);
                         
                         $.when($nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade))
                             .done(function() {
+                                appDebug('log', "zoom ready");
                                 zoomRunning = false;
                             })
                     }))
                     .fail(function() {
                         appDebug('warn', "cannot load ", $this.find('a').attr('href'))
-                        closeZoom();
+                        $.when(closeZoom()).then(function() {
+                            $current.removeClass('zoom');
+                            _cnt.removeClass('zoom');
+                            _ul.trigger('mouseleave');
+                            zoomRunning = false;
+                        });
                     })
             }
         },
