@@ -681,7 +681,7 @@
                 
                 
                 
-                $.when(_img.mosaiqyImagesLoad(function(img) { img.fadeIn(_s.startFade); }))
+                $.when(_img.mosaiqyImagesLoad(function(img) { img.animate({ opacity : '1' }, _s.startFade); }))
                 /**
                  * All images have been successfully loaded
                  */

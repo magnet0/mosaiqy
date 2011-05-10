@@ -43,7 +43,7 @@
     h2 {
         font-family     : LeagueGothicRegular;
         font-weight     : normal;
-        margin          : 15px 0 0 0;
+        margin          : 15px 0 30px; 0;
         font-size       : 28px;
         color           : #414141;
     }
@@ -148,7 +148,19 @@
                 </div>
             </li>
         </ul>
-     </div> 
+     </div>
+    
+    <section style="width: 100%; text-align: center;">
+        <h2>Choose your favourite grid size (except 1x12 and 12x1 &mdash; you could, but it's trivial!)</h2>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
+            <select name="gridsize" onchange="this.parentNode.submit()">
+                <option value="2x6" <?php if ($_POST['gridsize'] == "2x6") echo "selected"; ?> >2x6</option>
+                <option value="3x4" <?php if ($_POST['gridsize'] == "3x4" || $_POST['gridsize'] == '') echo "selected"; ?> >3x4</option>
+                <option value="4x3" <?php if ($_POST['gridsize'] == "4x3") echo "selected"; ?> >4x3</option>
+                <option value="6x2" <?php if ($_POST['gridsize'] == "6x2") echo "selected"; ?> >6x2</option>
+            </select>
+        </form>
+    </section>
      
     <script src="mosaiqy.js" id="mosaiqy_tpl">
         <div>
@@ -157,12 +169,21 @@
             </figure>
         </div>
     </script>
+    
+    <?php
+        $rows = 3;
+        $cols = 4;
+        
+        if (isset($_POST['gridsize'])) {
+            list($rows, $cols) = explode("x", $_POST['gridsize']);
+        }
+    ?>
      
     <script>
     $('.mosaiqy').mosaiqy({
         template        : '#mosaiqy_tpl',
-        rows            : 3,
-        cols            : 4,
+        rows            : <?php echo $rows ?>,
+        cols            : <?php echo $cols ?>,
         animationDelay  : 1500,
         loop            : true,
         data            : [
