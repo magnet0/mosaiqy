@@ -291,9 +291,11 @@
             
             function closeZoom() {
                 var dfd = $.Deferred();
-                appDebug('log', "closing zoom");
+                appDebug("log", 'closing zoom');
                 
-                $.when($nodezoom._animate({ height : '0' }, 750))
+               _cnt.find('#mosaiqy-zoom-close')._animate({ opacity: '0' }, _s.startFade / 2);
+                $current.removeClass('zoom');
+                $.when($nodezoom._animate({ height : '0' }, _s.startFade))
                     .done(function() {
                         $nodezoom.remove();
                         appDebug('log', "zoom has been removed");
@@ -305,9 +307,10 @@
             
             function openZoom(previousClose) {
                 
-                appDebug('log', "opening zoom");
+                appDebug("log", 'opening zoom');
                 zoomRunning = true;
                 
+                $this.addClass('zoom');
                 $.when(previousClose)
                     .done(function() {
                         
@@ -315,7 +318,6 @@
                         
                         _cnt.addClass('zoom');
                         $current = $this;
-                        $current.addClass('zoom');
                         
                         /**
                          * webkit bug: http://code.google.com/p/chromium/issues/detail?id=2891 
@@ -351,15 +353,15 @@
                 
                 var zoomImage;
                 
-                appDebug('log', "viewing zoom");
+                appDebug("log", 'viewing zoom');
 
-                $nodezoom._animate({ height : '200px' }, 750);
+                $nodezoom._animate({ height : '200px' }, _s.startFade);
                 zoomImage = $('<img />').attr({
                         id      : "mosaiqy-zoom-image",
                         src     : $this.find('a').attr('href')
                     })
                     .appendTo($nodezoom.find('figure'));
-                    
+                
                 $.when(zoomImage.mosaiqyImagesLoad(
                     function(img) {
                         setTimeout(function() { img.fadeIn(_s.startFade, function() {
@@ -369,14 +371,12 @@
                                 })
                                 .bind("click.mosaiqy", function(evt) {
                                     $.when(closeZoom()).then(function() {
-                                        $current.removeClass('zoom');
-                                        _cnt.removeClass('zoom');
-                                        _ul.trigger('mouseleave');
-                                        zoomRunning = false;
+                                        restartAnimation();
                                     });
                                     evt.preventDefault();
                                 })
-                                .appendTo($nodezoom.find('figure'));
+                                .appendTo($nodezoom.find('figure'))
+                                ._animate({ opacity: '1' }, _s.startFade / 2);
                             });
                         }, _s.startFade / 1.2);
                         
@@ -387,15 +387,25 @@
                             })
                     }))
                     .fail(function() {
-                        appDebug('warn', "cannot load ", $this.find('a').attr('href'))
+                        appDebug("warn", 'cannot load ', $this.find('a').attr('href'))
                         $.when(closeZoom()).then(function() {
-                            $current.removeClass('zoom');
-                            _cnt.removeClass('zoom');
-                            _ul.trigger('mouseleave');
-                            zoomRunning = false;
+                            restartAnimation();
                         });
                     })
+            };
+            
+            
+            function restartAnimation() {
+                _cnt.removeClass('zoom');
+
+                appDebug("info", 'restart animation in %d seconds ', _s.animationDelay / 1000);
+                setTimeout(function() {
+                    zoomRunning = false;
+                    _ul.trigger('mouseleave');
+                }, _s.animationDelay);
             }
+            
+            
         },
        
         

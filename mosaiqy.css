@@ -103,7 +103,7 @@
         height          : auto !important;
     }
     
-    .mosaiqy #mosaiqy-zoom-close {
+    .mosaiqy #mosaiqy-zoom-close { 
         display         : block;
         width           : 45px;
         height          : 45px;
@@ -114,6 +114,9 @@
         right           : 10px;
         overflow        : hidden;
         text-indent     : -8478em;
+        opacity         : 0;
+        -moz-opacity    : 0;
+        filter          : alpha(opacity=0)
     }
 
 /* User styles */
