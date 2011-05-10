@@ -22,10 +22,16 @@
     
     body {
         background  : #e0e7e6;
+        font        : 15px/1.4 Arial;
+        color       : #303133;
     }
     
-    hgroup {
+    section, hgroup {
         text-align  : center;
+    }
+    
+    section {
+        margin      : 3em 0 0 0;
     }
     
     h1 {
@@ -150,7 +156,7 @@
         </ul>
      </div>
     
-    <section style="width: 100%; text-align: center;">
+    <section>
         <h2>Choose your favourite grid size (except 1x12 and 12x1 &mdash; you could, but it's trivial!)</h2>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
             <select name="gridsize" onchange="this.parentNode.submit()">
@@ -161,6 +167,25 @@
             </select>
         </form>
     </section>
+    
+    <section>
+        <h2>Thanks to</h2>
+        <p>So many people here, just give me a moment...</p>
+    </section>
+    
+    <section>
+        <h2>Special thanks to</h2>
+        <p>
+            A great thank goes to "distillerie salentine" who gave me the opportunity to easily reach<br />
+            the famous <cite title="http://xkcd.com/323/">"Ballmer's peak"</cite> with theirs delicious melon's cream at 17%.
+            <figure>
+                <img src="http://imgs.xkcd.com/comics/ballmer_peak.png" />
+                <figcaption>A moderate alcohol quantity is definitely a javascript good part. Crockford should tell about it</figcaption>
+            </figure>
+        </p>
+    </section>
+    
+    
      
     <script src="mosaiqy.js" id="mosaiqy_tpl">
         <div>
@@ -233,79 +258,7 @@
     </script>
 
 
-<p>Fix rubbed his hands softly with satisfaction; if Phileas Fogg could be detained
-in Calcutta a week, it would be more than time for the warrant to arrive. Passepartout
-was stupefied.  This sentence ruined his master.  A wager of twenty thousand pounds
-lost, because he, like a precious fool, had gone into that abominable pagoda!
-Phileas Fogg, as self-composed as if the judgment did not in the least concern him,
-did not even lift his eyebrows while it was being pronounced. Just as the clerk
-was calling the next case, he rose, and said, "I offer bail."</p>
 
-<p>Fix's blood ran cold, but he resumed his composure when he heard the judge announce
-that the bail required for each prisoner would be one thousand pounds.
-"I will pay it at once," said Mr. Fogg, taking a roll of bank-bills from the carpet-bag,
-which Passepartout had by him, and placing them on the clerk's desk.</p>
-
-
-<p>Fix rubbed his hands softly with satisfaction; if Phileas Fogg could be detained
-in Calcutta a week, it would be more than time for the warrant to arrive. Passepartout
-was stupefied.  This sentence ruined his master.  A wager of twenty thousand pounds
-lost, because he, like a precious fool, had gone into that abominable pagoda!
-Phileas Fogg, as self-composed as if the judgment did not in the least concern him,
-did not even lift his eyebrows while it was being pronounced. Just as the clerk
-was calling the next case, he rose, and said, "I offer bail."</p>
-
-<p>Fix's blood ran cold, but he resumed his composure when he heard the judge announce
-that the bail required for each prisoner would be one thousand pounds.
-"I will pay it at once," said Mr. Fogg, taking a roll of bank-bills from the carpet-bag,
-which Passepartout had by him, and placing them on the clerk's desk.</p>
-
-<p>Fix rubbed his hands softly with satisfaction; if Phileas Fogg could be detained
-in Calcutta a week, it would be more than time for the warrant to arrive. Passepartout
-was stupefied.  This sentence ruined his master.  A wager of twenty thousand pounds
-lost, because he, like a precious fool, had gone into that abominable pagoda!
-Phileas Fogg, as self-composed as if the judgment did not in the least concern him,
-did not even lift his eyebrows while it was being pronounced. Just as the clerk
-was calling the next case, he rose, and said, "I offer bail."</p>
-
-<p>Fix's blood ran cold, but he resumed his composure when he heard the judge announce
-that the bail required for each prisoner would be one thousand pounds.
-"I will pay it at once," said Mr. Fogg, taking a roll of bank-bills from the carpet-bag,
-which Passepartout had by him, and placing them on the clerk's desk.</p>
-
-<p>Fix rubbed his hands softly with satisfaction; if Phileas Fogg could be detained
-in Calcutta a week, it would be more than time for the warrant to arrive. Passepartout
-was stupefied.  This sentence ruined his master.  A wager of twenty thousand pounds
-lost, because he, like a precious fool, had gone into that abominable pagoda!
-Phileas Fogg, as self-composed as if the judgment did not in the least concern him,
-did not even lift his eyebrows while it was being pronounced. Just as the clerk
-was calling the next case, he rose, and said, "I offer bail."</p>
-
-<p>Fix's blood ran cold, but he resumed his composure when he heard the judge announce
-that the bail required for each prisoner would be one thousand pounds.
-"I will pay it at once," said Mr. Fogg, taking a roll of bank-bills from the carpet-bag,
-which Passepartout had by him, and placing them on the clerk's desk.</p>
-
-<p>Fix rubbed his hands softly with satisfaction; if Phileas Fogg could be detained
-in Calcutta a week, it would be more than time for the warrant to arrive. Passepartout
-was stupefied.  This sentence ruined his master.  A wager of twenty thousand pounds
-lost, because he, like a precious fool, had gone into that abominable pagoda!
-Phileas Fogg, as self-composed as if the judgment did not in the least concern him,
-did not even lift his eyebrows while it was being pronounced. Just as the clerk
-was calling the next case, he rose, and said, "I offer bail."</p>
-
-<p>Fix's blood ran cold, but he resumed his composure when he heard the judge announce
-that the bail required for each prisoner would be one thousand pounds.
-"I will pay it at once," said Mr. Fogg, taking a roll of bank-bills from the carpet-bag,
-which Passepartout had by him, and placing them on the clerk's desk.</p>
-
-<p>Fix rubbed his hands softly with satisfaction; if Phileas Fogg could be detained
-in Calcutta a week, it would be more than time for the warrant to arrive. Passepartout
-was stupefied.  This sentence ruined his master.  A wager of twenty thousand pounds
-lost, because he, like a precious fool, had gone into that abominable pagoda!
-Phileas Fogg, as self-composed as if the judgment did not in the least concern him,
-did not even lift his eyebrows while it was being pronounced. Just as the clerk
-was calling the next case, he rose, and said, "I offer bail."</p>
      
 </body>
 </html>
