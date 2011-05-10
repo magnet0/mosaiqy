@@ -61,7 +61,12 @@
 
 .mosaiqy li.zoom figcaption,
 .mosaiqy li:hover figcaption {
-    display         : block;    
+    display         : block;
+    text-indent     : 0;
+}
+
+.mosaiqy li.zoom figcaption {
+    text-indent     : -8478em;
 }
 
 .mosaiqy li {
@@ -136,11 +141,14 @@
 
 .mosaiqy li figcaption {
     background          : rgba(255, 255, 255, 0.55);
-    color               : #20213A;
-    font                : 14px Arial, Verdana, sans-serif;
+    color               : #303134;
+    font-style          : italic;
+    font                : 13px Arial, Verdana, sans-serif;
     cursor              : pointer;
-    height              : 100%;
-    width               : 100%;
+    padding             : 8px;
+    
+    height              : 119px;
+    width               : 184px;
 }
 
 
