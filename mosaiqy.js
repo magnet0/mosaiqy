@@ -298,7 +298,7 @@
                         .then(function() {
                             nodezoom.remove();
                             nodezoom = null;
-                            appDebug('log', "zoom has been removed");
+                            appDebug("log", 'zoom has been removed');
                             dfd.resolve();
                         });
                 }
@@ -405,7 +405,7 @@
                     })
                 )
                     .done(function() {
-                        appDebug('log', "zoom ready");
+                        appDebug("log", 'zoom ready');
                         nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade);
                     })
                     .fail(function() {
