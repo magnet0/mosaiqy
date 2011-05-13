@@ -1,62 +1,66 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8">
-  <title>Mosaiqy: a nice jQuery plugin</title>
+    <meta charset="utf-8">
+    <title>Mosaiqy: a nice jQuery plugin</title>
 
-  <!-- jquery -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"> </script>
-  <script>document.documentElement.className = 'js'</script>
+    <script>document.documentElement.className = 'js'</script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="innershiv.js"></script>
+    <![endif]-->
+    
   
-  <style>
-    @font-face {
-        font-family: 'LeagueGothicRegular';
-        src: url('css/font/league_gothic-webfont.eot');
-        src: local('☺'), 
-            url('font/league_gothic-webfont.woff') format('woff'), 
-            url('font/league_gothic-webfont.ttf') format('truetype'), 
-            url('font/league_gothic-webfont.svg#webfontqRQZtdhc') format('svg');
-        font-weight: normal;
-        font-style: normal;
-    }
-    
-    body {
-        background  : #e0e7e6;
-        font        : 15px/1.4 Arial;
-        color       : #303133;
-    }
-    
-    section, hgroup {
-        text-align  : center;
-    }
-    
-    section {
-        margin      : 3em 0 0 0;
-    }
-    
-    h1 {
-        font-family     : LeagueGothicRegular;
-        font-size       : 140px;
-        line-height     : 0.9;
-        font-weight     : normal;
-        letter-spacing  : 5px;
-        color           : #fff;
-        text-transform  : uppercase;
-        margin          : 15px 0 0 0;
-        text-shadow     : -1px 1px 0px #a9b2a6;
-    }
-    
-    h2 {
-        font-family     : LeagueGothicRegular;
-        font-weight     : normal;
-        margin          : 15px 0 30px; 0;
-        font-size       : 28px;
-        color           : #414141;
-    }
-  </style>
+    <style>
+        @font-face {
+            font-family: 'LeagueGothicRegular';
+            src: url('font/league_gothic-webfont.eot');
+            src: local('☺'), 
+                url('font/league_gothic-webfont.woff') format('woff'), 
+                url('font/league_gothic-webfont.ttf') format('truetype'), 
+                url('font/league_gothic-webfont.svg#webfontqRQZtdhc') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            background  : #e0e7e6;
+            font        : 15px/1.4 Arial;
+            color       : #303133;
+        }
+        
+        section, hgroup {
+            display     : block;
+            text-align  : center;
+        }
+        
+        section {
+            margin      : 3em 0 0 0;
+        }
+        
+        h1 {
+            font-family     : LeagueGothicRegular;
+            font-size       : 140px;
+            line-height     : 0.9;
+            font-weight     : normal;
+            letter-spacing  : 5px;
+            color           : #fff;
+            text-transform  : uppercase;
+            margin          : 15px 0 0 0;
+            text-shadow     : -1px 1px 0px #a9b2a6;
+        }
+        
+        h2 {
+            font-family     : LeagueGothicRegular;
+            font-weight     : normal;
+            margin          : 15px 0 30px; 0;
+            font-size       : 28px;
+            color           : #414141;
+        }
+    </style>
   
   
-  <link rel="stylesheet" media="screen" href="mosaiqy.css" />
+    <link rel="stylesheet" media="screen" href="mosaiqy.css" />
 </head>
 
 <body>
@@ -184,17 +188,6 @@
             </figure>
         </p>
     </section>
-    
-    
-     
-    <script src="mosaiqy.js" id="mosaiqy_tpl">
-        <div>
-            <figure><a href="zoom/${img}"><img src="thumb/${img}">
-              <figcaption>${desc}</figcaption></a>
-            </figure>
-        </div>
-    </script>
-    
     <?php
         $rows = 3;
         $cols = 4;
@@ -203,58 +196,73 @@
             list($rows, $cols) = explode("x", $_POST['gridsize']);
         }
     ?>
-     
+
+
+
+    <!-- jquery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"> </script>
+    <script src="mosaiqy.js" id="mosaiqy_tpl">
+        <div>
+            <figure><a href="zoom/${img}"><img src="thumb/${img}">
+              <figcaption>${desc}</figcaption></a>
+            </figure>
+        </div>
+    </script>
+    
     <script>
-    $('.mosaiqy').mosaiqy({
-        template        : '#mosaiqy_tpl',
-        rows            : <?php echo $rows ?>,
-        cols            : <?php echo $cols ?>,
-        animationDelay  : 1500,
-        loop            : true,
-        data            : [
-            {
-                img     : "1.jpg",
-                desc    : "Rifugio &laquo;Citt&agrave; di Fiume&raquo;"
-            }
-            ,
-            {
-                img     : "2.jpg",
-                desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
-            },
-            {
-                img     : "3.jpg",
-                desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
-            },
-            {
-                img     : "4.jpg",
-                desc    : "Rifugio &laquo;Pradidali&raquo;"
-            },
-            {
-                img     : "5.jpg",
-                desc    : "Due simpatici escursionisti"
-            },
-            {
-                img     : "6.jpg",
-                desc    : "Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;"
-            },
-            {
-                img     : "7.jpg",
-                desc    : "Arrivando al rifugio &laquo;Pradidali&raquo;"
-            },
-            {
-                img     : "13.jpg",
-                desc    : "Una simpatica escursionista affamata"
-            },
-            {
-                img     : "9.jpg",
-                desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
-            },
-            {
-                img     : "10.jpg",
-                desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
-            }
-        ]
-    });     
+    $(document).ready(function() {
+        $('.mosaiqy').mosaiqy({
+            template        : '#mosaiqy_tpl',
+            rows            : <?php echo $rows ?>,
+            cols            : <?php echo $cols ?>,
+            animationDelay  : 1500,
+            loop            : true,
+            data            : [
+                {
+                    img     : "1.jpg",
+                    desc    : "Rifugio &laquo;Citt&agrave; di Fiume&raquo;"
+                }
+                ,
+                {
+                    img     : "2.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
+                },
+                {
+                    img     : "3.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "4.jpg",
+                    desc    : "Rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "5.jpg",
+                    desc    : "Due simpatici escursionisti"
+                },
+                {
+                    img     : "6.jpg",
+                    desc    : "Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;"
+                },
+                {
+                    img     : "7.jpg",
+                    desc    : "Arrivando al rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "13.jpg",
+                    desc    : "Una simpatica escursionista affamata"
+                },
+                {
+                    img     : "9.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "10.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
+                }
+            ]
+        });
+        
+    });
     </script>
 
 
