@@ -4,8 +4,8 @@
  * @version 0.1
  * @author Fabrizio Calderan, http://www.fabriziocalderan.it/, twitter : fcalderan
  *
- * Released under license Creative Commons - Attribution-NoDerivs 3.0
- * (CC BY-ND 3.0) available at http://creativecommons.org/licenses/by-nd/3.0/before
+ * Released under license Creative Commons, Attribution-NonCommercial-NoDerivs 3.0
+ * (CC BY-NC-D 3.0) available at http://creativecommons.org/licenses/by-nc-nd/3.0/
  * Read the license carefully before using this plugin.  
  */
 
