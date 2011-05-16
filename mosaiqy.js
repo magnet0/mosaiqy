@@ -261,18 +261,20 @@
         _setNodeZoomEvent   = function(node) {
                 
             var nodezoom, $this, i, zoomRunning,
+                zoomFigure, zoomCaption, zoomCloseBtt,
                 pagePos, targetPos, diffPos;
             
             node.live('click.mosaiqy', function(evt) {
-
-                $this = $(this);
                 
                 if (!_animationRunning && !zoomRunning) {
                     /**
                      * find the index of «li» selected, then retrieve the element placeholder
                      * to append the zoom node.
-                     */ 
-                    i = _s.cols * (Math.ceil((_li.index($this) + 1) / _s.cols));
+                     */
+                    _pauseAnimation();
+                    
+                    $this   = $(this);
+                    i       = _s.cols * (Math.ceil((_li.index($this) + 1) / _s.cols));
 
                     /**
                      * Don't click twice on the same zoom
@@ -291,7 +293,9 @@
                 
                 if ((nodezoom || { }).length) {
                     appDebug("log", 'closing previous zoom');
-                    _cnt.find('.mosaiqy-zoom-close').stop(true)._animate({ opacity: '0' }, _s.startFade / 2);
+                     
+                    zoomCaption.stop(true)._animate({ opacity: '0' }, _s.startFade / 4);
+                    zoomCloseBtt.stop(true)._animate({ opacity: '0' }, _s.startFade / 2);
                     _li.removeClass('zoom');
                     
                     $.when(nodezoom.stop(true)._animate({ height : '0' }, _s.startFade))
@@ -337,7 +341,7 @@
                         /**
                          * need to create the zoom node then append it and then open it
                          */
-                        nodezoom = '<li class="mosaiqy-zoom"><figure></figure></li>';
+                        nodezoom = '<li class="mosaiqy-zoom"><figure><figcaption></figcaption></figure></li>';
                         nodezoom = (typeof window.innerShiv === 'function')
                             ? $(innerShiv(nodezoom))
                             : $(nodezoom);
@@ -369,15 +373,25 @@
             
             function viewZoom() {
                 
-                var zoomImage, zoomCloseBtt;
+                var zoomImage, imgDesc;
                 
                 appDebug("log", 'viewing zoom');
-
+                
+                zoomFigure  = nodezoom.find('figure');
+                zoomCaption = nodezoom.find('figcaption');
+                
                 nodezoom._animate({ height : '200px' }, _s.startFade);
                 zoomImage = $('<img class="mosaiqy-zoom-image" />').attr({
                         src     : $this.find('a').attr('href')
                     })
-                    .appendTo(nodezoom.find('figure'));
+                    .appendTo(zoomFigure);
+                    
+                imgDesc = $this.find('img').prop('longDesc');
+                if (!!imgDesc) {
+                    zoomImage.wrap($('<a />').attr({
+                        href    : imgDesc
+                    }));
+                }
                 
                 $.when(zoomImage.mosaiqyImagesLoad(
                     function(img) {
@@ -391,14 +405,15 @@
                                     $.when(closeZoom()).then(function() {
                                         _cnt.removeClass('zoom');
                                         zoomRunning = false;
-                                        setTimeout(function() {
-                                            _playAnimation();
-                                        }, _s.animationDelay);
+                                        _playAnimation();
                                     });
                                     evt.preventDefault();
                                 })
-                                .appendTo(nodezoom.find('figure'))
+                                .appendTo(zoomFigure)
                                 ._animate({ opacity: '1' }, _s.startFade / 2);
+                                
+                                zoomCaption.html($this.find('figcaption').html())._animate({ opacity: '1' }, _s.startFade);
+
                             });
                             
                         }, _s.startFade / 1.2);

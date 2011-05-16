@@ -124,7 +124,7 @@
             </li>
             <li>
                 <div>
-                    <figure><a href="zoom/13.jpg"><img src="thumb/13.jpg">
+                    <figure><a href="zoom/13.jpg"><img src="thumb/13.jpg" longdesc="test.html">
                         <figcaption>Una simpatica escursionista affamata</figcaption></a>            
                     </figure>
                 </div>
