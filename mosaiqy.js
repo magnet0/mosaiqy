@@ -1,4 +1,3 @@
-"use strict";
 /**
  * @fileOverview Mosaiqy for jQuery
  * @version 0.1
@@ -6,6 +5,8 @@
  */
 
 (function($) {
+
+    "use strict";
 
     var
     /**
@@ -45,7 +46,7 @@
             cssProp = function(p) {
                 return p.replace(/([A-Z])/g, function(match, upper) {
                     return "-" + upper.toLowerCase();
-                })
+                });
             },
             vendorProp,
             uaList  = {
@@ -71,7 +72,7 @@
                     : (ua.webkit)? 'webkitTransitionEnd' : 'transitionend';
             }()),
             duration        : cssProp(vendorProp) + '-duration'
-        }
+        };
    }($.browser, 'transition')),
     
     
@@ -258,225 +259,6 @@
         },
         
         
-        _setNodeZoomEvent   = function(node) {
-                
-            var nodezoom, $this, i, zoomRunning,
-                zoomFigure, zoomCaption, zoomCloseBtt,
-                pagePos, targetPos, diffPos;
-            
-            node.live('click.mosaiqy', function(evt) {
-                
-                if (!_animationRunning && !zoomRunning) {
-                    /**
-                     * find the index of «li» selected, then retrieve the element placeholder
-                     * to append the zoom node.
-                     */
-                    _pauseAnimation();
-                    
-                    $this   = $(this);
-                    i       = _s.cols * (Math.ceil((_li.index($this) + 1) / _s.cols));
-
-                    /**
-                     * Don't click twice on the same zoom
-                     */
-                    if (!$this.hasClass('zoom')) {
-                        openZoom(closeZoom);
-                    }
-                    
-                }
-                evt.preventDefault();
-            });
-            
-            
-            function closeZoom() {
-                var dfd = $.Deferred();
-                
-                if ((nodezoom || { }).length) {
-                    appDebug("log", 'closing previous zoom');
-                     
-                    zoomCaption.stop(true)._animate({ opacity: '0' }, _s.startFade / 4);
-                    zoomCloseBtt.stop(true)._animate({ opacity: '0' }, _s.startFade / 2);
-                    _li.removeClass('zoom');
-                    
-                    $.when(nodezoom.stop(true)._animate({ height : '0' }, _s.startFade))
-                        .then(function() {
-                            nodezoom.remove();
-                            nodezoom = null;
-                            appDebug("log", 'zoom has been removed');
-                            dfd.resolve();
-                        });
-                }
-                else {
-                    dfd.resolve();
-                }
-                return dfd.promise();
-            };
-            
-            
-            function openZoom(previousClose) {
-                
-                appDebug("log", 'opening zoom');
-                zoomRunning = true;
-                
-                $.when(previousClose())
-                    .done(function() {
-                        
-                        var timeToScroll;
-                        
-                        _cnt.addClass('zoom');
-                        $this.addClass('zoom');
-                        _li = _cnt.find('li:not(.mosaiqy-zoom)');
-                        
-                        /**
-                         * webkit bug: http://code.google.com/p/chromium/issues/detail?id=2891 
-                         */                    
-                        targetPos   = $this.offset().top;
-                        pagePos = (document.body.scrollTop != 0)
-                            ? document.body.scrollTop
-                            : document.documentElement.scrollTop;
-                    
-                        diffPos         = Math.abs(pagePos - targetPos);
-                        timeToScroll    = (diffPos > 0) ? ((diffPos * 1.5) + 400) : 0;
-                        
-                        /**
-                         * need to create the zoom node then append it and then open it
-                         */
-                        nodezoom = '<li class="mosaiqy-zoom"><figure><figcaption></figcaption></figure></li>';
-                        nodezoom = (typeof window.innerShiv === 'function')
-                            ? $(innerShiv(nodezoom))
-                            : $(nodezoom);
-                        
-                        if (i < _li.length) {
-                            nodezoom.insertBefore(_li.eq(i));
-                        }
-                        else {
-                            nodezoom.appendTo(_ul);
-                        }
-                        
-                        /**
-                         * On IE < 9 the nodezoom just inserted is still a document fragment
-                         * so create an explicit reference to the node.
-                         */
-                        if (typeof window.innerShiv === 'function') {
-                            nodezoom = _cnt.find('.mosaiqy-zoom');
-                        }
-                        
-                        
-                        $.when(_page.stop()._animate({ scrollTop: targetPos }, timeToScroll))
-                            .done(function() {
-                                zoomRunning = false;
-                                viewZoom();
-                            });
-                    })
-            };
-            
-            
-            function viewZoom() {
-                
-                var zoomImage, imgDesc;
-                
-                appDebug("log", 'viewing zoom');
-                
-                zoomFigure  = nodezoom.find('figure');
-                zoomCaption = nodezoom.find('figcaption');
-                
-                nodezoom._animate({ height : '200px' }, _s.startFade);
-                zoomImage = $('<img class="mosaiqy-zoom-image" />').attr({
-                        src     : $this.find('a').attr('href')
-                    })
-                    .appendTo(zoomFigure);
-                    
-                imgDesc = $this.find('img').prop('longDesc');
-                if (!!imgDesc) {
-                    zoomImage.wrap($('<a />').attr({
-                        href    : imgDesc
-                    }));
-                }
-                
-                $.when(zoomImage.mosaiqyImagesLoad(
-                    function(img) {
-                        setTimeout(function() {
-                            
-                            img.fadeIn(_s.startFade, function() {
-                                zoomCloseBtt = $('<a class="mosaiqy-zoom-close">Close</a>').attr({
-                                    href    : "#"
-                                })
-                                .bind("click.mosaiqy", function(evt) {
-                                    $.when(closeZoom()).then(function() {
-                                        _cnt.removeClass('zoom');
-                                        zoomRunning = false;
-                                        _playAnimation();
-                                    });
-                                    evt.preventDefault();
-                                })
-                                .appendTo(zoomFigure)
-                                ._animate({ opacity: '1' }, _s.startFade / 2);
-                                
-                                zoomCaption.html($this.find('figcaption').html())._animate({ opacity: '1' }, _s.startFade);
-
-                            });
-                            
-                        }, _s.startFade / 1.2);
-                    })
-                )
-                    .done(function() {
-                        appDebug("log", 'zoom ready');
-                        nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade);
-                    })
-                    .fail(function() {
-                        appDebug("warn", 'cannot load ', $this.find('a').attr('href'));
-                        zoomCloseBtt.trigger("click.mosaiqy");
-                    })
-            };
-            
-            
-        },
-       
-        
-        _continueAnimation = function() {
-            if (!_animationPaused) {
-                _animationRunning = true;
-                
-                appDebug("info", 'Animate selection');
-                $.when(_animateSelection())
-                    .done(function() {
-                        _li = _ul.find('li');
-                        _dataIndex = _dataIndex + 1;
-                        appDebug("info", 'End animate selection');
-                    })
-                    .always(function () {
-                        if (_dataIndex === _s.data.length) {
-                            if (!_s.loop) {
-                                return _pauseAnimation();
-                            }
-                            else {
-                                _dataIndex = 0;
-                            }
-                        }
-                        _intvAnimation = setTimeout(function() {
-                            _continueAnimation();
-                        }, _s.animationDelay)
-                        _animationRunning = false;
-                    });
-            }
-            else {
-                _intvAnimation = setTimeout(function() {
-                    _continueAnimation();
-                }, _s.animationDelay)
-            }
-        },
-        
-        _pauseAnimation = function() {
-            _animationPaused = true;
-        },
-        
-        _playAnimation = function() {
-            _animationPaused = false;
-        },
-        
-        _startAnimation = function() {
-            _continueAnimation();
-        },
         
         /**
          * @private
@@ -531,7 +313,7 @@
                 : $('<li />').insertAfter(referral);
             
             if (typeof window.innerShiv === 'function') {
-                tpl = innerShiv(tpl);
+                tpl = window.innerShiv(tpl);
             }
             $(tpl).appendTo(node.css(_points[rnd].position));
             appDebug("info", "Random position is %d and its referral is node", rnd, referral);
@@ -584,7 +366,7 @@
                     function() {
                         var len;
                         
-                        if (--animatedQueue) return;
+                        if (--animatedQueue) { return; }
                         
                         /**
                          * Opposite node removal. "Opposite" is related on sliding direction
@@ -655,14 +437,234 @@
                                 }
                             
                             });
-                        };
+                        }
                         appDebug("groupEnd");
                         dfd.resolve();
                     }
-                )
+                );
             });
             
             return dfd.promise();
+        },
+        
+        
+_animationCycle = function() {
+            if (!_animationPaused) {
+                _animationRunning = true;
+                
+                appDebug("info", 'Animate selection');
+                $.when(_animateSelection())
+                    .done(function() {
+                        _li = _ul.find('li');
+                        _dataIndex = _dataIndex + 1;
+                        appDebug("info", 'End animate selection');
+                    })
+                    .always(function () {
+                        if (_dataIndex === _s.data.length) {
+                            if (!_s.loop) {
+                                return _pauseAnimation();
+                            }
+                            else {
+                                _dataIndex = 0;
+                            }
+                        }
+                        _intvAnimation = setTimeout(function() {
+                            _animationCycle();
+                        }, _s.animationDelay);
+                        _animationRunning = false;
+                    });
+            }
+            else {
+                _intvAnimation = setTimeout(function() {
+                    _animationCycle();
+                }, _s.animationDelay);
+            }
+        },
+        
+        _pauseAnimation = function() {
+            _animationPaused = true;
+        },
+        
+        _playAnimation = function() {
+            _animationPaused = false;
+        },
+        
+        _startAnimation = function() {
+            _animationCycle();
+        },
+        
+        
+        
+        _setNodeZoomEvent   = function(node) {
+                
+            var nodezoom, $this, i, zoomRunning,
+                zoomFigure, zoomCaption, zoomCloseBtt,
+                pagePos, targetPos, diffPos;
+            
+            function closeZoom() {
+                var dfd = $.Deferred();
+                
+                if ((nodezoom || { }).length) {
+                    appDebug("log", 'closing previous zoom');
+                     
+                    zoomCaption.stop(true)._animate({ opacity: '0' }, _s.startFade / 4);
+                    zoomCloseBtt.stop(true)._animate({ opacity: '0' }, _s.startFade / 2);
+                    _li.removeClass('zoom');
+                    
+                    $.when(nodezoom.stop(true)._animate({ height : '0' }, _s.startFade))
+                        .then(function() {
+                            nodezoom.remove();
+                            nodezoom = null;
+                            appDebug("log", 'zoom has been removed');
+                            dfd.resolve();
+                        });
+                }
+                else {
+                    dfd.resolve();
+                }
+                return dfd.promise();
+            }
+            
+  
+            function viewZoom() {
+                
+                var zoomImage, imgDesc;
+                
+                appDebug("log", 'viewing zoom');
+                
+                zoomFigure  = nodezoom.find('figure');
+                zoomCaption = nodezoom.find('figcaption');
+                
+                nodezoom._animate({ height : '200px' }, _s.startFade);
+                zoomImage = $('<img class="mosaiqy-zoom-image" />').attr({
+                        src     : $this.find('a').attr('href')
+                    })
+                    .appendTo(zoomFigure);
+                    
+                imgDesc = $this.find('img').prop('longDesc');
+                if (!!imgDesc) {
+                    zoomImage.wrap($('<a />').attr({
+                        href    : imgDesc
+                    }));
+                }
+                
+                $.when(zoomImage.mosaiqyImagesLoad(
+                    function(img) {
+                        setTimeout(function() {
+                            
+                            img.fadeIn(_s.startFade, function() {
+                                zoomCloseBtt = $('<a class="mosaiqy-zoom-close">Close</a>').attr({
+                                    href    : "#"
+                                })
+                                .bind("click.mosaiqy", function(evt) {
+                                    $.when(closeZoom()).then(function() {
+                                        _cnt.removeClass('zoom');
+                                        zoomRunning = false;
+                                        _playAnimation();
+                                    });
+                                    evt.preventDefault();
+                                })
+                                .appendTo(zoomFigure)
+                                ._animate({ opacity: '1' }, _s.startFade / 2);
+                                
+                                zoomCaption.html($this.find('figcaption').html())._animate({ opacity: '1' }, _s.startFade);
+
+                            });
+                            
+                        }, _s.startFade / 1.2);
+                    })
+                )
+                    .done(function() {
+                        appDebug("log", 'zoom ready');
+                        nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade);
+                    })
+                    .fail(function() {
+                        appDebug("warn", 'cannot load ', $this.find('a').attr('href'));
+                        zoomCloseBtt.trigger("click.mosaiqy");
+                    });
+            }
+            
+            
+            function openZoom(previousClose) {
+                
+                appDebug("log", 'opening zoom');
+                zoomRunning = true;
+                
+                $.when(previousClose())
+                    .done(function() {
+                        
+                        var timeToScroll;
+                        
+                        _cnt.addClass('zoom');
+                        $this.addClass('zoom');
+                        _li = _cnt.find('li:not(.mosaiqy-zoom)');
+                        
+                        /**
+                         * webkit bug: http://code.google.com/p/chromium/issues/detail?id=2891 
+                         */                    
+                        targetPos   = $this.offset().top;
+                        pagePos = (document.body.scrollTop !== 0)
+                            ? document.body.scrollTop
+                            : document.documentElement.scrollTop;
+                    
+                        diffPos         = Math.abs(pagePos - targetPos);
+                        timeToScroll    = (diffPos > 0) ? ((diffPos * 1.5) + 400) : 0;
+                        
+                        /**
+                         * need to create the zoom node then append it and then open it
+                         */
+                        nodezoom = '<li class="mosaiqy-zoom"><figure><figcaption></figcaption></figure></li>';
+                        nodezoom = (typeof window.innerShiv === 'function')
+                            ? $(window.innerShiv(nodezoom))
+                            : $(nodezoom);
+                        
+                        if (i < _li.length) {
+                            nodezoom.insertBefore(_li.eq(i));
+                        }
+                        else {
+                            nodezoom.appendTo(_ul);
+                        }
+                        
+                        /**
+                         * On IE < 9 the nodezoom just inserted is still a document fragment
+                         * so create an explicit reference to the node.
+                         */
+                        if (typeof window.innerShiv === 'function') {
+                            nodezoom = _cnt.find('.mosaiqy-zoom');
+                        }
+                        
+                        
+                        $.when(_page.stop()._animate({ scrollTop: targetPos }, timeToScroll))
+                            .done(function() {
+                                zoomRunning = false;
+                                viewZoom();
+                            });
+                    });
+            }
+            
+            
+            node.live('click.mosaiqy', function(evt) {
+                
+                if (!_animationRunning && !zoomRunning) {
+                    /**
+                     * find the index of «li» selected, then retrieve the element placeholder
+                     * to append the zoom node.
+                     */
+                    _pauseAnimation();
+                    
+                    $this   = $(this);
+                    i       = _s.cols * (Math.ceil((_li.index($this) + 1) / _s.cols));
+
+                    /**
+                     * Don't click twice on the same zoom
+                     */
+                    if (!$this.hasClass('zoom')) {
+                        openZoom(closeZoom);
+                    }
+                    
+                }
+                evt.preventDefault();
+            });
         };
         
         
@@ -724,7 +726,7 @@
                     _setNodeZoomEvent(_li);
                     _intvAnimation = setTimeout(function() {
                         _startAnimation();
-                    }, _s.animationDelay + 2000)
+                    }, _s.animationDelay + 2000);
                 })
                 /**
                  * One or more image have not been loaded
@@ -781,8 +783,8 @@
                          * handler for a given image. The interval is then unset when
                          * the image has loaded or if error event has been triggered.
                          */
-                        intv        = setTimeout(function() {  $(i).trigger('error.mosaiqy') }, timeout),
-                        imageDfd    = $.Deferred();
+                        imageDfd    = $.Deferred(),
+                        intv        = setTimeout(function() {  $(i).trigger('error.mosaiqy') }, timeout);
                         
                         /* single image main events */
                         $(i).one('load.mosaiqy', function() {
@@ -819,8 +821,8 @@
                             dfd.resolve();
                         }
                     }
-                })
-            })
+                });
+            });
         }
         return dfd.promise();
     };
@@ -839,7 +841,7 @@
                     duration    : speed,  
                     complete    : callback || !callback && easing || $.isFunction(speed) && speed,
                     easing      : callback && easing || easing && !$.isFunction(easing) && easing
-                }
+                };
             
             return $(this).each(function() {  
                 var $this   = _$(this),
@@ -878,7 +880,7 @@
                     appDebug("info", 'jQuery Animation' );
                     $this._animate(props, options);
                 }
-            })
+            });
         }
     });
     
