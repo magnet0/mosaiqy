@@ -2,7 +2,7 @@ For full detail, licensing, legal notices and copyright
 Project Homepage: http://fabriziocalderan/lib/mosaiqy
 
 
-Mosaiqy is a thumbnail/zoom viewer plugin for jQuery 1.5.
+Mosaiqy is a thumbnail/zoom viewer plugin for jQuery 1.6+.
 Thumbnails are arranged in a grid and each row and column could be randomically moved,
 sliding in every direction and showing other thumbnails available.
 Image data is described as a regular JSON object. 
