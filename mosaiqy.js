@@ -77,8 +77,24 @@
             }()),
             duration        : cssProp(vendorProp) + '-duration'
         };
-   }($.browser, 'transition')),
+    }($.browser, 'transition')),
     
+    
+    shuffledFisherYates = function(len) {
+        var i, j, tmp_i, tmp_j, shuffled = [];
+        
+        i = len;
+        for (j = 0; j < i; j++) { shuffled[j] = j; }
+        while (--i) {
+            var j = ~~(Math.random() * (i+1));
+            var tmp_i   = shuffled[i];
+            var tmp_j   = shuffled[j];
+            shuffled[i] = tmp_j;
+            shuffled[j] = tmp_i;
+        }
+    
+        return shuffled;
+    },
     
      /**
      * @class
@@ -109,6 +125,7 @@
         _cnt, _ul, _li, _img,
 
         _points             = [],
+        _shuffledEP         = [],
         _tplCache           = {},
         _animationPaused    = false,
         _animationRunning   = false,
@@ -294,12 +311,9 @@
             tpl = _tplCache[_dataIndex];
             
             /**
-             * @ignore
-             * rnd is in the range [0 .. _points.length - 1]
-             * [~~] is the bitwise op quickest equivalent to Math.floor()
-             * http://jsperf.com/bitwise-not-not-vs-math-floor
-             */
-            rnd = ~~(Math.random() * _points.length);
+             * Get random point
+             */ 
+            rnd = _shuffledEP.pop();
             
             
             isEven = ((rnd & 1) === 0);
@@ -361,8 +375,7 @@
                  * $.animate() function has been extended to support css transition
                  * on modern browser. For this reason I cannot use deferred animation,
                  * because if GPUacceleration is enabled the code will not use native
-                 * animation. I could return a promise() in my custom animate() method
-                 * but in this case is not worth the effort.
+                 * animation.
                  *
                  * See code below
                  */
@@ -410,7 +423,7 @@
                          * </ol>
                          * 
                          * <p>If the animation affected a row, rearrangement of nodes is not needed
-                         * at all, because insertion is sequential, thus the new node and shifted
+                         * at all because insertion is sequential, thus the new node and shifted
                          * nodes already have the right index.</p>
                          */
                         if (prop === 'top') {
@@ -424,7 +437,7 @@
                                  * Retrieve node after each new insertion and rearrangement
                                  * of selected animating nodes 
                                  */ 
-                                _li     = _cnt.find("li");
+                                _li     = _cnt.find("li:not(.mosaiqy-zoom)");
                                 
                                 node    = $(this);
                                 curpos  = _li.index(node);
@@ -452,15 +465,22 @@
         },
         
         
-_animationCycle = function() {
-            if (!_animationPaused) {
+        _animationCycle = function() {
+            if (!_animationPaused && !_animationRunning) {
+                
                 _animationRunning = true;
+                
+                if (_shuffledEP.length === 0) {
+                    _shuffledEP = shuffledFisherYates(_points.length);
+                    appDebug("info", 'New entry point shuffled array', _shuffledEP);
+                }
                 
                 appDebug("info", 'Animate selection');
                 $.when(_animateSelection())
                     .done(function() {
                         _li = _ul.find('li');
                         _dataIndex = _dataIndex + 1;
+                        _animationRunning = false;
                         appDebug("info", 'End animate selection');
                     })
                     .always(function () {
@@ -475,7 +495,6 @@ _animationCycle = function() {
                         _intvAnimation = setTimeout(function() {
                             _animationCycle();
                         }, _s.animationDelay);
-                        _animationRunning = false;
                     });
             }
             else {
@@ -503,7 +522,7 @@ _animationCycle = function() {
                 
             var nodezoom, $this, i, zoomRunning,
                 zoomFigure, zoomCaption, zoomCloseBtt,
-                pagePos, targetPos, diffPos;
+                pagePos, thumbPos, diffPos;
             
             function closeZoom() {
                 var dfd = $.Deferred();
@@ -606,16 +625,17 @@ _animationCycle = function() {
                         /**
                          * webkit bug: http://code.google.com/p/chromium/issues/detail?id=2891 
                          */                    
-                        targetPos   = $this.offset().top;
-                        pagePos = (document.body.scrollTop !== 0)
+                        thumbPos    = $this.offset().top;
+                        pagePos     = (document.body.scrollTop !== 0)
                             ? document.body.scrollTop
                             : document.documentElement.scrollTop;
                     
-                        diffPos         = Math.abs(pagePos - targetPos);
+                        diffPos         = Math.abs(pagePos - thumbPos);
                         timeToScroll    = (diffPos > 0) ? ((diffPos * 1.5) + 400) : 0;
                         
                         /**
-                         * need to create the zoom node then append it and then open it
+                         * need to create the zoom node then append it and then open it. When using
+                         * HTML5 elements we need the innerShiv function available.
                          */
                         nodezoom = '<li class="mosaiqy-zoom"><figure><figcaption></figcaption></figure></li>';
                         nodezoom = (typeof window.innerShiv === 'function')
@@ -638,7 +658,7 @@ _animationCycle = function() {
                         }
                         
                         
-                        $.when(_page.stop()._animate({ scrollTop: targetPos }, timeToScroll))
+                        $.when(_page.stop()._animate({ scrollTop: thumbPos }, timeToScroll))
                             .done(function() {
                                 zoomRunning = false;
                                 viewZoom();
@@ -803,7 +823,7 @@ _animationCycle = function() {
                         if (i.complete) { $(i).trigger('load.mosaiqy'); }
                         
                         return imageDfd.promise();
-                    })()
+                    }())
                 )
                 .done(function() {
                     loaded.push(i.src);
