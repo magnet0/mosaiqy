@@ -103,7 +103,7 @@
      * @returns public methods of Mosaiqy object for its instances.
      */
     Mosaiqy = function($) {
-
+        
         /**
          * @private
          * @name MyClass-_s
@@ -133,6 +133,28 @@
         _thumbSize          = {},
         _page               = ($.browser.opera)? $("html") : $("html,body"),
         _intvAnimation,
+        
+        
+        mosaiqyCreateTemplate = function(index) {
+            var tpl = '';
+            if (typeof _tplCache[index] === 'undefined') {
+                _tplCache[index] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
+                    if (typeof _s.data[index][key] === 'undefined') {
+                        return key;
+                    }
+                    return _s.data[index][key];
+                });
+            }
+            
+            tpl = _tplCache[index];
+            if (typeof window.innerShiv === 'function') {
+                tpl = window.innerShiv(tpl);
+            }
+            
+            return tpl;
+        },
+        
+        
         
         /**
          * @private
@@ -300,6 +322,7 @@
             /**
              * Generate template to append with user data
              */
+            /*
             if (typeof _tplCache[_dataIndex] === 'undefined') {
                 _tplCache[_dataIndex] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
                     if (typeof _s.data[_dataIndex][key] === 'undefined') {
@@ -309,6 +332,11 @@
                 });
             }
             tpl = _tplCache[_dataIndex];
+            if (typeof window.innerShiv === 'function') {
+                tpl = window.innerShiv(tpl);
+            }*/
+            
+            tpl = mosaiqyCreateTemplate(_dataIndex);
             
             /**
              * Get random point
@@ -330,9 +358,6 @@
                   $('<li />').insertBefore(referral)
                 : $('<li />').insertAfter(referral);
             
-            if (typeof window.innerShiv === 'function') {
-                tpl = window.innerShiv(tpl);
-            }
             $(tpl).appendTo(node.css(_points[rnd].position));
             appDebug("info", "Random position is %d and its referral is node", rnd, referral);
             
@@ -776,7 +801,7 @@
      */
     _$ = $.sub();
     
-    
+        
     /**
      * @lends _$.fn
      */

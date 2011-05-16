@@ -3,6 +3,7 @@
     padding     : 0;
 }
 
+
 .mosaiqy ul {
     list-style      : none;
     padding         : 0;
@@ -12,11 +13,16 @@
     overflow        : hidden;
 }
 
+.mosaiqy li  {
+    float   : left;    
+}
+
 .js .mosaiqy li {
     position        : absolute;
     z-index         : 1;
     display         : block;
     text-align      : left;
+    float           : none;
 }
 
     .js .mosaiqy li > div {
@@ -36,10 +42,15 @@
     display         : block;
 }
 
-.mosaiqy img {
+
+
+
+
+.js .mosaiqy img {
     display         : block;
     border          : 0;
 }
+
 
 
 .js .loading.mosaiqy img {

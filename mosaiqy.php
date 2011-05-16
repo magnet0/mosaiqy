@@ -160,14 +160,17 @@
         </ul>
      </div>
     
+    <?php
+        $gs = $_POST['gridsize'];
+    ?>
     <section>
         <h2>Choose your favourite grid size (except 1x12 and 12x1 &mdash; you could, but it's trivial!)</h2>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
             <select name="gridsize" onchange="this.parentNode.submit()">
-                <option value="2x6" <?php if ($_POST['gridsize'] == "2x6") echo "selected"; ?> >2x6</option>
-                <option value="3x4" <?php if ($_POST['gridsize'] == "3x4" || $_POST['gridsize'] == '') echo "selected"; ?> >3x4</option>
-                <option value="4x3" <?php if ($_POST['gridsize'] == "4x3") echo "selected"; ?> >4x3</option>
-                <option value="6x2" <?php if ($_POST['gridsize'] == "6x2") echo "selected"; ?> >6x2</option>
+                <option value="2x6" <?php if ($gs == "2x6") echo "selected"; ?> >2x6</option>
+                <option value="3x4" <?php if ($gs == "3x4" || $gs == '') echo "selected"; ?> >3x4</option>
+                <option value="4x3" <?php if ($gs == "4x3") echo "selected"; ?> >4x3</option>
+                <option value="6x2" <?php if ($gs == "6x2") echo "selected"; ?> >6x2</option>
             </select>
         </form>
     </section>
