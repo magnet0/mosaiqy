@@ -576,19 +576,27 @@
   
             function viewZoom() {
                 
-                var zoomImage, imgDesc;
+                var zoomImage, imgDesc, zoomHeight;
                 
                 appDebug("log", 'viewing zoom');
                 
                 zoomFigure  = nodezoom.find('figure');
                 zoomCaption = nodezoom.find('figcaption');
                 
-                nodezoom._animate({ height : '200px' }, _s.startFade);
                 zoomImage = $('<img class="mosaiqy-zoom-image" />').attr({
                         src     : $this.find('a').attr('href')
-                    })
-                    .appendTo(zoomFigure);
-                    
+                    });
+
+                zoomImage.appendTo(zoomFigure)
+                if (zoomImage.get(0).height === 0) {
+                    zoomImage.hide();
+                }
+                
+                zoomHeight = (!!zoomImage.get(0).complete)? zoomImage.height() : 200;
+                nodezoom._animate({ height : zoomHeight + 'px' }, _s.startFade);
+                
+                
+                
                 imgDesc = $this.find('img').prop('longDesc');
                 if (!!imgDesc) {
                     zoomImage.wrap($('<a />').attr({
@@ -600,7 +608,9 @@
                     function(img) {
                         setTimeout(function() {
                             
-                            img.fadeIn(_s.startFade, function() {
+                            var fadeZoom = (!!zoomImage.get(0).height)? _s.startFade : 0;
+                            
+                            img.fadeIn(fadeZoom, function() {
                                 zoomCloseBtt = $('<a class="mosaiqy-zoom-close">Close</a>').attr({
                                     href    : "#"
                                 })
@@ -624,7 +634,9 @@
                 )
                     .done(function() {
                         appDebug("log", 'zoom ready');
-                        nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade);
+                        if (zoomHeight < zoomImage.height()) {
+                            nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade);
+                        }
                     })
                     .fail(function() {
                         appDebug("warn", 'cannot load ', $this.find('a').attr('href'));
