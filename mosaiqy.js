@@ -589,7 +589,7 @@
          * called in a synchronous code queue inside other functions, ensuring all operation have
          * been successfully completed.</p>
          *
-         * <p><code>viewZoom</code> is called when the previous function <p><code>createZoom</code>
+         * <p><code>viewZoom</code> is called when the previous function <code>createZoom</code>
          * successfully created the zoom container into the DOM. The function creates the zoom image
          * and the closing button binding the click event. If image is not in cache the zoom is opened
          * with a slideDown effect with a waiting loader.</p>
