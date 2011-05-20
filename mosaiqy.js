@@ -80,12 +80,17 @@
     }($.browser, 'transition')),
     
     
+    
     shuffledFisherYates = function(len) {
         var i, j, tmp_i, tmp_j, shuffled = [];
         
         i = len;
         for (j = 0; j < i; j++) { shuffled[j] = j; }
         while (--i) {
+            /*
+             * [~~] is the bitwise op quickest equivalent to Math.floor()
+             * http://jsperf.com/bitwise-not-not-vs-math-floor
+             */
             var j = ~~(Math.random() * (i+1));
             var tmp_i   = shuffled[i];
             var tmp_j   = shuffled[j];
@@ -135,7 +140,18 @@
         _intvAnimation,
         
         
-        mosaiqyCreateTemplate = function(index) {
+        /**
+         * @private
+         * @name Mosaiqy#_mosaiqyCreateTemplate
+         * @param { Number } index The index of JSON data array
+         * @returns { String } HTML String to inject into the document
+         * @description
+         * 
+         * The method merges the user-defined template with JSON data associated
+         * to a given index and it's called both at initialization and every
+         * animation cycle.
+         */
+        _mosaiqyCreateTemplate = function(index) {
             var tpl = '';
             if (typeof _tplCache[index] === 'undefined') {
                 _tplCache[index] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
@@ -322,24 +338,10 @@
             /**
              * Generate template to append with user data
              */
-            /*
-            if (typeof _tplCache[_dataIndex] === 'undefined') {
-                _tplCache[_dataIndex] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
-                    if (typeof _s.data[_dataIndex][key] === 'undefined') {
-                        return key;
-                    }
-                    return _s.data[_dataIndex][key];
-                });
-            }
-            tpl = _tplCache[_dataIndex];
-            if (typeof window.innerShiv === 'function') {
-                tpl = window.innerShiv(tpl);
-            }*/
-            
-            tpl = mosaiqyCreateTemplate(_dataIndex);
+            tpl = _mosaiqyCreateTemplate(_dataIndex);
             
             /**
-             * Get random point
+             * Get the entry point from shuffled array
              */ 
             rnd = _shuffledEP.pop();
             
@@ -490,6 +492,18 @@
         },
         
         
+        /**
+         * @private
+         * @name Mosaiqy#_animationCycle
+         * @description
+         * 
+         * <p>The method runs the animation and check some private variables to
+         * allow cycle and animation execution. Every time the animation has
+         * completed successfully, the JSON index and node collection are updated.</p>
+         * 
+         * <p>Animation interval is not executed on mouse enter (_animationPaused)
+         * or when animation is still running.</p>
+         */ 
         _animationCycle = function() {
             if (!_animationPaused && !_animationRunning) {
                 
@@ -503,7 +517,7 @@
                 appDebug("info", 'Animate selection');
                 $.when(_animateSelection())
                     .done(function() {
-                        _li = _ul.find('li');
+                        _li = _ul.find('li:not(.mosaiqy-zoom)');
                         _dataIndex = _dataIndex + 1;
                         _animationRunning = false;
                         appDebug("info", 'End animate selection');
@@ -529,20 +543,60 @@
             }
         },
         
+        
+        /**
+         * @private
+         * @name Mosaiqy#_pauseAnimation
+         * @description
+         * 
+         * Set private _animationPaused to true so the animation cycle can run
+         * (unless a zoom is currently opened).
+         */
         _pauseAnimation = function() {
             _animationPaused = true;
         },
         
+        
+        /**
+         * @private
+         * @name Mosaiqy#_playAnimation
+         * @description
+         * 
+         * Set private _animationPaused to false so the animation cycle can stop.
+         */
         _playAnimation = function() {
             _animationPaused = false;
         },
         
-        _startAnimation = function() {
-            _animationCycle();
-        },
         
         
-        
+        /**
+         * @private
+         * @name Mosaiqy#_setNodeZoomEvent
+         * @description
+         * 
+         * <p>This method manages the zoom main events by some scoped internal functions.</p>
+         * 
+         * <p><code>closeZoom</code> is called when user clicks on "Close" button over a zoom
+         * image or when another thumbanail is choosed when another zoom is currently opened.
+         * The function stops all running transitions (if any) and it closes the zoom container
+         * while changing opacity of some elements (close button, image caption). At the end of
+         * animation it removes some internal classes and the «li» node that contained the zoom.</p>
+         *
+         * <p>The function <code>closeZoom</code> returns a deferred promise object, so it can be
+         * called in a synchronous code queue inside other functions, ensuring all operation have
+         * been successfully completed.</p>
+         *
+         * <p><code>viewZoom</code> is called when the previous function <p><code>createZoom</code>
+         * successfully created the zoom container into the DOM. The function creates the zoom image
+         * and the closing button binding the click event. If image is not in cache the zoom is opened
+         * with a slideDown effect with a waiting loader.</p>
+         * 
+         * <p><code>createZoom</code> calls the <code>closeZoom</code> function (if any zoom images
+         * are currently opened) then creates the zoom container into the DOM and then scroll the page
+         * until the upper bound of the thumbnail choosed has reached. When scrolling effect has
+         * completed then <code>viewZoom</code> function is called.</p>
+         */ 
         _setNodeZoomEvent   = function(node) {
                 
             var nodezoom, $this, i, zoomRunning,
@@ -645,7 +699,7 @@
             }
             
             
-            function openZoom(previousClose) {
+            function createZoom(previousClose) {
                 
                 appDebug("log", 'opening zoom');
                 zoomRunning = true;
@@ -720,7 +774,7 @@
                      * Don't click twice on the same zoom
                      */
                     if (!$this.hasClass('zoom')) {
-                        openZoom(closeZoom);
+                        createZoom(closeZoom);
                     }
                     
                 }
@@ -786,7 +840,7 @@
                     _cnt.removeClass('loading');
                     _setNodeZoomEvent(_li);
                     _intvAnimation = setTimeout(function() {
-                        _startAnimation();
+                        _animationCycle();
                     }, _s.animationDelay + 2000);
                 })
                 /**

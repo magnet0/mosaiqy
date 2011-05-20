@@ -53,9 +53,27 @@
         h2 {
             font-family     : LeagueGothicRegular;
             font-weight     : normal;
-            margin          : 15px 0 30px; 0;
+            margin          : 15px 0 0 0;
             font-size       : 28px;
             color           : #414141;
+            text-shadow     : -1px 1px 0px #fff;
+        }
+        
+        hgroup {
+            margin-bottom   : 45px;
+        }
+        h2 em {
+           font-style      : normal;
+           color           : #545355;
+        }
+        
+        h1:after, h1:before,
+        h2:after, h2:before {
+           content          : "\2605";
+           font-size        : 0.6em;
+           padding          : 0 10px;
+           display          : inline-block;
+           vertical-align   : middle;
         }
     </style>
   
@@ -67,7 +85,7 @@
     
     <hgroup>
         <h1>Mosaiqy</h1>
-        <h2>A nice plugin for jQuery 1.6</h2>
+        <h2>A nice plugin for <em>jQuery 1.6</em> &amp; <em>HTML5</em></h2>
         <!-- yes I am an hgroup supporter -->
     </hgroup>
     
