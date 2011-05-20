@@ -4,8 +4,10 @@
  * @author Fabrizio Calderan, http://www.fabriziocalderan.it/, twitter : fcalderan
  *
  * Released under license Creative Commons, Attribution-NonCommercial-NoDerivs 3.0
- * (CC BY-NC-D 3.0) available at http://creativecommons.org/licenses/by-nc-nd/3.0/
- * Read the license carefully before using this plugin.  
+ * (CC BY-NC-ND 3.0) available at http://creativecommons.org/licenses/by-nc-nd/3.0/
+ * Read the license carefully before using this plugin.
+ *
+ * Docs generation: java -jar jsrun.jar app/run.js -a -p -t=templates/couchjs ../mosaiqy.js
  */
 
 (function($) {
@@ -325,7 +327,7 @@
          * @return a deferred promise
          * @description
          *
-         * This method runs the animation cycle.
+         * This method runs the animation.
          */
         _animateSelection = function() {
             
@@ -578,7 +580,7 @@
          * <p>This method manages the zoom main events by some scoped internal functions.</p>
          * 
          * <p><code>closeZoom</code> is called when user clicks on "Close" button over a zoom
-         * image or when another thumbanail is choosed when another zoom is currently opened.
+         * image or when another thumbanail is choosed and another zoom is currently opened.
          * The function stops all running transitions (if any) and it closes the zoom container
          * while changing opacity of some elements (close button, image caption). At the end of
          * animation it removes some internal classes and the «li» node that contained the zoom.</p>
