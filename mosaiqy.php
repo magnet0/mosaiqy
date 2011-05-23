@@ -29,7 +29,43 @@
             color       : #303133;
         }
         
-        section, hgroup {
+        
+        a           {  color       : #414141; }
+        a:visited   {  color       : #667; }
+        
+        
+        .github-ribbon {
+            background-color    : #999;
+            display             : block;
+            overflow            : hidden;
+            position            : fixed;
+            z-index             : 10;
+            right               : -3em;
+            top                 : 3em;
+            -moz-transform      : rotate(45deg);
+            -webkit-transform   : rotate(45deg);
+            -moz-box-shadow     : 0 0 1.3em #767676;
+            -webkit-box-shadow  : 0 0 1.3em #767676;
+            margin              : 0;
+            padding             : 1px 0;
+            border-top          : 1px solid #999;
+            border-bottom       : 1px solid #999;
+        }
+          
+        .github-ribbon a {
+            color               : #fff;
+            display             : block;
+            font-weight         : bold;
+            font-size           : 0.8em;
+            padding             : 0.4em 5em;
+            text-align          : center;
+            text-decoration     : none;
+            text-shadow         : -1px 1px 0px #525059;
+            border-top          : 1px dashed #c2c0c4;
+            border-bottom       : 1px dashed #c2c0c4;
+          }
+        
+        section, hgroup, header {
             display     : block;
             text-align  : center;
         }
@@ -59,9 +95,10 @@
             text-shadow     : -1px 1px 0px #fff;
         }
         
-        hgroup {
+        header {
             margin-bottom   : 45px;
         }
+        
         h2 em {
            font-style      : normal;
            color           : #545355;
@@ -82,15 +119,22 @@
 </head>
 
 <body>
-    
-    <hgroup>
-        <h1>Mosaiqy</h1>
-        <h2>A nice plugin for <em>jQuery 1.6</em> &amp; <em>HTML5</em></h2>
-        <!-- yes I am an hgroup supporter -->
-    </hgroup>
+
+    <header>
+        <hgroup>
+            <h1>Mosaiqy</h1>
+            <h2>A nice plugin for <em>jQuery 1.6</em> &amp; <em>HTML5</em></h2>
+            <!-- yes I am an hgroup supporter -->
+        </hgroup>
+            
+        <p class="github-ribbon">
+           <a href="https://github.com/fcalderan/mosaiqy" target="new">Hosted on Github</a>
+        </p>
+    </header>
     
     <div class="loading mosaiqy">
         <ul>
+            
             <li>
                 <div>
                     <figure><a href="zoom/1.jpg"><img src="thumb/1.jpg">
@@ -201,12 +245,10 @@
     <section>
         <h2>Special thanks to</h2>
         <p>
-            A great thank goes to "distillerie salentine" who gave me the opportunity to easily reach<br />
-            the famous <cite title="http://xkcd.com/323/">"Ballmer's peak"</cite> with theirs delicious melon's cream at 17%.
-            <figure>
-                <img src="http://imgs.xkcd.com/comics/ballmer_peak.png" />
-                <figcaption>A moderate alcohol quantity is definitely a javascript good part. Crockford should tell about it</figcaption>
-            </figure>
+            A great thank goes to "Gargano delizie" distillery who gave me the opportunity to easily reach<br />
+            the famous <a href="http://xkcd.com/323/"
+            title="A moderate alcohol quantity is definitely a javascript good part. Crockford should tell about it"><q>Ballmer
+            peak</q></a> with theirs delicious melon's cream at 17%.
         </p>
     </section>
     <?php
@@ -238,6 +280,7 @@
             cols            : <?php echo $cols ?>,
             animationDelay  : 1500,
             loop            : true,
+            dataIndex       : 10,
             data            : [
                 {
                     img     : "1.jpg",
@@ -279,8 +322,17 @@
                 {
                     img     : "10.jpg",
                     desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
+                },
+                {
+                    img     : "11.jpg",
+                    desc    : "Mucche (1)"
+                },
+                {
+                    img     : "12.jpg",
+                    desc    : "Mucche(2)"
                 }
             ]
+            
         });
         
     });

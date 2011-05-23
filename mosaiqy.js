@@ -136,7 +136,6 @@
         _tplCache           = {},
         _animationPaused    = false,
         _animationRunning   = false,
-        _dataIndex          = _s.dataIndex || 0,
         _thumbSize          = {},
         _page               = ($.browser.opera)? $("html") : $("html,body"),
         _intvAnimation,
@@ -146,7 +145,7 @@
          * @private
          * @name Mosaiqy#_mosaiqyCreateTemplate
          * @param { Number } index The index of JSON data array
-         * @returns { String } HTML String to inject into the document
+         * @returns { jQuery } HTML Nodes to inject into the document
          * @description
          * 
          * The method merges the user-defined template with JSON data associated
@@ -169,7 +168,7 @@
                 tpl = window.innerShiv(tpl);
             }
             
-            return tpl;
+            return $(tpl);
         },
         
         
@@ -335,19 +334,13 @@
                 dfd = $.Deferred();
            
             appDebug("groupCollapsed", 'call animate()');
-            appDebug("info", 'Dataindex is', _dataIndex);
+            appDebug("info", 'Dataindex is', _s.dataIndex);
             
-            /**
-             * Generate template to append with user data
-             */
-            tpl = _mosaiqyCreateTemplate(_dataIndex);
             
             /**
              * Get the entry point from shuffled array
              */ 
             rnd = _shuffledEP.pop();
-            
-            
             isEven = ((rnd & 1) === 0);
             
             animatedSelection = _cnt.find(_points[rnd].selector);
@@ -362,7 +355,15 @@
                   $('<li />').insertBefore(referral)
                 : $('<li />').insertAfter(referral);
             
-            $(tpl).appendTo(node.css(_points[rnd].position));
+            node.data('mosaiqy-index', _s.dataIndex);
+            
+            
+            /**
+             * Generate template to append with user data
+             */
+            tpl = _mosaiqyCreateTemplate(_s.dataIndex);
+            tpl.appendTo(node.css(_points[rnd].position));
+            
             appDebug("info", "Random position is %d and its referral is node", rnd, referral);
             
             /**
@@ -375,7 +376,7 @@
              * again the _animate method
              */
             .fail(function() {
-                appDebug("warn", 'Skip dataindex %d, call _animate()', _dataIndex);
+                appDebug("warn", 'Skip dataindex %d, call _animate()', _s.dataIndex);
                 appDebug("groupEnd");
                 node.remove();
                 dfd.reject();
@@ -517,22 +518,23 @@
                 }
                 
                 appDebug("info", 'Animate selection');
+                if (_s.dataIndex === _s.data.length) {
+                    if (!_s.loop) {
+                        return _pauseAnimation();
+                    }
+                    else {
+                        _s.dataIndex = 0;
+                    }
+                }
+                
                 $.when(_animateSelection())
                     .done(function() {
                         _li = _ul.find('li:not(.mosaiqy-zoom)');
-                        _dataIndex = _dataIndex + 1;
+                        _s.dataIndex = _s.dataIndex + 1;
                         _animationRunning = false;
                         appDebug("info", 'End animate selection');
                     })
                     .always(function () {
-                        if (_dataIndex === _s.data.length) {
-                            if (!_s.loop) {
-                                return _pauseAnimation();
-                            }
-                            else {
-                                _dataIndex = 0;
-                            }
-                        }
                         _intvAnimation = setTimeout(function() {
                             _animationCycle();
                         }, _s.animationDelay);
@@ -782,6 +784,21 @@
                 }
                 evt.preventDefault();
             });
+        },
+        
+        
+        _loadThumbsFromJSON     = function(i) {
+            var node, tpl;
+            
+            while (i--) {
+                node  = $('<li />').appendTo(_ul);
+                node.data('mosaiqy-index', _s.dataIndex);
+                tpl = _mosaiqyCreateTemplate(_s.dataIndex);
+                console.log(tpl, _s.dataIndex);
+                tpl.appendTo(node);
+                _s.dataIndex = _s.dataIndex + 1;
+            }
+            
         };
         
         
@@ -793,11 +810,13 @@
             
             init    : function(cnt, options) {
                 
+                var imgToComplete = 0;
+                
                 _s = $.extend(_s, options);
                 
                 /* Data must not be empty */
                 if (!((_s.data || []).length)) {
-                    appDebug("error", 'data object is empty');
+                    throw Error("Data object is empty");
                     return false;
                 }
                 /* Template must not be empty and provided as a script element */
@@ -805,17 +824,36 @@
                     _s.template = $(_s.template).text() || $(_s.template).html();
                 }
                 else {
-                    appDebug("error", 'user template is not defined');
+                    throw Error("User template is not defined");
                     return false;
                 }
+                
                 
                 
                 _cnt    = cnt;
                 _ul     = cnt.find('ul');
                 _li     = cnt.find('li:not(.mosaiqy-zoom)');
+
+                
+                /**
+                 * If thumbnails on markup are less than (cols * rows) we retrieve
+                 * the missing images from the json, and we create the templates 
+                 */
+                imgToComplete = (_s.cols * _s.rows) - _li.length;
+                if (imgToComplete) {
+                    if (_s.data.length >= imgToComplete) {
+                        appDebug('warn', "Missing %d image/s. Load from JSON", imgToComplete);
+                        _loadThumbsFromJSON(imgToComplete);
+                        _li = cnt.find('li:not(.mosaiqy-zoom)');
+                    }
+                    else {
+                        throw Error("JSON data can't provide missing images on the HTML document.")
+                    }
+                }
+                
                 _img    = cnt.find('img');
-                   
-                               
+                
+                
                 /* define image position and retrieve entry points */
                 _setInitialImageCoords();
                 _getPoints();
