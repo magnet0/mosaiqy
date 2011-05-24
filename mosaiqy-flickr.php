@@ -214,9 +214,9 @@
                 fi;
             
             /**
-             * inject zoom images on JSON (they usually ends with ... _z.jpg
+             * inject zoom images on JSON (they usually end with ... _z.jpg)
              */
-            while (--flen) {
+            while (flen--) {
                 fi = fjson[flen];
                 fi.media['z']  = fi.media['m'].replace(/^(.+)(\_m\.)(\w+)$/i, function(url, name, type, ext) {
                     return [name, ext].join('_z.');

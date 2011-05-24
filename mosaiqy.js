@@ -127,6 +127,7 @@
             indexData           : 0,
             loop                : true,
             rows                : 3,
+            scrollZoom          : true,
             template            : null
         },
         
@@ -794,10 +795,15 @@
                         pagePos     = (document.body.scrollTop !== 0)
                             ? document.body.scrollTop
                             : document.documentElement.scrollTop;
-                    
-                        diffPos         = Math.abs(pagePos - thumbPos);
-                        timeToScroll    = (diffPos > 0) ? ((diffPos * 1.5) + 400) : 0;
                         
+                        if (_s.scrollZoom) {
+                            diffPos         = Math.abs(pagePos - thumbPos);
+                            timeToScroll    = (diffPos > 0) ? ((diffPos * 1.5) + 400) : 0;
+                        }
+                        else {
+                            thumbPos = pagePos;
+                            timeToScroll = 0;
+                        }
                         /**
                          * need to create the zoom node then append it and then open it. When using
                          * HTML5 elements we need the innerShiv function available.
@@ -821,7 +827,6 @@
                         if (typeof window.innerShiv === 'function') {
                             nodezoom = _cnt.find('.mosaiqy-zoom');
                         }
-                        
                         
                         $.when(_page.stop()._animate({ scrollTop: thumbPos }, timeToScroll))
                             .done(function() {
