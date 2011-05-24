@@ -65,7 +65,7 @@
             border-bottom       : 1px dashed #c2c0c4;
           }
         
-        section, hgroup, header {
+        section, hgroup, header, form {
             display     : block;
             text-align  : center;
         }
@@ -76,8 +76,12 @@
             text-align  : left;
         }
         
-        h1 {
+        h1, h2, h3 {
             font-family     : LeagueGothicRegular;
+            text-align      : center;
+        }
+        
+        h1 {
             font-size       : 140px;
             line-height     : 0.9;
             font-weight     : normal;
@@ -89,7 +93,14 @@
         }
         
         h2 {
-            font-family     : LeagueGothicRegular;
+            font-weight     : normal;
+            margin          : 15px 0 0 0;
+            font-size       : 36px;
+            color           : #414141;
+            text-shadow     : -1px 1px 0px #fff;
+        }
+        
+        h3 {
             font-weight     : normal;
             margin          : 15px 0 0 0;
             font-size       : 28px;
@@ -101,9 +112,9 @@
             margin-bottom   : 45px;
         }
         
-        h2 em {
+        hgroup em {
            font-style      : normal;
-           color           : #545355;
+           color           : #72707B;
         }
         
         h1:after, h1:before,
@@ -125,7 +136,8 @@
     <header>
         <hgroup>
             <h1>Mosaiqy</h1>
-            <h2>A nice plugin for <em>jQuery 1.6</em> &amp; <em>HTML5</em></h2>
+            <h2>A nice plugin for <em>jQuery 1.6+</em> &amp; <em>HTML5</em></h2>
+            <h3>(<em>8Kb</em> minified - <em>3.6Kb</em> minified + gzip)</h3>
             <!-- yes I am an hgroup supporter -->
         </hgroup>
             
@@ -228,7 +240,7 @@
         $gs = $_POST['gridsize'];
     ?>
     <section>
-        <h2>Choose your favourite grid size (except 1x12 and 12x1 &mdash; you could, but it's trivial!)</h2>
+        <h2>Choose your favourite grid size</h2>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
             <select name="gridsize" onchange="this.parentNode.submit()">
                 <option value="2x6" <?php if ($gs == "2x6") echo "selected"; ?> >2x6</option>
@@ -247,7 +259,7 @@
     <section>
         <h2>Special thanks to</h2>
         <p>
-            A great thank goes to "Gargano delizie" distillery who gave me the opportunity to easily reach<br />
+            A great thank goes to "Gargano delizie" distillery who gave me the opportunity to easily reach
             the famous <a href="http://xkcd.com/323/"
             title="A moderate alcohol quantity is definitely a javascript good part. Crockford should tell about it"><q>Ballmer
             peak</q></a> with theirs delicious melon's cream at 17%.

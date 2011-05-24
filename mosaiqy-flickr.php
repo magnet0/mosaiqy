@@ -148,49 +148,7 @@
     
     <div class="loading mosaiqy">
         <ul>
-            
-            <li data-mosaiqy-index="0">
-                <div>
-                    <figure><a href="zoom/1.jpg"><img src="thumb/1.jpg">
-                        <figcaption>Rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>
-                    </figure>
-                </div>
-            </li>
-            <li data-mosaiqy-index="1">
-                <div>
-                <figure><a href="zoom/2.jpg"><img src="thumb/2.jpg">
-                    <figcaption>Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>           
-                </figure>
-                </div>
-            </li>
-            <li data-mosaiqy-index="2">
-                <div>
-                <figure><a href="zoom/3.jpg"><img src="thumb/3.jpg">
-                    <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>           
-                </figure>
-                </div>
-            </li>
-            <li  data-mosaiqy-index="3">
-                <div>
-                    <figure><a href="zoom/4.jpg"><img src="thumb/4.jpg">
-                        <figcaption>Rifugio &laquo;Pradidali&raquo;</figcaption></a>           
-                    </figure>
-                </div>
-            </li>
-            <li data-mosaiqy-index="4">
-                <div>
-                    <figure><a href="zoom/5.jpg"><img src="thumb/5.jpg">
-                        <figcaption>Due simpatici escursionisti</figcaption></a>            
-                    </figure>
-                </div>
-            </li>
-            <li data-mosaiqy-index="5">
-                <div>
-                    <figure><a href="zoom/6.jpg"><img src="thumb/6.jpg">
-                        <figcaption>Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;</figcaption></a>            
-                    </figure>
-                </div>
-            </li>
+
         </ul>
      </div>
     
@@ -235,78 +193,49 @@
 
     <!-- jquery -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"> </script>
-    <script src="test.js" id="mosaiqy_tpl">
+    <script src="mosaiqy.js" id="mosaiqy_tpl">
         <div>
-            <figure><a href="zoom/${img}"><img src="thumb/${img}">
-              <figcaption>${desc}</figcaption></a>
+            <figure><a href="${media.z}"><img src="${media.m}">
+              <figcaption>${title}</figcaption></a>
             </figure>
         </div>
     </script>
     
     <script>
     $(document).ready(function() {
-        $('.mosaiqy').mosaiqy({
-            template        : '#mosaiqy_tpl',
-            rows            : 3,
-            cols            : 3,
-            avoidDuplicates : true,
-            animationDelay  : 1500,
-            loop            : true,
-            dataIndex       : 10,
-            data            : [
-                {
-                    img     : "1.jpg",
-                    desc    : "Rifugio &laquo;Citt&agrave; di Fiume&raquo;"
-                }
-                ,
-                {
-                    img     : "2.jpg",
-                    desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
-                },
-                {
-                    img     : "3.jpg",
-                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
-                },
-                {
-                    img     : "4.jpg",
-                    desc    : "Rifugio &laquo;Pradidali&raquo;"
-                },
-                {
-                    img     : "5.jpg",
-                    desc    : "Due simpatici escursionisti"
-                },
-                {
-                    img     : "6.jpg",
-                    desc    : "Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;"
-                },
-                {
-                    img     : "7.jpg",
-                    desc    : "Arrivando al rifugio &laquo;Pradidali&raquo;"
-                },
-                {
-                    img     : "13.jpg",
-                    desc    : "Una simpatica escursionista affamata"
-                },
-                {
-                    img     : "9.jpg",
-                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
-                },
-                {
-                    img     : "10.jpg",
-                    desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
-                },
-                {
-                    img     : "11.jpg",
-                    desc    : "Mucche (1)"
-                },
-                {
-                    img     : "12.jpg",
-                    desc    : "Mucche(2)"
-                }
-            ]
+        
+        $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?id=59422190@N00&jsoncallback=?", {
+            format : "json"
+        },
+        function(flickrJSON) {
+            
+            var fjson  = flickrJSON.items,
+                flen   = fjson.length,
+                fi;
+            
+            /**
+             * inject zoom images on JSON (they usually ends with ... _z.jpg
+             */
+            while (--flen) {
+                fi = fjson[flen];
+                fi.media['z']  = fi.media['m'].replace(/^(.+)(\_m\.)(\w+)$/i, function(url, name, type, ext) {
+                    return [name, ext].join('_z.');
+                });
+            }
+                
+                
+            $('.mosaiqy').mosaiqy({
+                template        : '#mosaiqy_tpl',
+                rows            : 3,
+                cols            : 3,
+                avoidDuplicates : true,
+                animationDelay  : 1500,
+                loop            : true,
+                dataIndex       : 10,
+                data            : fjson
+            });            
             
         });
-        
     });
     </script>
 

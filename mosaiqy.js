@@ -157,10 +157,26 @@
             var tpl = '';
             if (typeof _tplCache[index] === 'undefined') {
                 _tplCache[index] = _s.template.replace(/\$\{([^\}]+)\}/gm, function(data, key) {
-                    if (typeof _s.data[index][key] === 'undefined') {
+                    
+                    
+                    
+                    var value = (function() {
+                        var par = key.split('.'), len = 0, val;
+                        if (par.length) {
+                            val = _s.data[index];
+                            par = par.reverse();
+                            len = par.length;
+                            
+                            while (len--) {  val = val[par[len]] || {}; }
+                            return val;
+                        }
+                        return _s.data[index][key];
+                    }());
+                    
+                    if (typeof value === 'undefined') {
                         return key;
                     }
-                    return _s.data[index][key];
+                    return value;
                 });
             }
             
@@ -528,7 +544,7 @@
             
             if (_s.avoidDuplicates) {
                 appDebug('info', "Avoid Duplicates");
-                _cnt.find('li').each(function() {
+                _li.each(function() {
                     var i = $(this).data('mosaiqy-index');
                     stage[i] = i;
                 });
