@@ -121,11 +121,12 @@
         var _s = {
             animationDelay      : 3000,
             animationSpeed      : 800,
+            avoidDuplicates     : false,
             cols                : 4,
-            dataIndex           : 0,
+            fadeSpeed           : 750,
+            indexData           : 0,
             loop                : true,
             rows                : 3,
-            startFade           : 750,
             template            : null
         },
         
@@ -334,7 +335,7 @@
                 dfd = $.Deferred();
            
             appDebug("groupCollapsed", 'call animate()');
-            appDebug("info", 'Dataindex is', _s.dataIndex);
+            appDebug("info", 'Dataindex is', _s.indexData);
             
             
             /**
@@ -355,13 +356,13 @@
                   $('<li />').insertBefore(referral)
                 : $('<li />').insertAfter(referral);
             
-            node.data('mosaiqy-index', _s.dataIndex);
+            node.data('mosaiqy-index', _s.indexData);
             
             
             /**
              * Generate template to append with user data
              */
-            tpl = _mosaiqyCreateTemplate(_s.dataIndex);
+            tpl = _mosaiqyCreateTemplate(_s.indexData);
             tpl.appendTo(node.css(_points[rnd].position));
             
             appDebug("info", "Random position is %d and its referral is node", rnd, referral);
@@ -376,7 +377,7 @@
              * again the _animate method
              */
             .fail(function() {
-                appDebug("warn", 'Skip dataindex %d, call _animate()', _s.dataIndex);
+                appDebug("warn", 'Skip dataindex %d, call _animate()', _s.indexData);
                 appDebug("groupEnd");
                 node.remove();
                 dfd.reject();
@@ -495,6 +496,37 @@
         },
         
         
+        _incrementIndexData     = function() {
+            
+            var safe = _s.data.length;
+            
+            if (_s.avoidDuplicates && _s.loop) {
+                appDebug('info', "Avoid Duplicates")
+                while (--safe) {
+                    if (_cnt.find('li[data-mosaiqy-index=' + _s.indexData + ']').length) {
+                        appDebug('info', "%d already exist. Try next", _s.indexData)
+                        if (_s.indexData === _s.data.length) {
+                            _s.indexData = 0;
+                        }
+                        else {
+                            _s.indexData = _s.indexData + 1;
+                        }
+                        continue;
+                    }
+                    break;
+                }
+            }
+            
+            if (_s.indexData === _s.data.length) {
+                if (!_s.loop) {
+                    return _pauseAnimation();
+                }
+                else {
+                    _s.indexData = 0;
+                }
+            }
+        },
+        
         /**
          * @private
          * @name Mosaiqy#_animationCycle
@@ -518,19 +550,12 @@
                 }
                 
                 appDebug("info", 'Animate selection');
-                if (_s.dataIndex === _s.data.length) {
-                    if (!_s.loop) {
-                        return _pauseAnimation();
-                    }
-                    else {
-                        _s.dataIndex = 0;
-                    }
-                }
+                _incrementIndexData();
                 
                 $.when(_animateSelection())
                     .done(function() {
                         _li = _ul.find('li:not(.mosaiqy-zoom)');
-                        _s.dataIndex = _s.dataIndex + 1;
+                        _s.indexData = _s.indexData + 1;
                         _animationRunning = false;
                         appDebug("info", 'End animate selection');
                     })
@@ -613,11 +638,11 @@
                 if ((nodezoom || { }).length) {
                     appDebug("log", 'closing previous zoom');
                      
-                    zoomCaption.stop(true)._animate({ opacity: '0' }, _s.startFade / 4);
-                    zoomCloseBtt.stop(true)._animate({ opacity: '0' }, _s.startFade / 2);
+                    zoomCaption.stop(true)._animate({ opacity: '0' }, _s.fadeSpeed / 4);
+                    zoomCloseBtt.stop(true)._animate({ opacity: '0' }, _s.fadeSpeed / 2);
                     _li.removeClass('zoom');
                     
-                    $.when(nodezoom.stop(true)._animate({ height : '0' }, _s.startFade))
+                    $.when(nodezoom.stop(true)._animate({ height : '0' }, _s.fadeSpeed))
                         .then(function() {
                             nodezoom.remove();
                             nodezoom = null;
@@ -651,7 +676,7 @@
                 }
                 
                 zoomHeight = (!!zoomImage.get(0).complete)? zoomImage.height() : 200;
-                nodezoom._animate({ height : zoomHeight + 'px' }, _s.startFade);
+                nodezoom._animate({ height : zoomHeight + 'px' }, _s.fadeSpeed);
                 
                 
                 
@@ -666,7 +691,7 @@
                     function(img) {
                         setTimeout(function() {
                             
-                            var fadeZoom = (!!zoomImage.get(0).height)? _s.startFade : 0;
+                            var fadeZoom = (!!zoomImage.get(0).height)? _s.fadeSpeed : 0;
                             
                             img.fadeIn(fadeZoom, function() {
                                 zoomCloseBtt = $('<a class="mosaiqy-zoom-close">Close</a>').attr({
@@ -681,19 +706,19 @@
                                     evt.preventDefault();
                                 })
                                 .appendTo(zoomFigure)
-                                ._animate({ opacity: '1' }, _s.startFade / 2);
+                                ._animate({ opacity: '1' }, _s.fadeSpeed / 2);
                                 
-                                zoomCaption.html($this.find('figcaption').html())._animate({ opacity: '1' }, _s.startFade);
+                                zoomCaption.html($this.find('figcaption').html())._animate({ opacity: '1' }, _s.fadeSpeed);
 
                             });
                             
-                        }, _s.startFade / 1.2);
+                        }, _s.fadeSpeed / 1.2);
                     })
                 )
                     .done(function() {
                         appDebug("log", 'zoom ready');
                         if (zoomHeight < zoomImage.height()) {
-                            nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.startFade);
+                            nodezoom._animate({ height : zoomImage.height() + 'px' }, _s.fadeSpeed);
                         }
                     })
                     .fail(function() {
@@ -792,11 +817,10 @@
             
             while (i--) {
                 node  = $('<li />').appendTo(_ul);
-                node.data('mosaiqy-index', _s.dataIndex);
-                tpl = _mosaiqyCreateTemplate(_s.dataIndex);
-                console.log(tpl, _s.dataIndex);
+                node.data('mosaiqy-index', _s.indexData);
+                tpl = _mosaiqyCreateTemplate(_s.indexData);
                 tpl.appendTo(node);
-                _s.dataIndex = _s.dataIndex + 1;
+                _s.indexData = _s.indexData + 1;
             }
             
         };
@@ -833,7 +857,6 @@
                 _cnt    = cnt;
                 _ul     = cnt.find('ul');
                 _li     = cnt.find('li:not(.mosaiqy-zoom)');
-
                 
                 /**
                  * If thumbnails on markup are less than (cols * rows) we retrieve
@@ -842,6 +865,7 @@
                 imgToComplete = (_s.cols * _s.rows) - _li.length;
                 if (imgToComplete) {
                     if (_s.data.length >= imgToComplete) {
+                        
                         appDebug('warn', "Missing %d image/s. Load from JSON", imgToComplete);
                         _loadThumbsFromJSON(imgToComplete);
                         _li = cnt.find('li:not(.mosaiqy-zoom)');
@@ -852,7 +876,6 @@
                 }
                 
                 _img    = cnt.find('img');
-                
                 
                 /* define image position and retrieve entry points */
                 _setInitialImageCoords();
@@ -871,7 +894,7 @@
                 
                 
                 
-                $.when(_img.mosaiqyImagesLoad(function(img) { img.animate({ opacity : '1' }, _s.startFade); }))
+                $.when(_img.mosaiqyImagesLoad(function(img) { img.animate({ opacity : '1' }, _s.fadeSpeed); }))
                 /**
                  * All images have been successfully loaded
                  */
