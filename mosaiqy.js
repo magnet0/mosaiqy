@@ -498,24 +498,10 @@
         
         _incrementIndexData     = function() {
             
-            var safe = _s.data.length;
-            
-            if (_s.avoidDuplicates && _s.loop) {
-                appDebug('info', "Avoid Duplicates")
-                while (--safe) {
-                    if (_cnt.find('li[data-mosaiqy-index=' + _s.indexData + ']').length) {
-                        appDebug('info', "%d already exist. Try next", _s.indexData)
-                        if (_s.indexData === _s.data.length) {
-                            _s.indexData = 0;
-                        }
-                        else {
-                            _s.indexData = _s.indexData + 1;
-                        }
-                        continue;
-                    }
-                    break;
-                }
-            }
+            var safe    = _s.data.length,
+                stage   = [];
+                
+                
             
             if (_s.indexData === _s.data.length) {
                 if (!_s.loop) {
@@ -525,6 +511,30 @@
                     _s.indexData = 0;
                 }
             }
+            
+            if (_s.avoidDuplicates && _s.loop) {
+                appDebug('info', "Avoid Duplicates");
+                
+                _cnt.find('li').each(function() {
+                    var i = $(this).data('mosaiqy-index');
+                    stage[i] = i;
+                });
+                appDebug('info', "Now on stage: ", stage);
+                
+                while (true) {
+                    if (typeof stage[_s.indexData] !== 'undefined') {
+                        appDebug('info', "%d already exist (skip)", _s.indexData)
+                        _s.indexData = _s.indexData + 1;
+                        if (_s.indexData === _s.data.length) {
+                            _s.indexData = 0;
+                        }
+                        continue;
+                    }
+                    appDebug('info', "%d not in stage (ok)", _s.indexData)
+                    break;
+                }
+            }
+
         },
         
         /**
@@ -865,7 +875,7 @@
                 imgToComplete = (_s.cols * _s.rows) - _li.length;
                 if (imgToComplete) {
                     if (_s.data.length >= imgToComplete) {
-                        
+                        _s.indexData = _li.length;
                         appDebug('warn', "Missing %d image/s. Load from JSON", imgToComplete);
                         _loadThumbsFromJSON(imgToComplete);
                         _li = cnt.find('li:not(.mosaiqy-zoom)');
