@@ -131,9 +131,9 @@
         },
         
         _cnt, _ul, _li, _img,
-
+        
         _points             = [],
-        _shuffledEP         = [],
+        _entryPoints        = [],
         _tplCache           = {},
         _animationPaused    = false,
         _animationRunning   = false,
@@ -341,7 +341,7 @@
             /**
              * Get the entry point from shuffled array
              */ 
-            rnd = _shuffledEP.pop();
+            rnd = _entryPoints.pop();
             isEven = ((rnd & 1) === 0);
             
             animatedSelection = _cnt.find(_points[rnd].selector);
@@ -496,12 +496,26 @@
         },
         
         
+        
+        /**
+         * @private
+         * @name Mosaiqy#_incrementIndexData
+         * @description
+         * 
+         * <p>The method has the main purpose to properly increment the indexData
+         * for JSON lookup. If user choosed "avoidDuplicate" option, then we need
+         * to check if indexData requested is already on stage. In this case a
+         * loop shift the dataIndex until an hidden thumbnail is found.</p>
+         *
+         * <p>If user defined all thumbnails (or a part of them) as HTML code
+         * the "avoidDuplicate" option will properly work only if the attribute
+         * data-mosaiqy-index is also defined.
+         */
+        
         _incrementIndexData     = function() {
             
             var safe    = _s.data.length,
                 stage   = [];
-                
-                
             
             if (_s.indexData === _s.data.length) {
                 if (!_s.loop) {
@@ -512,21 +526,25 @@
                 }
             }
             
-            if (_s.avoidDuplicates && _s.loop) {
+            if (_s.avoidDuplicates) {
                 appDebug('info', "Avoid Duplicates");
-                
                 _cnt.find('li').each(function() {
                     var i = $(this).data('mosaiqy-index');
                     stage[i] = i;
                 });
                 appDebug('info', "Now on stage: ", stage);
                 
-                while (true) {
+                while (safe--) {
                     if (typeof stage[_s.indexData] !== 'undefined') {
                         appDebug('info', "%d already exist (skip)", _s.indexData)
                         _s.indexData = _s.indexData + 1;
                         if (_s.indexData === _s.data.length) {
-                            _s.indexData = 0;
+                            if (!_s.loop) {
+                                return _pauseAnimation();
+                            }
+                            else {
+                                _s.indexData = 0;
+                            }
                         }
                         continue;
                     }
@@ -534,8 +552,9 @@
                     break;
                 }
             }
-
         },
+        
+        
         
         /**
          * @private
@@ -554,9 +573,9 @@
                 
                 _animationRunning = true;
                 
-                if (_shuffledEP.length === 0) {
-                    _shuffledEP = shuffledFisherYates(_points.length);
-                    appDebug("info", 'New entry point shuffled array', _shuffledEP);
+                if (_entryPoints.length === 0) {
+                    _entryPoints = shuffledFisherYates(_points.length);
+                    appDebug("info", 'New entry point shuffled array', _entryPoints);
                 }
                 
                 appDebug("info", 'Animate selection');
@@ -583,6 +602,7 @@
         },
         
         
+        
         /**
          * @private
          * @name Mosaiqy#_pauseAnimation
@@ -594,6 +614,7 @@
         _pauseAnimation = function() {
             _animationPaused = true;
         },
+        
         
         
         /**
@@ -666,7 +687,7 @@
                 return dfd.promise();
             }
             
-  
+            
             function viewZoom() {
                 
                 var zoomImage, imgDesc, zoomHeight;
@@ -687,8 +708,6 @@
                 
                 zoomHeight = (!!zoomImage.get(0).complete)? zoomImage.height() : 200;
                 nodezoom._animate({ height : zoomHeight + 'px' }, _s.fadeSpeed);
-                
-                
                 
                 imgDesc = $this.find('img').prop('longDesc');
                 if (!!imgDesc) {
@@ -719,7 +738,7 @@
                                 ._animate({ opacity: '1' }, _s.fadeSpeed / 2);
                                 
                                 zoomCaption.html($this.find('figcaption').html())._animate({ opacity: '1' }, _s.fadeSpeed);
-
+                                
                             });
                             
                         }, _s.fadeSpeed / 1.2);
@@ -796,7 +815,10 @@
                     });
             }
             
-            
+            /**
+             * Set the click event handler on thumbnails («li» nodes). Since nodes are removed and
+             * injected at every animation cycle, the live() method is needed.
+             */
             node.live('click.mosaiqy', function(evt) {
                 
                 if (!_animationRunning && !zoomRunning) {
@@ -808,7 +830,7 @@
                     
                     $this   = $(this);
                     i       = _s.cols * (Math.ceil((_li.index($this) + 1) / _s.cols));
-
+                    
                     /**
                      * Don't click twice on the same zoom
                      */
@@ -820,6 +842,7 @@
                 evt.preventDefault();
             });
         },
+        
         
         
         _loadThumbsFromJSON     = function(i) {
@@ -1071,6 +1094,8 @@
             });
         }
     });
+    
+    
     
     /**
      * @lends jQuery.prototype
