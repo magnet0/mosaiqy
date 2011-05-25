@@ -1,0 +1,102 @@
+body {
+    background  : #e0e7e6;
+    font        : 15px/1.4 Arial;
+    color       : #303133;
+}
+
+
+a           {  color       : #414141; }
+a:visited   {  color       : #667; }
+
+
+.github-ribbon {
+    background-color    : #999;
+    display             : block;
+    overflow            : hidden;
+    position            : fixed;
+    z-index             : 10;
+    right               : -3em;
+    top                 : 3em;
+    -moz-transform      : rotate(45deg);
+    -webkit-transform   : rotate(45deg);
+    -moz-box-shadow     : 0 0 1.3em #767676;
+    -webkit-box-shadow  : 0 0 1.3em #767676;
+    margin              : 0;
+    padding             : 1px 0;
+    border-top          : 1px solid #999;
+    border-bottom       : 1px solid #999;
+}
+  
+.github-ribbon a {
+    color               : #fff;
+    display             : block;
+    font-weight         : bold;
+    font-size           : 0.8em;
+    padding             : 0.4em 5em;
+    text-align          : center;
+    text-decoration     : none;
+    text-shadow         : -1px 1px 0px #525059;
+    border-top          : 1px dashed #c2c0c4;
+    border-bottom       : 1px dashed #c2c0c4;
+  }
+
+section, hgroup, header, form {
+    display     : block;
+    text-align  : center;
+}
+
+section {
+    width       : 860px;
+    margin      : 3em auto 0 auto;
+    text-align  : left;
+}
+
+h1, h2, h3 {
+    font-family     : LeagueGothicRegular;
+    text-align      : center;
+}
+
+h1 {
+    font-size       : 140px;
+    line-height     : 0.9;
+    font-weight     : normal;
+    letter-spacing  : 5px;
+    color           : #fff;
+    text-transform  : uppercase;
+    margin          : 15px 0 0 0;
+    text-shadow     : -1px 1px 0px #a9b2a6;
+}
+
+h2 {
+    font-weight     : normal;
+    margin          : 15px 0 0 0;
+    font-size       : 36px;
+    color           : #414141;
+    text-shadow     : -1px 1px 0px #fff;
+}
+
+h3 {
+    font-weight     : normal;
+    margin          : 0;
+    font-size       : 28px;
+    color           : #414141;
+    text-shadow     : -1px 1px 0px #fff;
+}
+
+header {
+    margin-bottom   : 45px;
+}
+
+hgroup em {
+   font-style      : normal;
+   color           : #72707B;
+}
+
+h1:after, h1:before,
+h2:after, h2:before {
+   content          : "\2605";
+   font-size        : 0.6em;
+   padding          : 0 10px;
+   display          : inline-block;
+   vertical-align   : middle;
+}
