@@ -1,15 +1,5 @@
 <?php require "includes/header.php" ?>
 
-    <style>
-        .mosaiqy li, .mosaiqy img {
-            height      : 110px;
-            width       : 200px;
-        }
-        
-        .mosaiqy li figcaption {
-            height      : 90px;
-        }
-    </style>
 </head>
 
 <body>
@@ -29,7 +19,49 @@
     
     <div class="loading mosaiqy">
         <ul>
-
+            
+            <li data-mosaiqy-index="0">
+                <div>
+                    <figure><a href="images/zoom/1.jpg"><img src="images/thumb/1.jpg">
+                        <figcaption>Rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>
+                    </figure>
+                </div>
+            </li>
+            <li data-mosaiqy-index="1">
+                <div>
+                <figure><a href="images/zoom/2.jpg"><img src="images/thumb/2.jpg">
+                    <figcaption>Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>           
+                </figure>
+                </div>
+            </li>
+            <li data-mosaiqy-index="2">
+                <div>
+                <figure><a href="images/zoom/3.jpg"><img src="images/thumb/3.jpg">
+                    <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>           
+                </figure>
+                </div>
+            </li>
+            <li  data-mosaiqy-index="3">
+                <div>
+                    <figure><a href="images/zoom/4.jpg"><img src="images/thumb/4.jpg">
+                        <figcaption>Rifugio &laquo;Pradidali&raquo;</figcaption></a>           
+                    </figure>
+                </div>
+            </li>
+            <li data-mosaiqy-index="4">
+                <div>
+                    <figure><a href="images/zoom/5.jpg"><img src="images/thumb/5.jpg">
+                        <figcaption>Due simpatici escursionisti</figcaption></a>            
+                    </figure>
+                </div>
+            </li>
+            <li data-mosaiqy-index="5">
+                <div>
+                    <figure><a href="images/zoom/6.jpg"><img src="images/thumb/6.jpg">
+                        <figcaption>Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;</figcaption></a>            
+                    </figure>
+                </div>
+            </li>
         </ul>
      </div>
     
@@ -76,47 +108,27 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"> </script>
     <script src="lib/mosaiqy1.0.0.js" id="mosaiqy_tpl">
         <div>
-            <figure><a href="${media.z}"><img src="${media.m}">
-              <figcaption>${title}</figcaption></a>
+            <figure><a href="images/zoom/${img}"><img src="images/thumb/${img}">
+              <figcaption>${desc}</figcaption></a>
             </figure>
         </div>
     </script>
     
     <script>
     $(document).ready(function() {
-        
-        $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?id=62700709@N03&jsoncallback=?", {
-            format : "json"
-        },
-        function(flickrJSON) {
-            
-            var fjson  = flickrJSON.items,
-                flen   = fjson.length,
-                fi;
-            
-            /**
-             * inject zoom images on JSON (they usually end with ... _z.jpg)
-             */
-            while (flen--) {
-                fi = fjson[flen];
-                fi.media['z']  = fi.media['m'].replace(/^(.+)(\_m\.)(\w+)$/i, function(url, name, type, ext) {
-                    return [name, ext].join('_z.');
-                });
-            }
-                
-                
-            $('.mosaiqy').mosaiqy({
-                template        : '#mosaiqy_tpl',
-                rows            : 3,
-                cols            : 3,
-                avoidDuplicates : true,
-                animationDelay  : 1500,
-                loop            : true,
-                dataIndex       : 10,
-                data            : fjson
-            });            
-            
+        $('.mosaiqy').mosaiqy({
+            template        : '#mosaiqy_tpl',
+            rows            : 3,
+            cols            : 3,
+            avoidDuplicates : true,
+            animationDelay  : 1500,
+            loop            : true,
+            dataIndex       : 10,
+<?php
+                require "includes/json.php";
+?>
         });
+        
     });
     </script>
 
