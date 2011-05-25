@@ -19,7 +19,6 @@
     
     <div class="loading mosaiqy">
         <ul>
-            
             <li>
                 <div>
                     <figure><a href="images/zoom/1.jpg"><img src="images/thumb/1.jpg">
@@ -71,15 +70,15 @@
             </li>
             <li>
                 <div>
-                    <figure><a href="images/zoom/13.jpg"><img src="images/thumb/13.jpg" longdesc="test.html">
-                        <figcaption>Una simpatica escursionista affamata</figcaption></a>            
+                    <figure><a href="images/zoom/8.jpg"><img src="images/thumb/8.jpg" longdesc="test.html">
+                        <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>            
                     </figure>
                 </div>
             </li>
             <li>
                 <div>
                     <figure><a href="images/zoom/9.jpg"><img src="images/thumb/9.jpg">
-                        <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>            
+                        <figcaption>Rifugio &laquo;Locatelli&raquo;</figcaption></a>            
                     </figure>
                 </div>
             </li>
@@ -166,7 +165,7 @@
             avoidDuplicates : true,
             animationDelay  : 1500,
             loop            : true,
-            dataIndex       : 10,
+            indexData       : 12,
 <?php
                 require "includes/json.php";
 ?>

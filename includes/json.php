@@ -1,4 +1,4 @@
-		data            : [
+	    data            : [
                 {
                     img     : "1.jpg",
                     desc    : "Rifugio &laquo;Citt&agrave; di Fiume&raquo;"
@@ -29,12 +29,12 @@
                     desc    : "Arrivando al rifugio &laquo;Pradidali&raquo;"
                 },
                 {
-                    img     : "13.jpg",
-                    desc    : "Una simpatica escursionista affamata"
+                    img     : "8.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
                 },
                 {
                     img     : "9.jpg",
-                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
+                    desc    : "Rifugio &laquo;Locatelli&raquo;"
                 },
                 {
                     img     : "10.jpg",

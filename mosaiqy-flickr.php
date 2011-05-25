@@ -112,7 +112,7 @@
                 avoidDuplicates : true,
                 animationDelay  : 1500,
                 loop            : true,
-                dataIndex       : 10,
+                indexData       : 9,
                 data            : fjson
             });            
             

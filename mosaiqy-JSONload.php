@@ -20,42 +20,42 @@
     <div class="loading mosaiqy">
         <ul>
             
-            <li data-mosaiqy-index="0">
+            <li>
                 <div>
                     <figure><a href="images/zoom/1.jpg"><img src="images/thumb/1.jpg">
                         <figcaption>Rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>
                     </figure>
                 </div>
             </li>
-            <li data-mosaiqy-index="1">
+            <li>
                 <div>
                 <figure><a href="images/zoom/2.jpg"><img src="images/thumb/2.jpg">
                     <figcaption>Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>           
                 </figure>
                 </div>
             </li>
-            <li data-mosaiqy-index="2">
+            <li>
                 <div>
                 <figure><a href="images/zoom/3.jpg"><img src="images/thumb/3.jpg">
                     <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>           
                 </figure>
                 </div>
             </li>
-            <li  data-mosaiqy-index="3">
+            <li>
                 <div>
                     <figure><a href="images/zoom/4.jpg"><img src="images/thumb/4.jpg">
                         <figcaption>Rifugio &laquo;Pradidali&raquo;</figcaption></a>           
                     </figure>
                 </div>
             </li>
-            <li data-mosaiqy-index="4">
+            <li>
                 <div>
                     <figure><a href="images/zoom/5.jpg"><img src="images/thumb/5.jpg">
                         <figcaption>Due simpatici escursionisti</figcaption></a>            
                     </figure>
                 </div>
             </li>
-            <li data-mosaiqy-index="5">
+            <li>
                 <div>
                     <figure><a href="images/zoom/6.jpg"><img src="images/thumb/6.jpg">
                         <figcaption>Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;</figcaption></a>            
