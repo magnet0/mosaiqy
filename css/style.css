@@ -2,6 +2,8 @@ body {
     background  : #e0e7e6;
     font        : 15px/1.4 Arial;
     color       : #303133;
+    text-shadow     : -1px 1px 0px #fff;
+
 }
 
 
@@ -100,3 +102,9 @@ h2:after, h2:before {
    display          : inline-block;
    vertical-align   : middle;
 }
+
+address {
+    text-align      : center;
+}
+
+address img { display:  block; margin: 0 auto;}
