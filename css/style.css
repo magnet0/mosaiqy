@@ -20,6 +20,18 @@ noscript {
 a           {  color       : #414141; }
 a:visited   {  color       : #667; }
 
+#demolist ul {
+    text-align  : center;
+}
+#demolist li {
+    display     : inline;
+    padding     : 0 15px;
+    border-left : 1px #5d6061 solid;
+}
+
+    #demolist li:first-child {
+        border      : 0;
+    }
 
 .github-ribbon {
     background-color    : #999;
@@ -52,12 +64,12 @@ a:visited   {  color       : #667; }
     border-bottom       : 1px dashed #c2c0c4;
   }
 
-section, hgroup, header, form {
+section, hgroup, header, form, #demolist {
     display     : block;
     text-align  : center;
 }
 
-section {
+section, #demolist {
     width       : 860px;
     margin      : 3em auto 0 auto;
     text-align  : left;

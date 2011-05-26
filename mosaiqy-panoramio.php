@@ -87,7 +87,7 @@
     <script>
     $(document).ready(function() {
         
-        var panoramioAPIDataUrl = "http://www.panoramio.com/map/get_panoramas.php?set=full&from=0&to=20&size=medium&callback=?",
+        var panoramioAPIDataUrl = "http://www.panoramio.com/map/get_panoramas.php?set=public&from=0&to=30&size=medium&callback=?",
             acc = 0.02;
          
         if (navigator.geolocation) {
