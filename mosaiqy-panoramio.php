@@ -87,40 +87,67 @@
     <script>
     $(document).ready(function() {
         
-        var panoramioAPIData = ["http://www.panoramio.com/map/get_panoramas.php?set=full&from=0&to=20&",
-                                "minx=12.28&miny=45.63&maxx=12.30&maxy=45.65&size=medium&callback=?"].join('');
-        
-        console.log(panoramioAPIData);
-            
-        $.getJSON(panoramioAPIData, { },
-            
-            function(panoramioJSON) {
-                var pjson  = panoramioJSON.photos,
-                    plen   = pjson.length,
-                    pi;                   
-                    
-                /**
-                 * inject panoramio small images on JSON 
-                 * Small e.g. : http://mw2.google.com/mw-panoramio/photos/small/1234567.jpg
-                 * Original e.g.: http://mw2.google.com/mw-panoramio/photos/original/1234567.jpg
-                 */
-                while (plen--) {
-                    pi = pjson[plen];
-                    pi['photo_file_url_small']  = pi['photo_file_url'].replace(/\/original\//i, "/small/");
-                }
-                    
-                $('.mosaiqy').mosaiqy({
-                    template        : '#mosaiqy_tpl',
-                    rows            : 3,
-                    cols            : 2,
-                    avoidDuplicates : true,
-                    animationDelay  : 1500,
-                    loop            : true,
-                    data            : pjson
-                });            
+        var panoramioAPIDataUrl = "http://www.panoramio.com/map/get_panoramas.php?set=full&from=0&to=20&size=medium&callback=?",
+            acc = 0.2;
+         
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
                 
-            }
-        );
+                function(position) {
+                    var lat = position.coords.latitude,
+                        lon = position.coords.longitude;
+                        
+                    panoramioAPIDataUrl += ["&minx=", lon - acc,
+                                            "&miny=", lat - acc,
+                                            "&maxx=", lon + acc,
+                                            "&maxy=", lat + acc].join('');
+                        
+                    loadMosaiqy();
+                },  
+                function(error) {
+                    panoramioAPIDataUrl += "&minx=12.22&miny=45.6&maxx=12.30&maxy=45.7";
+                    loadMosaiqy();
+                }                                                     
+            );
+        }
+        else {
+            panoramioAPIDataUrl += "&minx=12.22&miny=45.6&maxx=12.30&maxy=45.7";
+            loadMosaiqy();
+        }
+            
+            
+        function loadMosaiqy() {
+            $.getJSON(panoramioAPIDataUrl, { },
+                
+                function(panoramioJSON) {
+                    var pjson  = panoramioJSON.photos,
+                        plen   = pjson.length,
+                        pi;                   
+                        
+                    /**
+                     * inject panoramio small images on JSON 
+                     * Small e.g. : http://mw2.google.com/mw-panoramio/photos/small/1234567.jpg
+                     * Original e.g.: http://mw2.google.com/mw-panoramio/photos/original/1234567.jpg
+                     */
+                    while (plen--) {
+                        pi = pjson[plen];
+                        pi['photo_file_url_small']  = pi['photo_file_url'].replace(/\/original\//i, "/small/");
+                    }
+                        
+                    $('.mosaiqy').mosaiqy({
+                        template        : '#mosaiqy_tpl',
+                        rows            : 3,
+                        cols            : 2,
+                        avoidDuplicates : true,
+                        animationDelay  : 1500,
+                        loop            : true,
+                        data            : pjson
+                    });            
+                    
+                }
+            );
+        }
+        
         
     });
     </script>
