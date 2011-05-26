@@ -92,10 +92,10 @@
             sort of energy and vigor, that should quickly settle that trifling little affair.
         </p>
     </section>
+        
+        
+    <?php require "includes/lib.php" ?>
 
-    <!-- jquery -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"> </script>
-    <script src="lib/mosaiqy1.0.0.js" id="mosaiqy_tpl">
         <div>
             <figure><a href="images/zoom/${img}"><img src="images/thumb/${img}">
               <figcaption>${desc}</figcaption></a>

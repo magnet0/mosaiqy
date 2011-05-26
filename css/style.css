@@ -1,11 +1,12 @@
 body {
-    background  : #e0e7e6;
-    font        : 15px/1.4 Arial;
-    color       : #303133;
-    text-shadow     : -1px 1px 0px #fff;
-
+    background      : #e0e7e6;
+    font            : 15px/1.4 Arial;
+    color           : #303133;
 }
 
+body p {
+    text-shadow     : -1px 1px 0px #fff;
+}
 
 a           {  color       : #414141; }
 a:visited   {  color       : #667; }

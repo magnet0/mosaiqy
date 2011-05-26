@@ -73,10 +73,10 @@
             sort of energy and vigor, that should quickly settle that trifling little affair.
         </p>
     </section>
-
-    <!-- jquery -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"> </script>
-    <script src="lib/mosaiqy1.0.0.js" id="mosaiqy_tpl">
+    
+    
+    <?php require "includes/lib.php" ?>
+        
         <div>
             <figure><a href="${photo_file_url}"><img src="${photo_file_url_small}" longdesc="${photo_url}">
               <figcaption>${photo_title} <strong>(${owner_name})</strong></figcaption></a>
