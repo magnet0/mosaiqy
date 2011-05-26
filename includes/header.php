@@ -12,7 +12,7 @@
     
     <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <script src="innershiv.js"></script>
+        <script src="lib/innershiv.js"></script>
     <![endif]-->
     
   
