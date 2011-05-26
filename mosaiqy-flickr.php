@@ -17,10 +17,15 @@
     <?php require "includes/title.php" ?>
     
     <div class="loading mosaiqy">
-        <ul>
+        <ul></ul>
+    </div>
+      
+    <noscript>Sorry, Javascript is not enabled on your browser.</noscript>
+    <address>
+        Photos retrieved in a public feed on <a href="http://www.flickr.com/"
+        target="new"><img src="images/flickr.png" alt="Flickr" /></a>
+    </address>
 
-        </ul>
-     </div>
     
     <section>
         <p>

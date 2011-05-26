@@ -8,6 +8,15 @@ body p {
     text-shadow     : -1px 1px 0px #fff;
 }
 
+noscript {
+    display         : block;
+    width           : 400px;
+    text-align      : center;
+    margin          : 1.5em auto;
+    border          : 1px #5D6061 solid;
+    color           : #5D6061;
+}
+
 a           {  color       : #414141; }
 a:visited   {  color       : #667; }
 

@@ -28,9 +28,9 @@
         <ul></ul>
     </div>
         
-        
+    <noscript>Sorry, Javascript is not enabled on your browser</noscript>
     <address>
-        Photos provided by <a href="http://www.panoramio.com/"
+        Photos retrieved on <a href="http://www.panoramio.com/"
         target="new"><img src="images/panoramio.png" alt="Panoramio" /></a>
     </address>
         

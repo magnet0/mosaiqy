@@ -1,8 +1,13 @@
-.mosaiqy.loading {
+.js .mosaiqy.loading {
     width           : 20px;
     height          : 20px;
     background      : #f0f1f4  url(../lib-img/ajax-loader.gif) center center no-repeat;
 }
+
+	.no-js .mosaiqy.loading  {
+		border			: 0;
+	}
+
 
 .mosaiqy * {
     margin      : 0;
@@ -19,29 +24,45 @@
     overflow        : hidden;
 }
 
-.no-js .mosaiqy li  {
-    float   : left;    
+.no-js .mosaiqy ul  {
+	height		: auto;
+	overflow	: hidden;
 }
 
-    .js .mosaiqy li {
-        position        : absolute;
-        z-index         : 1;
-        display         : block;
-        text-align      : left;
-        float           : none;
-    }
 
-    .js .mosaiqy li > div {
-        position        : relative;
-        z-index         : 1;
-        width           : 100%;
-        height          : 100%;
-    }
 
-    .js .mosaiqy.zoom li {
-        float           : left;
-        position        : static;
-    }
+
+.no-js .mosaiqy li  {
+	float		: left;
+	position	: relative;
+	z-index		: 1;
+}
+
+.js .mosaiqy li {
+	position        : absolute;
+	z-index         : 1;
+	display         : block;
+	text-align      : left;
+	float           : none;
+}
+
+.js .mosaiqy li > div {
+	position        : relative;
+	z-index         : 1;
+	width           : 100%;
+	height          : 100%;
+}
+
+.js .mosaiqy.zoom li {
+	float           : left;
+	position        : static;
+}
+
+
+.js .mosaiqy li:hover {
+    z-index             : 20;    
+}
+
     
  
 .mosaiqy figure {  
@@ -53,7 +74,7 @@
     border          : 0;
 }
 
-.loading.mosaiqy img {
+.js .loading.mosaiqy img {
     opacity         : 0;
     -moz-opacity    : 0;
     filter          : alpha(opacity=0);
@@ -68,9 +89,6 @@
     left                : 0;
 }
 
-.mosaiqy li:hover {
-    z-index             : 20;    
-}
 
 .mosaiqy li.zoom figcaption,
 .mosaiqy li:hover figcaption {
@@ -148,12 +166,18 @@
 
 /* User styles */
 
+.no-js .mosaiqy ul {
+	margin		: 0 auto;
+	width		: 600px;
+}
 
-
-.mosaiqy  {
+.js .mosaiqy  {
     border          : 1px #d8d8d8 solid;
     padding         : 4px;
     margin          : 30px auto;
+    -webkit-box-shadow  : 0 0 15px rgba(0, 0, 0, .4); 
+	-moz-box-shadow     : 0 0 15px rgba(0, 0, 0, .4); 
+	box-shadow          : 0 0 15px rgba(0, 0, 0, .4);
 }
 
 .mosaiqy li,
@@ -196,12 +220,6 @@
         cursor          : default;
     }
 
-
-.mosaiqy {
-    -webkit-box-shadow  : 0 0 15px rgba(0, 0, 0, .4); 
-	-moz-box-shadow     : 0 0 15px rgba(0, 0, 0, .4); 
-	box-shadow          : 0 0 15px rgba(0, 0, 0, .4);
-}
 
 .mosaiqy li figcaption {
     opacity             : 0;
