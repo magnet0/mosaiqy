@@ -103,8 +103,8 @@
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
             <select name="gridsize" onchange="this.parentNode.submit()">
                 <option value="2x6" <?php if ($gs == "2x6") echo "selected"; ?> >2x6</option>
-                <option value="3x4" <?php if ($gs == "3x4" || $gs == '') echo "selected"; ?> >3x4</option>
-                <option value="4x3" <?php if ($gs == "4x3") echo "selected"; ?> >4x3</option>
+                <option value="3x4" <?php if ($gs == "3x4") echo "selected"; ?> >3x4</option>
+                <option value="4x3" <?php if ($gs == "4x3"  || $gs == '') echo "selected"; ?> >4x3</option>
                 <option value="6x2" <?php if ($gs == "6x2") echo "selected"; ?> >6x2</option>
             </select>
         </form>
@@ -135,8 +135,8 @@
         </p>
     </section>
     <?php
-        $rows = 3;
-        $cols = 4;
+        $rows = 4;
+        $cols = 3;
         
         if (isset($_POST['gridsize'])) {
             list($rows, $cols) = explode("x", $_POST['gridsize']);
