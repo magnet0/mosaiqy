@@ -26,6 +26,9 @@ noscript {
 a           {  color       : #414141; }
 a:visited   {  color       : #667; }
 
+h1 a            {  color       : #fff; text-decoration: none; }
+h1 a:visited    {  color       : #fff; }
+
 #demolist ul {
     text-align  : center;
 }

@@ -101,7 +101,7 @@
                 $('.mosaiqy').mosaiqy({
                     template        : '#mosaiqy_tpl',
                     rows            : 2,
-                    cols            : 4,
+                    cols            : 3,
                     avoidDuplicates : true,
                     animationDelay  : 1500,
                     loop            : true,
