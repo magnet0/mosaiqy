@@ -80,7 +80,7 @@
         
         <div>
             <figure><a href="${images.standard_resolution.url}"><img src="${images.low_resolution.url}" longdesc="${link}">
-              <figcaption>${caption.text} <strong>(${user.full_name})</strong></figcaption></a>
+              <figcaption>${caption.text} <strong>(${user.username})</strong></figcaption></a>
             </figure>
         </div>
     </script>
