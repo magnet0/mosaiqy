@@ -101,7 +101,7 @@ h1 a:visited    {  color       : #fff; }
     border-bottom       : 1px dashed #c2c0c4;
   }
 
-hgroup, header, .mosaiqy + section {
+hgroup, header, section, .mosaiqy + section {
     display     : block;
     text-align  : center;
 }
@@ -229,7 +229,7 @@ pre, code {
     -webkit-text-size-adjust: 0.57;
 }
 
-code.inline {
+code {
     -ms-border-radius       : 4px;
     -webkit-border-radius   : 4px;
     -moz-border-radius      : 4px;
@@ -239,18 +239,21 @@ code.inline {
     background              : #D5D6C9;
 }
 
-code pre {
+pre {
+    white-space             : pre;
+    white-space             : pre-wrap;
+    word-wrap               : break-word;
+}
+
+pre code {
     -ms-border-radius       : 8px;
     -webkit-border-radius   : 8px;
     -moz-border-radius      : 8px;
     border-radius           : 8px;
-    background              : #D5D6C9;
     padding                 : 15px;
-    margin                  :1.5em 0 3.5em 0;
+    margin                  : 1.5em 0 3.5em 0;
     min-width               : 650px;
-    white-space             : pre;
-    white-space             : pre-wrap;
-    word-wrap               : break-word;
+	display					: block;
 }
 
 .ie7 img { -ms-interpolation-mode: bicubic; }
