@@ -126,13 +126,14 @@
     <section id="demos">
         <h2>Available demos & service integration</h2>
         <p>
-            So far I realized simple integration with Flickr, Instagram and Panoramio
+            So far, integration demo with Flickr, Instagram and Panoramio were realized. If you'd like to see
+            some other examples with your favourite service (not yet listed here) just let me know:
         </p>
         <ul>
             <li><a href="mosaiqy-mixed-load.php">Mixing initial images JSON/HTML</a></li>
             <li><a href="mosaiqy-flickr.php">Flickr</a></li>
             <li><a href="mosaiqy-instagram.php">Instagram</a></li>
-            <li><a href="mosaiqy-panoramio.php">Panoramio</a></li>
+            <li><a href="mosaiqy-panoramio.php">Panoramio (and HTML5 GeoLocation)</a></li>
         </ul>
     </section>
    
@@ -161,9 +162,9 @@
         <p>
             if you do not load <a href="http://www.modernizr.com/" target="new">modernizr</a> into your page, please make sure to insert the
             snippet below into your <code>&lt;head&gt;</code> section.<br />
-            If you plan to run this plugin on IE versions prior to 9 you will need to download and include <a
+            If you plan to run this plugin on IE versions prior to 9 you will need to include <a
             href="http://html5shim.googlecode.com" target="new">shiv</a> (you may omit the protocol) and
-            <a href="http://jdbartlett.github.com/innershiv/" target="new">innerShiv</a> scripts
+            <a href="http://jdbartlett.github.com/innershiv/" target="new">innerShiv</a> scripts.
             inside conditional comments.
         </p>
         
@@ -181,17 +182,20 @@
 &lt;/head&gt;</code></pre>
         
         <p>
-        Finally, simply include the CSS file, then jQuery 1.6+ and the javascript library (better at the bottom of your document)</p>
+        Finally, simply include the CSS file, then jQuery 1.6+ and the javascript plugin (for performance reasons
+       <a href="http://developer.yahoo.com/blogs/ydn/posts/2007/07/high_performanc_5/" target="new">include scripts at the
+        bottom</a> of your document).</p>
 
         <pre><code>&lt;link rel="stylesheet" media="screen" href="lib/lib-css/mosaiqy.css" /&gt;</code></pre>
         
-        <pre><code>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"&gt; &lt;/script&gt;
-&lt;script src="lib/mosaiqy-1.0.0.js"&gt; &lt;/script&gt;
-        </code></pre>
+        <pre><code>&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"&gt; &lt;/script&gt;
+&lt;script src="lib/mosaiqy-1.0.0.min.js"&gt; &lt;/script&gt;<sup>(&dagger;)</sup></code></pre>
 
         <p>
-            Remember to include both style and library <em>after</em> you switched the <code>no-js</code> class on
-            the <code>&lt;html&gt;</code> element.<br />
+            <small>(&dagger;) Note: the regular version of the script  is ~ 45Kb, it has many debug statements and then a lot of
+            overhead due to internal function &amp; console calls, so please use always the minified script. Your users will appreciate it.</small>
+        </p>
+        <p>
             Now you're ready to use mosaiqy on you page. For any doubt
             you are strongly encouraged to take a look at the source code of the demo pages.</p>
     </section>

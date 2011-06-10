@@ -34,7 +34,7 @@ body {
     padding-bottom  : 30px;
 }
 
-body p {
+ul, p {
     text-shadow     : -1px 1px 0px #fff;
 }
 
