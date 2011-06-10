@@ -209,9 +209,9 @@ header h2:after, header h2:before {
             content          : "";
         }
 
-        nav a, nav a:visited   {  color       : #A66C6D; }
+        p em, nav a, nav a:visited   {  color       : #A66C6D; }
 
-
+        p em { font-weight: bold; }
 
 address {
     text-align      : center;
@@ -220,16 +220,10 @@ address {
 address img { display:  block; margin: 0 auto;}
 
 
-pre, code {
+code {
     color           : #414141;
     font-family     : Inconsolata, Monaco, "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
     text-shadow     : -1px 1px 0px #d8d8d8;
-    font-size       : 0.9em;
-  	font-size-adjust : 0.57;
-    -webkit-text-size-adjust: 0.57;
-}
-
-code {
     -ms-border-radius       : 4px;
     -webkit-border-radius   : 4px;
     -moz-border-radius      : 4px;
@@ -251,9 +245,11 @@ pre code {
     -moz-border-radius      : 8px;
     border-radius           : 8px;
     padding                 : 15px;
-    margin                  : 1.5em 0 3.5em 0;
+    margin                  : 1.5em 0 1.5em 0;
     min-width               : 650px;
 	display					: block;
+  	font-size-adjust        : 0.57;
+    font-size               : 0.9em;
 }
 
 .ie7 img { -ms-interpolation-mode: bicubic; }

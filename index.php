@@ -146,13 +146,11 @@
         Paul Irish's <a href="http://html5boilerplate.com/">HTML5 boilerplate</a>.</p>
         
         <p>If you don't use HTML5 boilerplate (as neither do all demo pages) you could run anyway this plugin:
-        all you need is to choose the HTML5 doctype, define multiple <code class="inline">&lt;html&gt;</code> tags
-        wrapped on conditional comments and load the <a href="http://jdbartlett.github.com/innershiv/" target="new">innerShiv
-        script</a> if you need to use specific HTML5 elements (and if you also plan to run this plugin on IE versions prior to 9).
+        all you need is to choose the HTML5 doctype defining multiple <code>&lt;html&gt;</code> tags
+        wrapped on conditional comments.
         </p>
         
-        <pre><code>
-&lt;!doctype html&gt;
+        <pre><code>&lt;!doctype html&gt;
 &lt;!--[if lt IE 7]&gt; &lt;html class="no-js ie6" lang="en"&gt; &lt;![endif]--&gt;
 &lt;!--[if IE 7]&gt;    &lt;html class="no-js ie7" lang="en"&gt; &lt;![endif]--&gt;
 &lt;!--[if IE 8]&gt;    &lt;html class="no-js ie8" lang="en"&gt; &lt;![endif]--&gt;
@@ -161,14 +159,18 @@
     ...</code></pre>
 
         <p>
-            if you do not even load modernizr into your page, please make sure to insert this
-            snippet soon into your <code class="inline">&lt;head&gt;</code> section:
+            if you do not load <a href="http://www.modernizr.com/" target="new">modernizr</a> into your page, please make sure to insert the
+            snippet below into your <code>&lt;head&gt;</code> section.<br />
+            If you plan to run this plugin on IE versions prior to 9 you will need to download and include <a
+            href="http://html5shim.googlecode.com" target="new">shiv</a> (you may omit the protocol) and
+            <a href="http://jdbartlett.github.com/innershiv/" target="new">innerShiv</a> scripts
+            inside conditional comments.
         </p>
         
-        <pre><code>
-&lt;head&gt;
+        <pre><code>&lt;head&gt;
     &lt;!--[if lt IE 9]&gt;
-        &lt;script src="http://html5shim.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;
+        &lt;script src="//html5shim.googlecode.com/svn/trunk/html5.js"&gt; &lt;/script&gt;
+        &lt;script src="http://jdbartlett.github.com/innershiv/innershiv.min.js"&gt; &lt;/script&gt;
     &lt;![endif]--&gt;
     &lt;script&gt;
         (function(doc) { 
@@ -179,17 +181,19 @@
 &lt;/head&gt;</code></pre>
         
         <p>
-        Finally, simply include jQuery and the javascript library (better at the bottom of your document) and the css file:</p>
+        Finally, simply include jQuery the CSS file and the javascript library (better at the bottom of your document)</p>
 
-        <pre><code>
-&lt;link rel="stylesheet" media="screen" href="lib/lib-css/mosaiqy.css" /&gt;
-...
-&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"&gt; &lt;/script&gt;
+        <pre><code>&lt;link rel="stylesheet" media="screen" href="lib/lib-css/mosaiqy.css" /&gt;</code></pre>
+        
+        <pre><code>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"&gt; &lt;/script&gt;
 &lt;script src="lib/mosaiqy-1.0.0.js"&gt; &lt;/script&gt;
         </code></pre>
-        
-        <p>Now you're ready to use mosaiqy on you page. For any doubt you are encouraged to take a look at
-        the source code of the demo pages.</p>
+
+        <p>
+            Remember to include both style and library <em>after</em> you switched the <code>no-js</code> class on
+            the <code>&lt;html&gt;</code> element.<br />
+            Now you're ready to use mosaiqy on you page. For any doubt
+            you are strongly encouraged to take a look at the source code of the demo pages.</p>
     </section>
     
     

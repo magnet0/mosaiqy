@@ -14,8 +14,8 @@
     </script>
     
     <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <script src="lib/innershiv.js"></script>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="//jdbartlett.github.com/innershiv/innershiv.min.js"></script>
     <![endif]-->
     
   
