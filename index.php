@@ -113,7 +113,7 @@
     <nav>
         <ul class="ibw">
             <li><a href="#demos">Demos</a>
-            <li><a href="#how-to-install">How to install</a>
+            <li><a href="#how-to-install">How to install &amp; Requirements</a>
             <li><a href="#how-to-use">How to use</a>
             <li><a href="#license">License</a>
             <li><a href="#download">Download</a>
@@ -138,7 +138,7 @@
    
 
     <section id="how-to-install">
-        <h2>How to Install</h2>
+        <h2>How to Install &amp; Requirements</h2>
         
         
         
@@ -147,7 +147,7 @@
         
         <p>If you don't use HTML5 boilerplate (as neither do all demo pages) you could run anyway this plugin:
         all you need is to choose the HTML5 doctype defining multiple <code>&lt;html&gt;</code> tags
-        wrapped on conditional comments.
+        wrapped on conditional comment.
         </p>
         
         <pre><code>&lt;!doctype html&gt;
@@ -181,7 +181,7 @@
 &lt;/head&gt;</code></pre>
         
         <p>
-        Finally, simply include jQuery the CSS file and the javascript library (better at the bottom of your document)</p>
+        Finally, simply include the CSS file, then jQuery 1.6+ and the javascript library (better at the bottom of your document)</p>
 
         <pre><code>&lt;link rel="stylesheet" media="screen" href="lib/lib-css/mosaiqy.css" /&gt;</code></pre>
         
