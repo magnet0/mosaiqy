@@ -28,13 +28,13 @@
 
 
 body {
-    background      : #e4e4d0;
+    background      : #e4e4db;
     font            : 15px/1.6 Arial;
     color           : #303133;
     padding-bottom  : 30px;
 }
 
-ul, p {
+ol, ul, p {
     text-shadow     : -1px 1px 0px #fff;
 }
 
@@ -132,6 +132,7 @@ h1 {
     text-shadow     : -2px 2px 0 #9e8886;
 }
 
+
 h2 {
     font-weight     : normal;
     padding         : 15px 0 0 0;
@@ -185,6 +186,10 @@ header h2:after, header h2:before {
         margin          : 15px;
     }
 
+    section ol {
+        margin          : 15px 20px;    
+    }
+    
     nav ul {
         text-align      : center;
         list-style      : none;
@@ -222,7 +227,7 @@ address img { display:  block; margin: 0 auto;}
 code {
     color           : #414141;
     font-family     : Inconsolata, Monaco, "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
-    text-shadow     : -1px 1px 0px #d8d8d8;
+    text-shadow     : -1px 1px 0px #f8f8f8;
     -ms-border-radius       : 4px;
     -webkit-border-radius   : 4px;
     -moz-border-radius      : 4px;
@@ -232,6 +237,8 @@ code {
     background              : #D5D6C9;
 }
 
+
+b.ib,
 pre {
     white-space             : pre;
     white-space             : pre-wrap;
@@ -250,5 +257,19 @@ pre code {
   	font-size-adjust        : 0.57;
     font-size               : 0.9em;
 }
+
+pre code b {
+    font-weight     : normal;
+    background      : #f2f2f6;
+    width           : auto;
+    padding         : 2px 4px;
+    -ms-border-radius       : 8px;    
+    -webkit-border-radius   : 8px;
+    -moz-border-radius      : 8px;
+    border-radius           : 8px;
+    text-shadow     : -1px 1px 0 #E6E8EC;
+}
+
+
 
 .ie7 img { -ms-interpolation-mode: bicubic; }

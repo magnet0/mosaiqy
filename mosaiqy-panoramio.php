@@ -135,7 +135,7 @@
                     }
                         
                     $('.mosaiqy').mosaiqy({
-                        template        : '#mosaiqy_tpl',
+                        template        : 'mosaiqy_tpl',
                         rows            : 3,
                         cols            : 2,
                         avoidDuplicates : true,

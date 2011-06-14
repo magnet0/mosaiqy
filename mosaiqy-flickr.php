@@ -99,7 +99,7 @@
                 
                 
             $('.mosaiqy').mosaiqy({
-                template        : '#mosaiqy_tpl',
+                template        : 'mosaiqy_tpl',
                 rows            : 3,
                 cols            : 3,
                 avoidDuplicates : true,
