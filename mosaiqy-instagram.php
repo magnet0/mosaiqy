@@ -88,15 +88,13 @@
     <script>
     $(document).ready(function() {
         
-        var instagramAPIDataUrl = "https://api.instagram.com/v1//locations/121218/media/recent?client_id=cdebd6a242f149e38fe100f042d8bc18&callback=?";
+        var instagramAPIDataUrl = "https://api.instagram.com/v1/locations/121218/media/recent?client_id=cdebd6a242f149e38fe100f042d8bc18&callback=?";
                 
         $.getJSON(instagramAPIDataUrl, { },
             
             function(instagramJSON) {
                 
-                console.log(instagramAPIDataUrl);
                 console.log(instagramJSON.data)
-                
                     
                 $('.mosaiqy').mosaiqy({
                     template        : 'mosaiqy_tpl',
