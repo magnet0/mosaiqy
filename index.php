@@ -203,7 +203,7 @@
     
     <section id="how-to-use">
         <a href="#menu">Up</a>
-        <h2>Requirements</h2>
+        <h2>How to use</h2>
         
         <p>
             The first thing to know is <strong>how</strong> the plugin works: the blocks on the grid are
