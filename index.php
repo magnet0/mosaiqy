@@ -244,12 +244,12 @@ $(document).ready(function() {
 &lt;/script&gt;</code></pre>
         
     <p>When you call the plugin you can specify some options (listed below). The most important one is <b>data</b>
-    who accept an array of objects containing the information about a single image. In the example, every object has
+    who accept an array of objects containing the information about images. In the example, every object has
     <strong>img</strong> and a  <strong>desc</strong> key (of course you can name your
     keys as you want). These key are dinamically replaced on the HTML5 template above
     respectively where the placeholders <b>${img}</b> and <b>${desc}</b> occur.</p>
     
-    <p>If your data structure is not flatten and you need to find keys into nested sub-objects you can use dot-notation. if
+    <p>If your data structure is not flat and you need to find keys into nested sub-objects you can use dot-notation. if
     the JSON were</p>
     
     <pre><code>data : [
