@@ -325,3 +325,63 @@ dd {
 
 
 .ie7 img { -ms-interpolation-mode: bicubic; }
+
+
+@media print {
+    
+    * {
+        text-shadow : none;
+    }
+
+    dt, dd {
+        float       : none !important;
+    }
+    
+    body {
+        font-size   : 10pt;
+        color       : #414141;
+    }
+    
+    pre { border: 0; }
+    
+    
+    h1, h2, h3 {
+        font-family     : georgia;
+    }
+    
+    h1 {  font-size       : 25pt; }
+    h2 {  font-size       : 20pt; }
+    h3 {  font-size       : 15pt; }
+    
+    a {
+        text-decoration : none;
+    }
+    
+    a[href^="http://"]:link:after,
+    a[href^="http://"]:visited:after {
+      content       : "(" attr(href) ")";
+      font-size     : 10pt;
+      margin-left  : 0.5em;
+      font-style    : italic;
+      text-decoration : underline;
+      color           : #888
+    }
+    
+    h1 a:link:after,
+    h1 a:visited:after  {
+        content     : "";
+    }
+    
+    header {
+        border-bottom       : 1pt #888 solid;
+    }
+
+    header h3, nav, #menu, .github-ribbon, .mosaiqy { display: none; }
+    
+    a[href^="#"] { display: none; }
+
+    pre, code {
+        page-break-inside: avoid;
+    }
+
+}
