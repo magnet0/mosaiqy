@@ -26,7 +26,6 @@
 .ie6 .ibw li,  .ie7 .ibw li { display : inline; } 
 
 
-
 body {
     background      : #e4e4db;
     font            : 15px/1.6 Arial;
@@ -34,8 +33,12 @@ body {
     padding-bottom  : 30px;
 }
 
-ol, ul, p {
+ol, ul, p, dl {
     text-shadow     : -1px 1px 0px #fff;
+}
+
+.mosaiqy * {
+    text-shadow     : none;    
 }
 
 noscript {
@@ -58,7 +61,7 @@ h1 a:visited    {  color       : #fff; }
 }
 #demolist li {
     display     : inline;
-    padding     : 0 15px;
+    padding     : 0 15px;   
     border-left : 1px #5d6061 solid;
 }
 
@@ -141,7 +144,8 @@ h2 {
     text-shadow     : -1px 1px 0px #fff;
 }
 
-    section h2 {
+    
+    section h2, dt {
         color           : #A66C6D;
     }
     
@@ -213,7 +217,24 @@ header h2:after, header h2:before {
             content          : "";
         }
 
-        p em, nav a, nav a:visited   {  color       : #A66C6D; }
+        section > a, p em, nav a, nav a:visited   {  color       : #A66C6D; }
+        
+        section > a,
+        section > a:link,
+        section > a:visited,
+        section > a:active {
+            float       : right;
+            position    : relative;
+            top         : 36px;
+            text-decoration : none;
+            color           : #A66C6D;
+        }
+        section > a:before {
+            text-decoration : underline;
+            padding         : 0 0.25em 0 0;
+            color           : #A66C6D;
+            content         : "\2605"
+        }
 
         p em { font-weight: bold; }
 
@@ -224,7 +245,7 @@ address {
 address img { display:  block; margin: 0 auto;}
 
 
-code {
+dl, code {
     color           : #414141;
     font-family     : Inconsolata, Monaco, "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
     text-shadow     : -1px 1px 0px #f8f8f8;
@@ -258,6 +279,7 @@ pre code {
     font-size               : 0.9em;
 }
 
+
 pre code b {
     font-weight     : normal;
     background      : #f2f2f6;
@@ -271,5 +293,95 @@ pre code b {
 }
 
 
+pre code em {
+    font-style      : normal;
+    color           : #A66C6D;
+}
+
+dl {
+    height      : auto;
+    overflow    : hidden;
+    margin-top  : 2.5em;
+    padding     : 25px;
+}
+dt, dd {
+    float       : left;
+}
+dt {
+    width           : 170px;
+    clear           : left;
+}
+dd {
+    width           : 70%;
+    padding-bottom  : 1.5em;
+}
+
+    dd em {
+        font-weight : bold;
+        display     : block;
+        font-size   : 0.9em;
+        font-family : arial;
+    }
+
 
 .ie7 img { -ms-interpolation-mode: bicubic; }
+
+
+@media print {
+    
+    * {
+        text-shadow : none;
+    }
+
+    dt, dd {
+        float       : none !important;
+    }
+    
+    body {
+        font-size   : 10pt;
+        color       : #414141;
+    }
+    
+    pre { border: 0; }
+    
+    
+    h1, h2, h3 {
+        font-family     : georgia;
+    }
+    
+    h1 {  font-size       : 25pt; }
+    h2 {  font-size       : 20pt; }
+    h3 {  font-size       : 15pt; }
+    
+    a {
+        text-decoration : none;
+    }
+    
+    a[href^="http://"]:link:after,
+    a[href^="http://"]:visited:after {
+      content       : "(" attr(href) ")";
+      font-size     : 10pt;
+      margin-left  : 0.5em;
+      font-style    : italic;
+      text-decoration : underline;
+      color           : #888
+    }
+    
+    h1 a:link:after,
+    h1 a:visited:after  {
+        content     : "";
+    }
+    
+    header {
+        border-bottom       : 1pt #888 solid;
+    }
+
+    header h3, nav, #menu, .github-ribbon, .mosaiqy { display: none; }
+    
+    a[href^="#"] { display: none; }
+
+    pre, code {
+        page-break-inside: avoid;
+    }
+
+}
