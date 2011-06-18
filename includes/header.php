@@ -31,6 +31,6 @@
             font-style: normal;
         }
     </style>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" media="all" href="css/style.css" />
     <link rel="stylesheet" media="screen" href="lib/lib-css/mosaiqy.css" />
     

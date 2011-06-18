@@ -329,9 +329,13 @@ dd {
 
 @media print {
     
-    * {
-        text-shadow : none;
+    body, ol, ul, p, dl, dt, dd, code, pre, h1, h2, h3, code b  {
+        text-shadow : none !important;
     }
+	
+	dl {
+		overflow	: auto;
+	}
 
     dt, dd {
         float       : none !important;
