@@ -14,8 +14,8 @@
 
 .ibw > li,
 .ib {
-  display           : -moz-inline-box;  /* FF2 or lower */
-  display           : inline-block;     /* FF3, Opera, Safari */
+  display           : -moz-inline-box !important;  /* FF2 or lower */
+  display           : inline-block !important;     /* FF3, Opera, Safari */
   white-space       : normal;
   letter-spacing    : normal;
   word-spacing      : normal; 
@@ -32,6 +32,15 @@ body {
     color           : #303133;
     padding-bottom  : 30px;
 }
+
+header, .addthis_toolbox {
+    text-align      : center;
+}
+
+    .addthis_toolbox a {
+        float       : none !important;
+        vertical-align: top;
+    }
 
 ol, ul, p, dl {
     text-shadow     : -1px 1px 0px #fff;
@@ -106,17 +115,21 @@ h1 a:visited    {  color       : #fff; }
 
 hgroup, header, section, .mosaiqy + section {
     display     : block;
-    text-align  : center;
 }
 
 .mosaiqy + section  {
     padding-bottom      : 3em;
     border-bottom       : 1px #c6c6c9 solid;
+    text-align          : center;
 }
 
 nav, section {
     margin      : 3em 25px 0 25px;
     text-align  : left;
+}
+
+#socialshare {
+    text-align  : center; 
 }
 
 h1, h2, h3 {

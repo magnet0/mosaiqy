@@ -13,98 +13,16 @@
 
     
     <div class="loading mosaiqy">
-        <ul>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/1.jpg"><img src="images/thumb/1.jpg">
-                        <figcaption>Rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                <figure><a href="images/zoom/2.jpg"><img src="images/thumb/2.jpg">
-                    <figcaption>Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>           
-                </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                <figure><a href="images/zoom/3.jpg"><img src="images/thumb/3.jpg">
-                    <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>           
-                </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/4.jpg"><img src="images/thumb/4.jpg">
-                        <figcaption>Rifugio &laquo;Pradidali&raquo;</figcaption></a>           
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/5.jpg"><img src="images/thumb/5.jpg">
-                        <figcaption>Due simpatici escursionisti</figcaption></a>            
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/6.jpg"><img src="images/thumb/6.jpg">
-                        <figcaption>Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;</figcaption></a>            
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/7.jpg"><img src="images/thumb/7.jpg">
-                        <figcaption>Arrivando al rifugio &laquo;Pradidali&raquo;</figcaption></a>           
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/8.jpg"><img src="images/thumb/8.jpg" longdesc="test.html">
-                        <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>            
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/9.jpg"><img src="images/thumb/9.jpg">
-                        <figcaption>Rifugio &laquo;Locatelli&raquo;</figcaption></a>            
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/10.jpg"><img src="images/thumb/10.jpg">
-                        <figcaption>Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>           
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/11.jpg"><img src="images/thumb/11.jpg"></a>
-                        <figcaption>Due mucche al rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption>            
-                    </figure>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <figure><a href="images/zoom/12.jpg"><img src="images/thumb/12.jpg">
-                        <figcaption>Due mucche al rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>            
-                    </figure>
-                </div>
-            </li>
-        </ul>
-     </div>
+        <ul></ul>
+    </div>
+ 
     
     <?php
         $gs = $_POST['gridsize'];
     ?>
-    <section id="menu">
+
+    
+    <section id="menu" class="noprint">
         <h2>Click over a thumbnail / choose another grid size (with 12 photos)</h2>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
             <select name="gridsize" onchange="this.parentNode.submit()">
@@ -116,7 +34,26 @@
         </form>
     </section>
 
-
+    <!--
+    <section id="socialshare" class="noprint">
+        <h2>Share if you like it</h2>
+        <div class="addthis_toolbox addthis_default_style addthis_32x32_style ibw"
+            addthis:url="http://www.fabriziocalderan.it/_test/mosaiqy/"
+            addthis:title="Mosaiqy, an amazing jQuery plugin for viewing and zooming photos"
+            addthis:description="Mosaiqy, is a photogallery plugin for jQuery 1.6+ with slide effects on thumbnails and zoom">
+        <a class="addthis_button_facebook ib"></a>
+        <a class="addthis_button_stumbleupon ib"></a>
+        <a class="addthis_button_twitter ib" addthis:title="An amazing #jQuery plugin for photos viewing and zooming: #Mosaiqy"></a>
+        <a class="addthis_button_linkedin ib"></a>
+        <a class="addthis_counter addthis_bubble_style ib"></a>
+        </div>
+        <script>
+            var addthis_config = {"data_track_clickback":true};
+            var addthis_share = { url : "http://www.mosaiqy.com/_test/mosaiqy/" }
+        </script>
+        <script src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+    </div>
+    -->
 
     <nav>
         <ul class="ibw">
@@ -370,6 +307,9 @@ $(document).ready(function() {
         </p>
     </section>
     
+    
+    
+    
     <!--
             A great thank goes to the melon's cream at 17% I found in a local fair, who gave me the opportunity
             to easily reach the well-known Ballmer peak (http://xkcd.com/323/) helping me in some circustances
@@ -459,6 +399,19 @@ $(document).ready(function() {
             evt.preventDefault();
         });
     })
+    
+    window.onload = function() {
+        $('.addthis_counter')
+            .removeAttr('title')
+            .css('cursor', 'default')
+            .get(0).onclick = function() { return false; }
+        
+        $('.addthis_button_expanded')
+            .removeAttr('title')
+            .css('cursor', 'default')
+            .get(0).onclick = function() { return false; }
+    
+    }
     </script>
     
      

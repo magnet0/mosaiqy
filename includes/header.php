@@ -34,3 +34,8 @@
     <link rel="stylesheet" media="all" href="css/style.css" />
     <link rel="stylesheet" media="screen" href="lib/lib-css/mosaiqy.css" />
     
+	<!-- social share libs -->	
+	<script src="http://platform.twitter.com/widgets.js"></script>
+
+	<meta property="og:title" content="Mosaiqy, an amazing jQuery plugin for viewing and zooming photos" />
+	<meta property="og:description" content="Mosaiqy, is a photogallery plugin for jQuery 1.6+ with slide effects on thumbnails and zoom" />
