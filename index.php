@@ -400,6 +400,7 @@ $(document).ready(function() {
         });
     })
     
+    /*
     window.onload = function() {
         $('.addthis_counter')
             .removeAttr('title')
@@ -411,7 +412,7 @@ $(document).ready(function() {
             .css('cursor', 'default')
             .get(0).onclick = function() { return false; }
     
-    }
+    }*/
     </script>
     
      
