@@ -170,6 +170,10 @@ $(document).ready(function() {
 });
 &lt;/script&gt;</code></pre>
         
+    <p>The plugin looks for an element with class <code>.mosaiqy</code> with a nested unordered list <code>ul</code>.
+    As you can see on the first demo available, the list could be empty or partially filled with list-items in which
+    you have replicated your template with real data (for SEO purposes or other)</p>
+    
     <p>When you call the plugin you can specify some options (listed below). The most important one is <b>data</b>
     who accept an array of objects, each one containing the information about a single image (thumb and zoom).
     In this example, every object has <b>img</b> and a  <b>desc</b> key (of course you can name your
