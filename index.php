@@ -35,7 +35,7 @@
         </form>
     </section>
 
-    <!--
+    
     <section id="socialshare" class="noprint">
         <h2>Share if you like it</h2>
         <div class="addthis_toolbox addthis_default_style addthis_32x32_style ibw"
@@ -61,7 +61,7 @@
         </script>
         <script src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
     </section>
-    -->
+   
 
     <nav>
         <ul class="ibw">
