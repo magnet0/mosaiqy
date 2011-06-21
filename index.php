@@ -1,8 +1,9 @@
 <?php require "includes/header.php" ?>
-
-
+        
+        
+        
     <!--
-       Javascript is on the bottom of the page.
+       Javascript is on bottom of the page.
     -->
 
 </head>
@@ -38,21 +39,28 @@
     <section id="socialshare" class="noprint">
         <h2>Share if you like it</h2>
         <div class="addthis_toolbox addthis_default_style addthis_32x32_style ibw"
-            addthis:url="http://www.fabriziocalderan.it/_test/mosaiqy/"
-            addthis:title="Mosaiqy, an amazing jQuery plugin for viewing and zooming photos"
+            addthis:url="http://www.fabriziocalderan.it/mosaiqy/"
+            addthis:title="Mosaiqy, an amazing jQuery plugin for photos viewing and zooming."
             addthis:description="Mosaiqy, is a photogallery plugin for jQuery 1.6+ with slide effects on thumbnails and zoom">
-        <a class="addthis_button_facebook ib"></a>
-        <a class="addthis_button_stumbleupon ib"></a>
-        <a class="addthis_button_twitter ib" addthis:title="An amazing #jQuery plugin for photos viewing and zooming: #Mosaiqy"></a>
-        <a class="addthis_button_linkedin ib"></a>
-        <a class="addthis_counter addthis_bubble_style ib"></a>
+                
+            <a class="addthis_button_facebook ib"></a>
+            <a class="addthis_button_twitter ib"
+               addthis:title="An amazing #jQuery plugin for photos viewing and zooming: #Mosaiqy"></a>
+            <a class="addthis_button_linkedin ib"></a>
+            <a class="addthis_button_stumbleupon ib"></a>
+            <a class="addthis_counter addthis_bubble_style ib"></a>
         </div>
         <script>
             var addthis_config = {"data_track_clickback":true};
-            var addthis_share = { url : "http://www.mosaiqy.com/_test/mosaiqy/" }
+            var addthis_share = {
+                url         : "http://www.mosaiqy.com/_test/mosaiqy/",
+                templates   : {
+                    twitter  : "{{title}} http://goo.gl/bAi8x (via @fcalderan)"
+                }
+            }
         </script>
         <script src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
-    </div>
+    </section>
     -->
 
     <nav>

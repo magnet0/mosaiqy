@@ -38,8 +38,8 @@ header, .addthis_toolbox {
 }
 
     .addthis_toolbox a {
-        float       : none !important;
-        vertical-align: top;
+        float           : none !important;
+        vertical-align  : top;
     }
 
 ol, ul, p, dl {
@@ -65,9 +65,11 @@ a:visited   {  color       : #666; }
 h1 a            {  color       : #fff; text-decoration: none; }
 h1 a:visited    {  color       : #fff; }
 
-#demolist ul {
+
+#socialshare, #demotitle, #demolist ul {
     text-align  : center;
 }
+
 #demolist li {
     display     : inline;
     padding     : 0 15px;   
@@ -128,11 +130,9 @@ nav, section {
     text-align  : left;
 }
 
-#socialshare {
-    text-align  : center; 
-}
 
-h1, h2, h3 {
+
+h1, h2, h3, #demotitle {
     font-family     : LeagueGothicRegular;
 }
 
@@ -149,7 +149,7 @@ h1 {
 }
 
 
-h2 {
+h2, #demotitle  {
     font-weight     : normal;
     padding         : 15px 0 0 0;
     font-size       : 36px;

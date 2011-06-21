@@ -19,63 +19,66 @@
     <div class="loading mosaiqy">
         <ul></ul>
     </div>
-      
-    <noscript>Sorry, Javascript is not enabled on your browser.</noscript>
-    <address>
-        Photos retrieved in a public feed on <a href="http://www.flickr.com/"
-        target="new"><img src="images/flickr.png" alt="Flickr" /></a>
-    </address>
+    
+    <p id="demotitle">Photos retrieved in a public feed on <a href="http://www.flickr.com/" target="new">Flickr</a></p>
 
     
-    <section>
-        <p>
-            The train was about to start from Allahabad, and Mr. Fogg proceeded to pay the guide the price agreed
-            upon for his service, and not a farthing more; which astonished Passepartout, who remembered all that
-            his master owed to the guide's devotion. He had, indeed, risked his life in the adventure at Pillaji,
-            and, if he should be caught afterwards by the Indians, he would with difficulty escape their vengeance.
-            Kiouni, also, must be disposed of. What should be done with the elephant, which had been so dearly
-            purchased? Phileas Fogg had already determined this question. 
-        </p>
+    <noscript>Sorry, Javascript is not enabled on your browser.</noscript>
+    
         
-        <p>
-            Now, this plan of Queequeg's, or rather Yojo's, touching the selection of our craft; I did not like
-            that plan at all. I had not a little relied upon Queequeg's sagacity to point out the whaler best fitted
-            to carry us and our fortunes securely. But as all my remonstrances produced no effect upon Queequeg, I
-            was obliged to acquiesce; and accordingly prepared to set about this business with a determined rushing
-            sort of energy and vigor, that should quickly settle that trifling little affair.
-        </p>
-    </section>
-        
-        
-    <section>
-        <p>
-            The train was about to start from Allahabad, and Mr. Fogg proceeded to pay the guide the price agreed
-            upon for his service, and not a farthing more; which astonished Passepartout, who remembered all that
-            his master owed to the guide's devotion. He had, indeed, risked his life in the adventure at Pillaji,
-            and, if he should be caught afterwards by the Indians, he would with difficulty escape their vengeance.
-            Kiouni, also, must be disposed of. What should be done with the elephant, which had been so dearly
-            purchased? Phileas Fogg had already determined this question. 
-        </p>
-        
-        <p>
-            Now, this plan of Queequeg's, or rather Yojo's, touching the selection of our craft; I did not like
-            that plan at all. I had not a little relied upon Queequeg's sagacity to point out the whaler best fitted
-            to carry us and our fortunes securely. But as all my remonstrances produced no effect upon Queequeg, I
-            was obliged to acquiesce; and accordingly prepared to set about this business with a determined rushing
-            sort of energy and vigor, that should quickly settle that trifling little affair.
-        </p>
-    </section>
-
     <?php require "includes/lib.php" ?>
         
         <div>
-            <figure><a href="${media.z}"><img src="${media.m}">
+            <figure><a href="${media.z}"><img src="${media.m}" longdesc="${link}">
               <figcaption>${title}</figcaption></a>
             </figure>
         </div>
     </script>
+
+
+    <section>
+        <h2>Integration code</h2>
+        <pre><code id="codesample"></code></pre>
+    </section>
+
+    <section>
+        <h2>Sample JSON retrieved by the service</h2>
+        <pre><code id="jsonsample">"title"         : "Uploads from fcalderan",
+"link"          : "http://www.flickr.com/photos/fcalderan/",
+"description"   : "",
+"modified"      : "2011-05-25T13:00:33Z",
+"generator"     : "http://www.flickr.com/",
+"items": [
+    {
+        "title"         : "\"Find you well\"",
+        "link"          : "http://www.flickr.com/photos/fcalderan/5757891471/",
+        "media"         : {
+            "m" : "http://farm6.static.flickr.com/5105/5757891471_1abfbd822c_m.jpg"
+        },
+        "date_taken"    : "2011-05-25T15:00:33-08:00",
+        "description"   : "...",
+        "published"     : "2011-05-25T13:00:33Z",
+        "author"        : "nobody@flickr.com (fcalderan)",
+        "author_id"     : "62700709@N03",
+        "tags"          : ""
+    },
+    {
+        "title"         : "\"A new girl for your anniversary\"",
+        "link"          : "http://www.flickr.com/photos/fcalderan/5757891387/",
+        "media"         : {
+            "m" : "http://farm3.static.flickr.com/2444/5757891387_ff511e764e_m.jpg"
+        },
+        "date_taken"    : "2011-05-25T15:00:32-08:00",
+        "description"   : "...",
+        "published"     : "2011-05-25T13:00:32Z",
+        "author"        : "nobody@flickr.com (fcalderan)",
+        "author_id"     : "62700709@N03",
+        "tags"          : ""
+    },
+    ...</code></pre>
+    </section>
     
-    <script>
+    <script id="mosaiqydemo">
     $(document).ready(function() {
         
         $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?id=62700709@N03&jsoncallback=?", {
@@ -86,9 +89,16 @@
             var fjson  = flickrJSON.items,
                 flen   = fjson.length,
                 fi;
-            
+                
             /**
-             * inject zoom images on JSON (they usually end with ... _z.jpg)
+             * This JSON doesn't include information about zoom image for each photo.
+             * Since zoom file name usually ends with '_z.jpg' we inject into data a new
+             * key/value pair for each thumb, so the object will be something like
+             *
+             * "media"         : {
+             *      "m" : "http://farm6.static.flickr.com/5105/5757891471_1abfbd822c_m.jpg"
+             *      "z" : "http://farm6.static.flickr.com/5105/5757891471_1abfbd822c_z.jpg"
+             * }
              */
             while (flen--) {
                 fi = fjson[flen];
@@ -114,7 +124,12 @@
     </script>
 
 
-
      
+    <script>
+    $(document).ready(function() {
+        var code = $('#mosaiqydemo').html() || $('#mosaiqydemo').text();
+        $('#codesample').html(code);
+    })
+    </script>
 </body>
 </html>
