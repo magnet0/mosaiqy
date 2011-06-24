@@ -54,8 +54,8 @@
 }
 
 .js .mosaiqy.zoom li {
-	float           : left;
-	position        : static;
+	float           : left !important;
+	position        : static !important;
 }
 
 
@@ -199,6 +199,17 @@
     padding             : 8px;
     height              : 115px;
     width               : 180px;
+    opacity             : 0;
+    -webkit-transition  : opacity .5s ease;
+    -moz-transition     : opacity .5s ease;
+    -ms-transition      : opacity .5s ease;
+    -o-transition       : opacity .5s ease;
+	transition          : opacity .5s ease;
+}
+
+.ie7 .mosaiqy li figcaption,
+.ie8 .mosaiqy li figcaption {
+	background          : url(../lib-img/figcaption-IE-bg.png);
 }
 
 .mosaiqy li.zoom figcaption {
@@ -221,14 +232,7 @@
     }
 
 
-.mosaiqy li figcaption {
-    opacity             : 0;
-    -webkit-transition  : opacity .5s ease;
-    -moz-transition     : opacity .5s ease;
-    -ms-transition      : opacity .5s ease;
-    -o-transition       : opacity .5s ease;
-	transition          : opacity .5s ease;
-}
+
 
 .mosaiqy li figure a {
     display         : block;

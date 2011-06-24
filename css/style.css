@@ -339,6 +339,72 @@ dd {
 
 .ie7 img { -ms-interpolation-mode: bicubic; }
 
+fieldset {
+    border      : 0;
+}
+
+#donate button {
+    font-family     : LeagueGothicRegular;
+    font-size       : 50px;
+    background      : #D5D6C9;
+    padding         : 0 30px;
+    color           : #A66C6D;
+    border          : 1px #f2f2f6 solid;
+    cursor          : pointer;
+    text-transform  : uppercase;
+}
+
+#chooseamount, #choosecurr {
+    float           : left;
+    height          : 70px;
+    line-height     : 60px;
+}
+
+#chooseamount input, #choosecurr li {
+    font-family     : LeagueGothicRegular;
+    font-size       : 50px;
+    background      : #D5D6C9;
+    width           : 150px;
+}
+
+#chooseamount input {
+    color           : #A66C6D;    
+    text-align      : left;
+    padding         : 3px;
+    border          : 1px #f2f2f6 solid;
+}
+
+#choosecurr {
+    list-style-type     : none;
+    margin              : 0;
+}
+#choosecurr li {
+    color           : #868688;    
+    width           : 110px;
+    float           : left;
+    cursor          : pointer;
+    text-align      : center;
+    margin          : 1px;
+}
+#choosecurr li span {
+    padding         : 0 15px;
+    margin          : 2px;
+    display         : block;
+    border          : 2px #D5D6C9 solid;
+}
+#choosecurr li:hover span {
+    border-color    : #A66C6D;
+}
+
+#choosecurr li.current:hover span {
+     border-color    : #D5D6C9;
+}
+#choosecurr li.current {
+    background      : #A66C6D;
+    color           : #D5D6C9;
+}
+    
+
 
 @media print {
     
@@ -393,7 +459,7 @@ dd {
         border-bottom       : 1pt #888 solid;
     }
 
-    header h3, nav, #menu, .github-ribbon, .mosaiqy { display: none; }
+    header h3, nav, #menu, .github-ribbon, .mosaiqy, #download { display: none; }
     
     a[href^="#"] { display: none; }
 

@@ -16,10 +16,11 @@
     <div class="loading mosaiqy">
         <ul></ul>
     </div>
+    
  
     
     <?php
-        $gs = $_POST['gridsize'];
+        $gs = (isset($_POST['gridsize']))? $_POST['gridsize'] : "4x3" ;
     ?>
 
     
@@ -28,7 +29,7 @@
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
             <select name="gridsize" onchange="this.parentNode.submit()">
                 <option value="3x4" <?php if ($gs == "3x4") echo "selected"; ?> >3 rows - 4 cols</option>
-                <option value="4x3" <?php if ($gs == "4x3"  || $gs == '') echo "selected"; ?> >4 rows - 3 cols</option>
+                <option value="4x3" <?php if ($gs == "4x3") echo "selected"; ?> >4 rows - 3 cols</option>
                 <option value="6x2" <?php if ($gs == "6x2") echo "selected"; ?> >6 rows - 2 cols</option>
                 <option value="12x1" <?php if ($gs == "12x1") echo "selected"; ?> >12 rows - 1 cols</option>
             </select>
@@ -70,7 +71,7 @@
             <li><a href="#how-to-use">How to use</a>
             <li><a href="#options">Options</a>
             <li><a href="#download">License &amp; Download</a>
-            <li><a href="#author">About the author</a>
+            <li><a href="#donate">Donate</a>
             <li><a href="#thanks-to">Thanks to</a>
         </ul>   
     </nav>
@@ -124,7 +125,7 @@
         <pre><code>&lt;head&gt;
     &lt;!--[if lt IE 9]&gt;
         &lt;script src="//html5shim.googlecode.com/svn/trunk/html5.js"&gt; &lt;/script&gt;
-        &lt;script src="http://jdbartlett.github.com/innershiv/innershiv.min.js"&gt; &lt;/script&gt;
+        &lt;script src="http://jdbartlett.com/innershiv/innershiv.js"&gt; &lt;/script&gt;
     &lt;![endif]--&gt;
     &lt;script&gt;
         (function(doc) { 
@@ -298,6 +299,42 @@ $(document).ready(function() {
     </section>
     
     
+    <section id="donate">
+        <a href="#menu">Up</a>
+        <h2>Donate</h2>
+        
+    
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+            
+            <fieldset>
+                <div id="chooseamount">
+                    <input type="text" name="amount" value="5.00" maxlength="8">  
+                </div>
+                <ul id="choosecurr">
+                    <li class="current"><span>EUR</span></li>
+                    <li><span>USD</span></li>
+                    <li><span>GBP</span></li>
+                </div>
+            </fieldset>            
+            
+            <input type="hidden" name="cmd" value="_xclick">  
+            <input type="hidden" name="business" value="paypal@fabriziocalderan.it">  
+            <input type="hidden" name="item_name" value="Mosaiqy plugin for jQuery">  
+            <input type="hidden" name="item_number" value="1">  
+            <input type="hidden" name="no_shipping" value="0">  
+            <input type="hidden" name="no_note" value="1">  
+            <input type="hidden" name="lc" value="EN">
+                
+           
+            <input type="hidden" id="paypal_currency" name="currency_code" value="EUR">  
+        
+            <button type="submit" name="submit">Donate!</button>
+            <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">  
+        </form>              
+
+    </section>
+    
+    
     <section id="thanks-to">
         <a href="#menu">Up</a>
         <h2>Thanks to</h2>
@@ -410,6 +447,50 @@ $(document).ready(function() {
             
             evt.preventDefault();
         });
+        
+        $('#choosecurr li').bind('click', function() {
+            var $this = $(this);
+            $('li.current').removeClass('current');
+            $this.addClass('current');
+            $('#paypal_currency').val($this.find('span').html())
+        })
+        
+        /*
+        $('#chooseamount input').bind('blur', function(e) {
+            var $this = $(this);
+            $this.val($this.val().replace(/\,/, '.'));
+            $this.val(parseFloat($this.val()).toFixed(2));
+            if (parseFloat($this.val()) < 2) {
+                 $this.val('2.00')
+            }
+        });
+        */
+
+           
+        $('#chooseamount input').bind('keydown', function(e) {
+            var $this   = $(this),
+                val     = $this.val(),
+            
+            editingKeys = {
+                '8'   : 'delete',
+                '9'   : 'tab',
+                '46'  : 'canc',
+                '37'  : 'leftarrow',
+                '39'  : 'rightarrow'
+            },
+                
+            key = e.charCode,
+            keynum = (key > 47) && (key < 58),
+            keypad = (key > 95) && (key < 106);
+            
+            
+            alert(String.fromCharCode(key));
+            alert(((String.fromCharCode(key) === '.') && (0 > val.indexOf('.'))))
+            if (!keynum && !keypad) {
+                return (key in editingKeys || ((String.fromCharCode(key) === '.') && (0 > val.indexOf('.'))));
+            }
+        });
+        
     })
     
     /*
