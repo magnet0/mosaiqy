@@ -25,7 +25,7 @@
 
     
     <section id="menu" class="noprint">
-        <h2>Click over a thumbnail / choose another grid size (with 12 photos)</h2>
+        <h2>Click a thumbnail / choose another grid size</h2>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">        
             <select name="gridsize" onchange="this.parentNode.submit()">
                 <option value="3x4" <?php if ($gs == "3x4") echo "selected"; ?> >3 rows - 4 cols</option>
@@ -36,37 +36,11 @@
         </form>
     </section>
 
-    
-    <section id="socialshare" class="noprint">
-        <h2>Share if you like it</h2>
-        <div class="addthis_toolbox addthis_default_style addthis_32x32_style ibw"
-            addthis:url="http://www.fabriziocalderan.it/mosaiqy/"
-            addthis:title="Mosaiqy, an amazing jQuery plugin for photos viewing and zooming."
-            addthis:description="Mosaiqy, is a photogallery plugin for jQuery 1.6+ with slide effects on thumbnails and zoom">
-                
-            <a class="addthis_button_facebook ib"></a>
-            <a class="addthis_button_twitter ib"
-               addthis:title="An amazing #jQuery plugin for photos viewing and zooming: #Mosaiqy"></a>
-            <a class="addthis_button_linkedin ib"></a>
-            <a class="addthis_button_stumbleupon ib"></a>
-            <a class="addthis_counter addthis_bubble_style ib"></a>
-        </div>
-        <script>
-            var addthis_config = {"data_track_clickback":true};
-            var addthis_share = {
-                url         : "http://www.mosaiqy.com/_test/mosaiqy/",
-                templates   : {
-                    twitter  : "{{title}} http://goo.gl/bAi8x (via @fcalderan)"
-                }
-            }
-        </script>
-        <script src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
-    </section>
-   
+    <?php require "includes/socialshare.php" ?>
 
     <nav>
         <ul class="ibw">
-            <li><a href="#demos">Demos</a>
+            <li><a href="#demos">Available demos & service integration</a>
             <li><a href="#requirements">Requirements</a>
             <li><a href="#how-to-use">How to use</a>
             <li><a href="#options">Options</a>
@@ -76,7 +50,15 @@
         </ul>   
     </nav>
     
+    
+    
     <section id="demos">
+        <p>
+            Mosaiqy is a jQuery plugin for viewing and zooming photo working on Opera 9+, Firefox 3.6+, Safari 3.2+,
+            Chrome and IE7+. All expensive animations are taken over by your GPU on recent browsers, minimizing
+            the CPU overall hoverhead. <small>(for technical detail see README file on github project).</small>
+        </p>
+        
         <h2>Available demos & service integration</h2>
         <p>
             So far, integration demo with Flickr, Instagram and Panoramio were realized. If you'd like to see
@@ -97,7 +79,7 @@
         
         
         
-        <p>Mosaiqy was specifically designed for HTML5 pages, with easier integration with 
+        <p>Mosaiqy was specifically designed for <strong>jQuery 1.6</strong> or newer and HTML5 pages, for an easy integration with 
         Paul Irish's <a href="http://html5boilerplate.com/">HTML5 boilerplate</a>.</p>
         
         <p>If you don't use HTML5 boilerplate (as neither do all demo pages) you could run anyway this plugin:
@@ -230,7 +212,7 @@ $(document).ready(function() {
     </section>
     
     
-    <section>
+    <section id="options">
         <a href="#menu">Up</a>
         <h2>Options</h2>
 
@@ -303,34 +285,59 @@ $(document).ready(function() {
         <a href="#menu">Up</a>
         <h2>Donate</h2>
         
+        <p>
+            This plugin is free for <strong>any</strong> purposes but if you like it and you use
+            it on your projects please really consider to donate a fair amount (especially if you include it on
+            commercial sites) since you saved a lot of time in development and headache pills (the entire project took
+            more than 250 hours of nightly job, between feasibility study, coding, testing and writing documentation).
+        </p>
+        <p>
+            I will really appreciate your support &mdash; thank you! =)<br /> <small><b>Note:</b> PayPal take a 3.4%
+            + 0.50 &euro; commission on all donations. Please mind this when donating.</small>
+        </p>
     
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
             
-            <fieldset>
-                <div id="chooseamount">
-                    <input type="text" name="amount" value="5.00" maxlength="8">  
-                </div>
-                <ul id="choosecurr">
-                    <li class="current"><span>EUR</span></li>
-                    <li><span>USD</span></li>
-                    <li><span>GBP</span></li>
-                </div>
-            </fieldset>            
+            <div>
+                <fieldset id="chooseamount">
+                    <label>Enter an amount</label>
+                    <span><b id="currency_sign">&euro;</b><input type="text" name="amount" value="5.00"
+                        placeholder="5.00" maxlength="7"></span> 
+                </fieldset>
+                <fieldset  id="choosecurr">
+                    <label>Choose a currency</label>
+                    <ul>
+                        <li class="current"><span data-currency="EUR">&euro;</span></li>
+                        <li><span data-currency="USD">$</span></li>
+                        <li><span data-currency="GBP">£</span></li>
+                    </ul>
+                </fieldset>
+            </div>
             
-            <input type="hidden" name="cmd" value="_xclick">  
-            <input type="hidden" name="business" value="paypal@fabriziocalderan.it">  
-            <input type="hidden" name="item_name" value="Mosaiqy plugin for jQuery">  
-            <input type="hidden" name="item_number" value="1">  
-            <input type="hidden" name="no_shipping" value="0">  
-            <input type="hidden" name="no_note" value="1">  
-            <input type="hidden" name="lc" value="EN">
+            <div>
+                <fieldset id="mecenate">
+                    <label>Your name</label>
+                    <span><input type="text" name="donate_name" maxlength="30" placeholder="anonymous" value="anonymous"></span>
+                    <button type="submit" name="submit">Donate via Paypal</button>
+                </fieldset>
                 
-           
-            <input type="hidden" id="paypal_currency" name="currency_code" value="EUR">  
-        
-            <button type="submit" name="submit">Donate!</button>
-            <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">  
-        </form>              
+                <input type="hidden" name="cmd" value="_xclick">  
+                <input type="hidden" name="business" value="paypal@fabriziocalderan.it">  
+                <input type="hidden" name="item_name" value="Mosaiqy plugin for jQuery">  
+                <input type="hidden" name="item_number" value="1">  
+                <input type="hidden" name="no_shipping" value="0">  
+                <input type="hidden" name="no_note" value="1">  
+                <input type="hidden" name="lc" value="EN">
+                <input type="hidden" name="return" value="http://www.fabriziocalderan.it/mosaiqy/thankyou.php">
+
+                
+                <input type="hidden" id="paypal_currency" name="currency_code" value="EUR">
+                
+                <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+            </div>
+            
+
+        </form>
 
     </section>
     
@@ -349,7 +356,7 @@ $(document).ready(function() {
             <strong>Addy Osmany</strong>, for its article on <a href="http://addyosmani.com/blog/css3transitions-jquery/"
             target="new">CSS3 Animation With jQuery Fallbacks</a>, <strong>Adam Luikart (adamesque)</strong> for its
             <a href="https://gist.github.com/adamesque" target="new">code gists</a> on jQuery deferred objects</a>.
-            Then <strong>Silvia Nucci</strong>, <strong>Giulia Alfonsi</strong> for suggestions,
+            Then <strong>Paul irish</strong>, <strong>Robert Casanova</strong>, <strong>Silvio Cioni</strong>, <strong>Silvia Nucci</strong>, <strong>Giulia Alfonsi</strong> for suggestions,
             testing and brainstorming, <strong>Roberto Butti</strong> for original idea, integration suggestion
             and finally thanks to my wife <strong>Laura</strong> for the patience.
             
@@ -358,23 +365,21 @@ $(document).ready(function() {
     
     
     
-    
     <!--
             A great thank goes to the melon's cream at 17% I found in a local fair, who gave me the opportunity
             to easily reach the well-known Ballmer peak (http://xkcd.com/323/) helping me in some circustances
             on writing code. Sometimes I think if I had not documented the plugin, maybe today I couldn't tell
-            how the hell my code works :-)
+            how the hell my code works =)
     -->
-        
-        
-      
-        
-        
-        
-        
-        
+    
+    
+    <?php require "includes/socialshare.php" ?>
+    
+    
+    
+    
     <!-- Javascript is here below -->
-        
+    
     
 <?php
         $rows = 4;
@@ -427,47 +432,49 @@ $(document).ready(function() {
     <!-- this is not needed for plugin but if you need a simple page scroller... -->
     <script>
     $(document).ready(function() {
-        var page  =  ($.browser.opera)? $("html") : $("html,body");
-        
-        $('section > a').bind('click', function(evt) {
+        var page        =  ($.browser.opera)? $("html") : $("html,body"),
+            pagescroll  =  function(evt) {
             var elementID       = $(this).attr('href'),
                 elementOffset   = $(elementID).offset().top;
                 pageOffset      = (document.body.scrollTop !== 0)
                                     ? document.body.scrollTop
                                     : document.documentElement.scrollTop;
                                     
-            var pageScroll      = (pageOffset - elementOffset),
+            var pageScroll      = Math.abs(pageOffset - elementOffset),
                 timeScroll      = (pageScroll < 2000)
                                     ? pageScroll * 1.25
                                     : 2500;
             
             if (pageScroll) {   
-                page.animate({ scrollTop: elementOffset }, timeScroll);
+                page.animate({ scrollTop: elementOffset }, timeScroll, function() {
+                    location.href = elementID;
+                });
             }
             
             evt.preventDefault();
-        });
+        };
+        
+        
+        
+        $('nav a').bind('click', pagescroll);
+        $('section > a').bind('click', pagescroll);
         
         $('#choosecurr li').bind('click', function() {
             var $this = $(this);
+            
             $('li.current').removeClass('current');
             $this.addClass('current');
-            $('#paypal_currency').val($this.find('span').html())
+            $('#paypal_currency').val($this.find('span').data('currency'));
+            $('#currency_sign').html($this.find('span').html());
         })
-        
-        /*
-        $('#chooseamount input').bind('blur', function(e) {
-            var $this = $(this);
-            $this.val($this.val().replace(/\,/, '.'));
-            $this.val(parseFloat($this.val()).toFixed(2));
-            if (parseFloat($this.val()) < 2) {
-                 $this.val('2.00')
-            }
-        });
-        */
-
-           
-        $('#chooseamount input').bind('keydown', function(e) {
+               
+        $('#chooseamount input')
+        .bind('blur', function() {
+            var $this   = $(this),
+                val     = parseFloat($this.val());
+            $this.val((isNaN(val) || (val < 1))? '1.00' : val.toFixed(2));
+        })
+        .bind('keydown', function(e) {
             var $this   = $(this),
                 val     = $this.val(),
             
@@ -476,18 +483,24 @@ $(document).ready(function() {
                 '9'   : 'tab',
                 '46'  : 'canc',
                 '37'  : 'leftarrow',
-                '39'  : 'rightarrow'
+                '39'  : 'rightarrow',
+                '190' : 'dot1'
             },
                 
-            key = e.charCode,
+            key = e.which,
             keynum = (key > 47) && (key < 58),
             keypad = (key > 95) && (key < 106);
             
+            if (key == 190) {
+                return (0 > val.indexOf('.'))
+            }
             
-            alert(String.fromCharCode(key));
-            alert(((String.fromCharCode(key) === '.') && (0 > val.indexOf('.'))))
+            if (keynum || keypad) {
+                return (!(/\.\d{2}$/.test(val)));
+            }
+            
             if (!keynum && !keypad) {
-                return (key in editingKeys || ((String.fromCharCode(key) === '.') && (0 > val.indexOf('.'))));
+                return (key in editingKeys);
             }
         });
         

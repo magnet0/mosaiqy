@@ -66,7 +66,7 @@ h1 a            {  color       : #fff; text-decoration: none; }
 h1 a:visited    {  color       : #fff; }
 
 
-#socialshare, #demotitle, #demolist ul {
+.socialshare, #demotitle, #demolist ul {
     text-align  : center;
 }
 
@@ -339,58 +339,119 @@ dd {
 
 .ie7 img { -ms-interpolation-mode: bicubic; }
 
+
+/* -------- paypal form --------- */
+
 fieldset {
     border      : 0;
 }
 
+#donate div {
+    height          : auto;
+    overflow        : hidden;
+}
+
+#donate  form {
+    margin          : 3em 0;    
+}
+
 #donate button {
-    font-family     : LeagueGothicRegular;
-    font-size       : 50px;
-    background      : #D5D6C9;
-    padding         : 0 30px;
-    color           : #A66C6D;
-    border          : 1px #f2f2f6 solid;
-    cursor          : pointer;
-    text-transform  : uppercase;
+    font-family             : LeagueGothicRegular;
+    font-size               : 35px;
+    padding                 : 0 30px;
+    color                   : #A66C6D;
+    border                  : 1px #ccc solid;
+    cursor                  : pointer;
+    -ms-border-radius       : 8px;
+    -webkit-border-radius   : 8px;
+    -moz-border-radius      : 8px;
+    border-radius           : 8px;
+    width                   : auto;
+    height                  : 52px;
+    float                   : left;
+    text-shadow             : -1px 1px 0px #ccc;
 }
 
-#chooseamount, #choosecurr {
+#donate button:hover {
+    border-color        : #A66C6D;
+}
+
+#chooseamount {
+    margin-bottom   : 1em;    
+}
+
+#chooseamount , #choosecurr, #donate button {
+    line-height     : 50px;
     float           : left;
-    height          : 70px;
-    line-height     : 60px;
+    margin-right    : 45px;
 }
 
-#chooseamount input, #choosecurr li {
+
+#mecenate span,
+#chooseamount span,
+#donate input,
+#choosecurr li {
     font-family     : LeagueGothicRegular;
-    font-size       : 50px;
-    background      : #D5D6C9;
-    width           : 150px;
+    font-size       : 35px;
+    font-weight     : normal;
+    background      : #fff;
 }
 
-#chooseamount input {
+
+#donate label,
+#mecenate *,
+#chooseamount * {
     color           : #A66C6D;    
     text-align      : left;
-    padding         : 3px;
-    border          : 1px #f2f2f6 solid;
+    float           : left;
+    height          : 50px;
 }
 
-#choosecurr {
+#donate label   { width : 140px; float: none; display: block; height: 30px; line-height: 30px; }
+#chooseamount b { width : 20px; font-weight: normal; }
+
+#mecenate span,
+#chooseamount span {
+    padding         : 0 10px;
+    width           : 120px;
+    clear           : left;
+    border          : 1px #d8d8d8 solid;
+}
+
+#mecenate span {
+    width           : 381px;
+    margin          : 0 45px 1em 0;
+
+}
+
+#mecenate input {
+    border          : 0;
+    width           : 391px;    
+}
+#chooseamount input {
+    border          : 0;
+    width           : 90px;
+}
+
+#choosecurr ul {
     list-style-type     : none;
     margin              : 0;
 }
 #choosecurr li {
     color           : #868688;    
-    width           : 110px;
+    width           : 70px;
     float           : left;
     cursor          : pointer;
     text-align      : center;
-    margin          : 1px;
+    margin          : 0 3px 0 0;
+    background      : #D5D6C9;
 }
 #choosecurr li span {
     padding         : 0 15px;
     margin          : 2px;
+    height          : 45px;
     display         : block;
-    border          : 2px #D5D6C9 solid;
+    border          : 1px #f2f2f6 solid;
 }
 #choosecurr li:hover span {
     border-color    : #A66C6D;
@@ -402,6 +463,7 @@ fieldset {
 #choosecurr li.current {
     background      : #A66C6D;
     color           : #D5D6C9;
+    text-shadow     : none;
 }
     
 
