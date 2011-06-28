@@ -293,7 +293,7 @@ $(document).ready(function() {
 
         <p id="dwlink">
             <a href="mosaiqy1.0.0.zip">Download CSS, JS and Demos <small>(approx. 2.0 Mb)</small></a>
-            <a href="lib/mosaiqy-1.0.0.min.js">Download only minfied JS <small>(8.3 kb)</small></a>
+            <a href="lib/mosaiqy-1.0.0.min.js">Download only minified JS <small>(8.3 kb)</small></a>
         </p>
         
         <p>
