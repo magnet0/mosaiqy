@@ -340,6 +340,17 @@ dd {
 .ie7 img { -ms-interpolation-mode: bicubic; }
 
 
+
+/* -------- download links -------- */
+
+#dwlink {
+    height      : auto;
+    overflow    : hidden;
+}
+
+#dwlink a {
+    margin-right    : 45px;
+}
 /* -------- paypal form --------- */
 
 fieldset {
@@ -355,6 +366,7 @@ fieldset {
     margin          : 3em 0;    
 }
 
+#dwlink a ,
 #donate button {
     font-family             : LeagueGothicRegular;
     font-size               : 35px;
@@ -370,8 +382,10 @@ fieldset {
     height                  : 52px;
     float                   : left;
     text-shadow             : -1px 1px 0px #ccc;
+    background              : #f2f2f2;
 }
 
+#dwlink a:hover,
 #donate button:hover {
     border-color        : #A66C6D;
 }

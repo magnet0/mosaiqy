@@ -1,0 +1,136 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    
+    <meta charset="utf-8">
+    <meta name="author" content="Fabrizio Calderan">
+    
+    <title>Mosaiqy: a nice jQuery plugin</title>
+    
+    <script>
+    (function(doc) { 
+		doc.className = doc.className.replace(/(^|\b)no\-js(\b|$)/, 'js');
+    }(document.documentElement));
+    </script>
+
+    
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://jdbartlett.com/innershiv/innershiv.js"></script>
+    <![endif]-->
+
+
+    <link rel="stylesheet" media="screen" href="../lib/lib-css/mosaiqy.css" />
+</head>
+
+<body>
+
+    
+    <div class="loading mosaiqy">
+        <ul>
+            <li>
+                <div>
+                    <figure><a href="images/zoom/1.jpg"><img src="images/thumb/1.jpg">
+                        <figcaption>Rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>
+
+                    </figure>
+                </div>
+            </li>
+            <li>
+                <div>
+                <figure><a href="images/zoom/2.jpg"><img src="images/thumb/2.jpg">
+                    <figcaption>Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;</figcaption></a>           
+                </figure>
+
+                </div>
+            </li>
+            <li>
+                <div>
+                <figure><a href="images/zoom/3.jpg"><img src="images/thumb/3.jpg">
+                    <figcaption>Veduta dal rifugio &laquo;Pradidali&raquo;</figcaption></a>           
+                </figure>
+                </div>
+
+            </li>			
+		</ul>
+    </div>
+    
+    
+	<!-- jquery & lib-->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"> </script>
+    <script src="../lib/mosaiqy-1.0.0.min.js" id="mosaiqy_tpl">
+        <div>
+            <figure><a href="../images/zoom/${img}"><img src="../images/thumb/${img}">
+              <figcaption>${desc}</figcaption></a>
+            </figure>
+        </div>
+    </script>
+    
+
+    <script>
+    $(document).ready(function() {
+        $('.mosaiqy').mosaiqy({
+            template        : "mosaiqy_tpl",
+            rows            : 4,
+            cols            : 2,
+            avoidDuplicates : true,
+            animationDelay  : 800,
+            animationSpeed  : 1200,
+            loop            : true,
+            loadTimeout     : 5000,
+            indexData       : 12,
+			data            : [
+                {
+                    img     : "1.jpg",
+                    desc    : "Rifugio &laquo;Citt&agrave; di Fiume&raquo;"
+                }
+                ,
+                {
+                    img     : "2.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
+                },
+                {
+                    img     : "3.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "4.jpg",
+                    desc    : "Rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "5.jpg",
+                    desc    : "Due simpatici escursionisti"
+                },
+                {
+                    img     : "6.jpg",
+                    desc    : "Veduta della Marmolada lungo il sentiero per il Rifugio &laquo;Venezia&raquo;"
+                },
+                {
+                    img     : "7.jpg",
+                    desc    : "Arrivando al rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "8.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Pradidali&raquo;"
+                },
+                {
+                    img     : "9.jpg",
+                    desc    : "Rifugio &laquo;Locatelli&raquo;"
+                },
+                {
+                    img     : "10.jpg",
+                    desc    : "Veduta dal rifugio &laquo;Citt&agrave; di Fiume&raquo;"
+                }
+            ]            
+            
+        });
+        
+    });
+    </script> 
+
+</body>
+</html>

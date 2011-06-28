@@ -1,3 +1,8 @@
+/**
+ * Basic style. Please don't change this section unless you're
+ * absolutely confident and you know what you're doing
+ */
+
 .js .mosaiqy.loading {
     width           : 20px;
     height          : 20px;
@@ -164,7 +169,14 @@
         filter          : alpha(opacity=0)
     }
 
-/* User styles */
+
+
+/**
+ * User styles
+ * In this section you can modify style according to your template
+ * These rules are suitable for the markup written into the demo templates
+ * If you change markup or if you  modify the style change the rules below.
+ */
 
 .no-js .mosaiqy ul {
 	margin		: 0 auto;

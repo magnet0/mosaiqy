@@ -1,0 +1,88 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    
+    <meta charset="utf-8">
+    <meta name="author" content="Fabrizio Calderan">
+    
+    <title>Mosaiqy: a nice jQuery plugin</title>
+    
+    <script>
+    (function(doc) { 
+		doc.className = doc.className.replace(/(^|\b)no\-js(\b|$)/, 'js');
+    }(document.documentElement));
+    </script>
+
+    
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://jdbartlett.com/innershiv/innershiv.js"></script>
+    <![endif]-->
+
+
+    <link rel="stylesheet" media="screen" href="../lib/lib-css/mosaiqy.css" />
+    <style>
+        .mosaiqy li, .mosaiqy img {
+            height      : 200px;
+            width       : 200px;
+        }
+        
+        .mosaiqy li figcaption {
+            height      : 180px;
+            width       : 180px;
+        }
+        
+        figcaption strong {
+            display     : block;
+        }
+        .mosaiqy-zoom figcaption strong {
+            text-indent : 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    
+    <div class="loading mosaiqy">
+        <ul></ul>
+    </div>
+    
+    
+	<!-- jquery & lib-->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"> </script>
+    <script src="../lib/mosaiqy-1.0.0.min.js" id="mosaiqy_tpl">
+        <div>
+            <figure><a href="${images.standard_resolution.url}"><img src="${images.low_resolution.url}" longdesc="${link}">
+              <figcaption>${caption.text} <strong>(${user.username})</strong></figcaption></a>
+            </figure>
+        </div>
+    </script>
+    
+
+     <script>
+    $(document).ready(function() {
+        var instagramAPIDataUrl = "https://api.instagram.com/v1/locations/121218/media/recent?client_id=cdebd6a242f149e38fe100f042d8bc18&callback=?";
+                
+        $.getJSON(instagramAPIDataUrl, function(instagramJSON) {
+                
+            $('.mosaiqy').mosaiqy({
+                template        : 'mosaiqy_tpl',
+                rows            : 2,
+                cols            : 3,
+                avoidDuplicates : true,
+                animationDelay  : 1500,
+                loop            : true,
+                data            : instagramJSON.data
+            });            
+            
+        });        
+    });
+    </script>
+
+</body>
+</html>

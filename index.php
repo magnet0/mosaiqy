@@ -280,6 +280,27 @@ $(document).ready(function() {
         </dl>
     </section>
     
+    <section id="download">
+        <a href="#menu">Up</a>
+        <h2>License &amp; Download</h2>
+        
+        <p>
+            Mosaiqy is an opensource project released under the <a href="http://creativecommons.org/licenses/by-nd/3.0/" target="new">Creative
+            Commons Non-Derivative</a> (CC BY-ND 3.0) license. This means you are free to copy, distribute and transmit the work,
+            to make also commercial use of the work under some restrictions (see carefully the link above). 
+        </p>
+        
+
+        <p id="dwlink">
+            <a href="mosaiqy1.0.0.zip">Download CSS, JS and demos (~2.0 Mb)</a>
+            <a href="lib/mosaiqy-1.0.0.min.js">Download only minfied JS (8.3 kb)</a>
+        </p>
+        
+        <p>
+            Source code of Mosaiqy and all the code of this site are <a href="https://github.com/fcalderan/mosaiqy"
+            target="new">hosted on github</a>.
+    </section>
+    
     
     <section id="donate">
         <a href="#menu">Up</a>
@@ -288,7 +309,7 @@ $(document).ready(function() {
         <p>
             This plugin is free for <strong>any</strong> purposes but if you like it and you use
             it on your projects please really consider to donate a fair amount (especially if you include it on
-            commercial sites) since you saved a lot of time in development and headache pills (the entire project took
+            commercial sites) since you saved a lot of time in development (I spent
             more than 250 hours of nightly job, between feasibility study, coding, testing and writing documentation).
         </p>
         <p>
