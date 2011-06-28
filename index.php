@@ -56,7 +56,7 @@
         <p>
             Mosaiqy is a jQuery plugin for viewing and zooming photo working on Opera 9+, Firefox 3.6+, Safari 3.2+,
             Chrome and IE7+. All expensive animations are taken over by your GPU on recent browsers, minimizing
-            the CPU overall hoverhead. <small>(for technical detail see README file on github project).</small>
+            the CPU overhead. <small>(for technical detail see README file on github project).</small>
         </p>
         
         <h2>Available demos & service integration</h2>
@@ -292,7 +292,7 @@ $(document).ready(function() {
         
 
         <p id="dwlink">
-            <a href="mosaiqy1.0.0.zip">Download CSS, JS and demos <small>(approx. 2.0 Mb)</small></a>
+            <a href="mosaiqy1.0.0.zip">Download CSS, JS and Demos <small>(approx. 2.0 Mb)</small></a>
             <a href="lib/mosaiqy-1.0.0.min.js">Download only minfied JS <small>(8.3 kb)</small></a>
         </p>
         
