@@ -38,14 +38,17 @@
 
     <?php require "includes/socialshare.php" ?>
 
-    <nav>
+    <nav class="noprint">
         <ul class="ibw">
             <li><a href="#demos">Available demos & service integration</a>
             <li><a href="#requirements">Requirements</a>
             <li><a href="#how-to-use">How to use</a>
             <li><a href="#options">Options</a>
             <li><a href="#download">License &amp; Download</a>
+        </ul>
+        <ul class="ibw">
             <li><a href="#donate">Donate</a>
+            <li><a href="#about">About the author</a>
             <li><a href="#thanks-to">Thanks to</a>
         </ul>   
     </nav>
@@ -280,7 +283,7 @@ $(document).ready(function() {
         </dl>
     </section>
     
-    <section id="download">
+    <section id="download" class="noprint">
         <a href="#menu">Up</a>
         <h2>License &amp; Download</h2>
         
@@ -292,8 +295,10 @@ $(document).ready(function() {
         
 
         <p id="dwlink">
-            <a href="mosaiqy1.0.0.zip">Download CSS, JS and Demos <small>(approx. 2.0 Mb)</small></a>
-            <a href="lib/mosaiqy-1.0.0.min.js">Download only minified JS <small>(8.3 kb)</small></a>
+            <a href="mosaiqy1.0.0.zip">Download CSS, JS and Demos <small>(approx. 1.3 Mb)</small>
+            <ins>Checksum: 04b6f90c3f6c5a89fe891a807f371e43dfc6d394</ins></a>
+            <a href="lib/mosaiqy-1.0.0.min.js">Download only minified JS <small>(8.3 kb)</small>
+            <ins>Checksum: b1d7b37f87fba0ace8ca108eda0bf2347c688667</ins></a>
         </p>
         
         <p>
@@ -302,7 +307,7 @@ $(document).ready(function() {
     </section>
     
     
-    <section id="donate">
+    <section id="donate" class="noprint">
         <a href="#menu">Up</a>
         <h2>Donate</h2>
         
@@ -356,12 +361,26 @@ $(document).ready(function() {
                 
                 <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
             </div>
-            
-
         </form>
-
     </section>
     
+    <section id="about">
+        <a href="#menu">Up</a>
+        <h2>About</h2>
+        <p>
+            Mosaiqy was developed by <strong>Fabrizio Calderan</strong>, a frontend developer who lives in Italy and works
+            for a digital media company located in the middle of bucolic venetian countryside, only one mile far from
+            the beautiful <a href="http://goo.gl/u97TM" target="new">lagoon of Venice</a>.
+        <p>
+        <p>
+            For bug report you can contact me at <span style="direction: rtl;unicode-bidi: bidi-override;">
+            ti.naredlacoizirbaf[ta]yqiasom</span>. Other contacts:
+        <p>
+        <ul>
+            <li>twitter: fcalderan</li>
+            <li>linkedin: http://www.linkedin.com/in/fabriziocalderan</li>
+        </ul>
+    </section>
     
     <section id="thanks-to">
         <a href="#menu">Up</a>
@@ -430,7 +449,6 @@ $(document).ready(function() {
             animationSpeed  : 1200,
             loop            : true,
             loadTimeout     : 5000,
-            indexData       : 12,
 <?php
                 require "includes/json.php";
 ?>

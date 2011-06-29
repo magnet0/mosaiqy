@@ -3,6 +3,7 @@
     padding     : 0;
 }
 
+.ie7 img { -ms-interpolation-mode: bicubic; }
 
 /* inline blocks */
 
@@ -37,10 +38,11 @@ header, .addthis_toolbox {
     text-align      : center;
 }
 
-    .addthis_toolbox a {
-        float           : none !important;
-        vertical-align  : top;
-    }
+.addthis_toolbox a {
+    float           : none !important;
+    vertical-align  : top;
+}
+
 
 ol, ul, p, dl {
     text-shadow     : -1px 1px 0px #fff;
@@ -113,7 +115,13 @@ h1 a:visited    {  color       : #fff; }
     text-shadow         : -1px 1px 0px #525059;
     border-top          : 1px dashed #c2c0c4;
     border-bottom       : 1px dashed #c2c0c4;
-  }
+}
+
+.ie7 .github-ribbon,
+.ie8 .github-ribbon {
+    display         : none;
+}
+
 
 hgroup, header, section, .mosaiqy + section {
     display     : block;
@@ -191,12 +199,19 @@ hgroup em {
 
 header h1:after, header h1:before,
 header h2:after, header h2:before {
-   content          : "\2605";
-   font-size        : 0.6em;
-   padding          : 0 10px;
-   display          : inline-block;
-   vertical-align   : middle;
+    font-family      : arial;
+    content          : "\2605";
+    font-size        : 0.6em;
+    padding          : 0 10px;
+    display          : inline-block;
+    vertical-align   : middle;
 }
+
+.ie7 header :after, .ie7 header :before,
+.ie8 header :after, .ie8 header :before {
+    content          : " ";
+}
+
 
 
     section ul {
@@ -225,31 +240,37 @@ header h2:after, header h2:before {
             color            : #fff;
         }
         
-        nav li:first-child:before {
-            padding-right    : 0;
-            content          : "";
-        }
-
-        section > a, p em, nav a, nav a:visited   {  color       : #A66C6D; }
         
-        section > a,
-        section > a:link,
-        section > a:visited,
-        section > a:active {
-            float       : right;
-            position    : relative;
-            top         : 36px;
-            text-decoration : none;
-            color           : #A66C6D;
+        .ie7 nav li:before,
+        .ie8 nav li:before {
+            content          : " ";
         }
-        section > a:before {
-            text-decoration : underline;
-            padding         : 0 0.25em 0 0;
-            color           : #A66C6D;
-            content         : "\2605"
-        }
+        
+nav li:first-child:before {
+    padding-right    : 0;
+    content          : "";
+}
 
-        p em { font-weight: bold; }
+section > a, p em, nav a, nav a:visited   {  color       : #A66C6D; }
+
+section > a,
+section > a:link,
+section > a:visited,
+section > a:active {
+    float       : right;
+    position    : relative;
+    top         : 36px;
+    text-decoration : none;
+    color           : #A66C6D;
+}
+section > a:before {
+    text-decoration : underline;
+    padding         : 0 0.25em 0 0;
+    color           : #A66C6D;
+    content         : "\2605"
+}
+
+p em { font-weight: bold; }
 
 address {
     text-align      : center;
@@ -259,9 +280,9 @@ address img { display:  block; margin: 0 auto;}
 
 
 dl, code {
-    color           : #414141;
-    font-family     : Inconsolata, Monaco, "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
-    text-shadow     : -1px 1px 0px #f8f8f8;
+    color                   : #414141;
+    font-family             : Inconsolata, Monaco, "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+    text-shadow             : -1px 1px 0px #f8f8f8;
     -ms-border-radius       : 4px;
     -webkit-border-radius   : 4px;
     -moz-border-radius      : 4px;
@@ -337,20 +358,6 @@ dd {
     }
 
 
-.ie7 img { -ms-interpolation-mode: bicubic; }
-
-
-
-/* -------- download links -------- */
-
-#dwlink {
-    height      : auto;
-    overflow    : hidden;
-}
-
-#dwlink a {
-    margin-right    : 45px;
-}
 /* -------- paypal form --------- */
 
 fieldset {
@@ -363,7 +370,7 @@ fieldset {
 }
 
 #donate  form {
-    margin          : 3em 0;    
+    margin-top          : 3em;    
 }
 
 #dwlink a ,
@@ -435,16 +442,22 @@ fieldset {
 #mecenate span {
     width           : 381px;
     margin          : 0 45px 1em 0;
-
 }
 
 #mecenate input {
     border          : 0;
     width           : 391px;    
 }
+
+#mecenate button {
+    margin          : 0 0 1em 0;
+}
+
+
 #chooseamount input {
     border          : 0;
     width           : 90px;
+    line-height     : 50px;
 }
 
 #choosecurr ul {
@@ -479,6 +492,34 @@ fieldset {
     color           : #D5D6C9;
     text-shadow     : none;
 }
+
+/* -------- download links -------- */
+
+#dwlink {
+    height      : auto;
+    overflow    : hidden;
+}
+
+#dwlink a {
+    margin-right    : 45px;
+    height          : auto;
+    padding         : 5px 10px;
+    text-decoration : none;
+}
+
+#dwlink ins {
+    font            : Arial;
+    display         : block;
+    color           : #ccc;
+    text-decoration : none;
+    text-shadow     : none;
+    font            : 0.3em Arial;
+}
+
+#about {
+    margin-top      : 0;
+}
+
     
 
 
@@ -535,7 +576,7 @@ fieldset {
         border-bottom       : 1pt #888 solid;
     }
 
-    header h3, nav, #menu, .github-ribbon, .mosaiqy, #download { display: none; }
+    header h3, .github-ribbon, .mosaiqy, .noprint { display: none; }
     
     a[href^="#"] { display: none; }
 
