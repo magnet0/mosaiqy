@@ -203,7 +203,7 @@ $(document).ready(function() {
     properly work.</li>
     </ol>
     
-    <p>Of course you can add other markup than this or hide the existing one via css but remember that
+    <p>You can also add other markup than this or hide the existing one via css but remember that
     the template code will be injected into a <code>&lt;li&gt;</code> element, so be sure <strong>not</strong> to wrap your template in
     a list-item (I used a simple <code>&lt;div&gt;</code>).
     </p>
@@ -316,6 +316,7 @@ $(document).ready(function() {
             it on your projects please really consider to donate a fair amount (especially if you include it on
             commercial sites) since you saved a lot of time in development (I spent
             more than 250 hours of nightly job, between feasibility study, coding, testing and writing documentation).
+            Of course feel free to choose another amount.
         </p>
         <p>
             I will really appreciate your support &mdash; thank you! =)<br /> <small><b>Note:</b> PayPal take a 3.4%
@@ -327,8 +328,8 @@ $(document).ready(function() {
             <div>
                 <fieldset id="chooseamount">
                     <label>Enter an amount</label>
-                    <span><b id="currency_sign">&euro;</b><input type="text" name="amount" value="5.00"
-                        placeholder="5.00" maxlength="7"></span> 
+                    <span><b id="currency_sign">&euro;</b><input type="text" name="amount" value="4.00"
+                        placeholder="4.00" maxlength="7"></span> 
                 </fieldset>
                 <fieldset  id="choosecurr">
                     <label>Choose a currency</label>
@@ -377,8 +378,8 @@ $(document).ready(function() {
             ti.naredlacoizirbaf[ta]<!--thispage@need.moreunicorns.com-->yqiasom</strong>. Other contacts:
         <p>
         <ul>
-            <li>twitter: fcalderan</li>
-            <li>linkedin: http://www.linkedin.com/in/fabriziocalderan</li>
+            <li><a href="http://twitter.com/#!/fcalderan" target="new">twitter</a></li>
+            <li><a href="http://www.linkedin.com/in/fabriziocalderan" target="new">linkedin</a></li>
         </ul>
     </section>
     
