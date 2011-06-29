@@ -373,8 +373,8 @@ $(document).ready(function() {
             the beautiful <a href="http://goo.gl/u97TM" target="new">lagoon of Venice</a>.
         <p>
         <p>
-            For bug report you can contact me at <span style="direction: rtl;unicode-bidi: bidi-override;">
-            ti.naredlacoizirbaf[ta]yqiasom</span>. Other contacts:
+            For bug report you can contact me at <strong style="direction: rtl;unicode-bidi: bidi-override;">
+            ti.naredlacoizirbaf[ta]<!--thispage@need.moreunicorns.com-->yqiasom</strong>. Other contacts:
         <p>
         <ul>
             <li>twitter: fcalderan</li>
