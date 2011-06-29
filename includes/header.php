@@ -38,7 +38,8 @@
     <link rel="stylesheet" media="screen" href="lib/lib-css/mosaiqy.css" />
 
     <meta property="og:url" content="http://www.fabriziocalderan.it/mosaiqy/" />
-    <meta property="og:type" content="text/html" />
+    <meta property="og:type" content="website" />
     <meta property="og:image" content="http://www.fabriziocalderan.it/mosaiqy/images/thumb/17.jpg" />
     <meta property="og:title" content="Mosaiqy, an amazing jQuery plugin for viewing and zooming photos" />
     <meta property="og:description" content="Mosaiqy, is a photogallery plugin for jQuery 1.6+ with slide effects on thumbnails and zoom" />        
+    <meta property="fb:admins" content="1063607596" />

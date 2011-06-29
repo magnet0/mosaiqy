@@ -42,30 +42,30 @@
                 },
                 {
                     img     : "11.jpg",
-                    desc    : "Mucche (1)"
+                    desc    : "3 cime di Lavaredo"
                 },
                 {
                     img     : "12.jpg",
-                    desc    : "Mucche(2)"
+                    desc    : "Mucche"
                 },
                 {
                     img     : "13.jpg",
-                    desc    : "Mucche(2)"
+                    desc    : "Una simpatica escursionista"
                 },
                 {
                     img     : "14.jpg",
-                    desc    : "Mucche(2)"
+                    desc    : "Cima Undici, Dolomiti di Sesto"
                 },
                 {
                     img     : "15.jpg",
-                    desc    : "Mucche(2)"
+                    desc    : "Laghi dei Piani(1)"
                 },
                 {
                     img     : "16.jpg",
-                    desc    : "Mucche(2)"
+                    desc    : "Il gatto del Rifugio &laquo;Antonio Locatelli&raquo;"
                 },
                 {
                     img     : "17.jpg",
-                    desc    : "Mucche(2)"
+                    desc    : "Laghi dei Piani(2)"
                 }
             ]

@@ -296,7 +296,7 @@ $(document).ready(function() {
 
         <p id="dwlink">
             <a href="mosaiqy1.0.0.zip">Download CSS, JS and Demos <small>(approx. 1.3 Mb)</small>
-            <ins>Checksum: 04b6f90c3f6c5a89fe891a807f371e43dfc6d394</ins></a>
+            <ins>Checksum: 60b20b47d260071f27db85600bef3d292bfa5f24</ins></a>
             <a href="lib/mosaiqy-1.0.0.min.js">Download only minified JS <small>(8.3 kb)</small>
             <ins>Checksum: b1d7b37f87fba0ace8ca108eda0bf2347c688667</ins></a>
         </p>
@@ -376,11 +376,9 @@ $(document).ready(function() {
         <p>
             For bug report you can contact me at <strong style="direction: rtl;unicode-bidi: bidi-override;">
             ti.naredlacoizirbaf[ta]<!--thispage@need.moreunicorns.com-->yqiasom</strong>. Other contacts:
+            <a href="http://twitter.com/#!/fcalderan" target="new">twitter</a> and <a
+            href="http://www.linkedin.com/in/fabriziocalderan" target="new">linkedin</a>
         <p>
-        <ul>
-            <li><a href="http://twitter.com/#!/fcalderan" target="new">twitter</a></li>
-            <li><a href="http://www.linkedin.com/in/fabriziocalderan" target="new">linkedin</a></li>
-        </ul>
     </section>
     
     <section id="thanks-to">
