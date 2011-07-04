@@ -337,6 +337,7 @@ dl {
     overflow    : hidden;
     margin-top  : 2.5em;
     padding     : 25px;
+    font-size   : 1.05em;
 }
 dt, dd {
     float       : left;
@@ -357,7 +358,17 @@ dd {
         font-family : arial;
     }
 
+#changelog > div, 
+#changelog ul {
+    padding-left : 1.5em;
+}
 
+#changelog h3 {
+    margin-top  : 0.5em;
+}
+#changelog ul {
+    margin-top      : 0;
+}
 /* -------- paypal form --------- */
 
 fieldset {
@@ -367,10 +378,11 @@ fieldset {
 #donate div {
     height          : auto;
     overflow        : hidden;
+    clear           : both;
 }
 
 #donate  form {
-    margin-top          : 3em;    
+    margin-top          : 1em;    
 }
 
 #dwlink a ,
@@ -440,13 +452,15 @@ fieldset {
 }
 
 #mecenate span {
-    width           : 381px;
+    width           : 455px;
     margin          : 0 45px 1em 0;
 }
 
 #mecenate input {
     border          : 0;
-    width           : 391px;    
+    width           : 455px;
+    font-family     : LeagueGothicRegular;
+    font-size       : 35px;    
 }
 
 #mecenate button {
@@ -458,6 +472,8 @@ fieldset {
     border          : 0;
     width           : 90px;
     line-height     : 50px;
+    font-family     : LeagueGothicRegular;
+    font-size       : 35px;
 }
 
 #choosecurr ul {
@@ -514,6 +530,7 @@ fieldset {
     text-decoration : none;
     text-shadow     : none;
     font            : 0.3em Arial;
+    padding-bottom  : 10px;
 }
 
 #about {

@@ -1,4 +1,4 @@
-    
+  
 	<script>
 	
 	  var _gaq = _gaq || [];
@@ -11,7 +11,8 @@
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
 	
-	</script>	
+	</script>
+
 	
 	<!-- jquery & lib-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"> </script>

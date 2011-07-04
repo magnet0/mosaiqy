@@ -40,13 +40,14 @@
 
     <nav class="noprint">
         <ul class="ibw">
-            <li><a href="#demos">Available demos & service integration</a>
+            <li><a href="#demos">Demos & service integration</a>
             <li><a href="#requirements">Requirements</a>
             <li><a href="#how-to-use">How to use</a>
             <li><a href="#options">Options</a>
-            <li><a href="#download">License &amp; Download</a>
         </ul>
         <ul class="ibw">
+            <li><a href="#changelog">Changelog</a>
+            <li><a href="#download">License &amp; Download</a>
             <li><a href="#donate">Donate</a>
             <li><a href="#about">About the author</a>
             <li><a href="#thanks-to">Thanks to</a>
@@ -58,20 +59,20 @@
     <section id="demos">
         <p>
             Mosaiqy is a jQuery plugin &mdash; released on June 29, 2011 &mdash; for viewing and zooming photo working on Opera 9+, Firefox 3.6+, Safari 3.2+,
-            Chrome and IE7+. All expensive animations are taken over by your GPU on recent browsers using CSS3 transitions, minimizing
+            Chrome and IE7+. Photos are retrieved from a JSON/JSONP data structure and randomly moved inside the grid. All expensive animations are taken over by your GPU on recent browsers using CSS3 transitions, minimizing
             the CPU overhead. <small>(for technical detail see README file on github project).</small>
         </p>
         
-        <h2>Available demos & service integration</h2>
+        <h2>Demos & service integration</h2>
         <p>
             So far, integration demo with Flickr, Instagram and Panoramio were realized. If you'd like to see
             some other examples with your favourite service (not yet listed here) just let me know:
         </p>
         <ul>
-            <li><a href="mosaiqy-mixed-load.php">Mixing initial images JSON/HTML</a></li>
-            <li><a href="mosaiqy-flickr.php">Flickr</a></li>
-            <li><a href="mosaiqy-instagram.php">Instagram</a></li>
-            <li><a href="mosaiqy-panoramio.php">Panoramio (and HTML5 GeoLocation)</a></li>
+            <li><a href="mosaiqy-mixed-load.php"><strong>Mixing initial images JSON/HTML</strong></a></li>
+            <li><a href="mosaiqy-flickr.php"><strong>Flickr</strong></a></li>
+            <li><a href="mosaiqy-instagram.php"><strong>Instagram</strong></a></li>
+            <li><a href="mosaiqy-panoramio.php"><strong>Panoramio (and HTML5 GeoLocation)</strong></a></li>
         </ul>
     </section>
    
@@ -121,7 +122,7 @@
 &lt;/head&gt;</code></pre>
         
         <p>
-        Finally, simply include the CSS file, then jQuery 1.6+ and the javascript plugin (for performance reasons
+        Finally, simply include the CSS file, then jQuery and the javascript plugin (for performance reasons
        <a href="http://developer.yahoo.com/blogs/ydn/posts/2007/07/high_performanc_5/" target="new">include scripts at the
         bottom</a> of your document).</p>
 
@@ -142,7 +143,7 @@
             are retrieved by a JSON/JSONP data structure. This is the javascript snippet I used for the example in this page (you can find it at the bottom of the source code)
         </p>
         
-        <pre><code>&lt;script src="lib/mosaiqy-1.0.0.js" id="<b>mosaiqy_tpl</b>"&gt;
+        <pre><code>&lt;script src="lib/mosaiqy-1.0.0.min.js" id="<b>mosaiqy_tpl</b>"&gt;
 <em>    &lt;div&gt;
         &lt;figure&gt;&lt;a href="images/zoom/<b>${img}</b>"&gt;&lt;img src="images/thumb/<b>${img}</b>" <b>longdesc</b>="..."&gt;
           &lt;figcaption&gt;<b>${desc}</b>&lt;/figcaption&gt;&lt;/a&gt;
@@ -211,7 +212,7 @@ $(document).ready(function() {
     <p>If you also specify an URL for the <code>longdesc</code> attribute on the thumbnail image, <strong>your zoom image will
     be automatically linked</strong> to that address. This behaviour could be necessary when using the plugin with an external
     service integration - like panoramio - where a link to the photo or to the user page is requested by the
-    terms of service.
+    terms of service.</p>
     </section>
     
     
@@ -283,27 +284,52 @@ $(document).ready(function() {
         </dl>
     </section>
     
-    <section id="download" class="noprint">
-        <a href="#menu">Up</a>
-        <h2>License &amp; Download</h2>
+   <section id="changelog">
+         <a href="#menu">Up</a>
+         <h2>Changelog</h2>
+         
+         <div>
+            <h3>Version 1.0.0</h3>
+            <ul>
+               <li>Initial release</li>
+            </ul>
+            <h3>Todo for next version</h3>
+            <ul>
+               <li>Callbacks after/before zoom opening and after/before zoom closing</li>
+            </ul>
+         </div>
+         
+   </section>
+   
+   <section id="download" class="noprint">
+         <a href="#menu">Up</a>
+         <h2>License &amp; Download</h2>
         
-        <p>
+         <p>
             Mosaiqy is an opensource project released under the <a href="http://creativecommons.org/licenses/by-nd/3.0/" target="new">Creative
             Commons Non-Derivative</a> (CC BY-ND 3.0) license. This means you are free to copy, distribute and transmit the work,
             to make also commercial use of the work under some restrictions (see carefully the link above). 
-        </p>
+         </p>
         
-
-        <p id="dwlink">
-            <a href="mosaiqy1.0.0.zip">Download CSS, JS and Demos <small>(approx. 1.3 Mb)</small>
-            <ins>Checksum: 60b20b47d260071f27db85600bef3d292bfa5f24</ins></a>
+         <?php $hitcount = @file_get_contents('count.txt') ?>
+         <p id="dwlink">
+            <a href="mosaiqy1.0.0.zip">Download CSS, JS and Demos <small>(approx. 1.26 Mb)</small>
+            <ins>Checksum: 60b20b47d260071f27db85600bef3d292bfa5f24 &mdash; Downloaded <?php echo $hitcount ?> times</ins></a>
             <a href="lib/mosaiqy-1.0.0.min.js">Download only minified JS <small>(8.3 kb)</small>
             <ins>Checksum: b1d7b37f87fba0ace8ca108eda0bf2347c688667</ins></a>
-        </p>
+         </p>
         
         <p>
+            <strong>Note</strong>: the <a href="lib/mosaiqy-1.0.0.js" target="new">original source code</a> is meant for <strong>development
+            purposes only</strong>  since it's 45.7Kb and it contains debug statements, thus it's not suitable for production
+            environment. Use it anyway for check the overall quality of the code and/or when you have to debug your
+            application (look at log messages into the Firefox console or
+            Chrome Toolbar or Opera Dragonfly).
+         </p>
+         <p>            
             Source code of Mosaiqy and all the code of this site are <a href="https://github.com/fcalderan/mosaiqy"
             target="new">hosted on github</a>.
+        </p>
     </section>
     
     
@@ -316,7 +342,7 @@ $(document).ready(function() {
             it on your projects please really consider to donate a fair amount (especially if you include it on
             commercial sites) since you saved a lot of time in development (I spent
             more than 200 hours of nightly/weekend job, between feasibility study, coding, testing and writing documentation).
-            Of course feel free to choose another amount.
+            Of course feel free to choose a different amount.
         </p>
         <p>
             I will really appreciate your support &mdash; thank you! =)<br /> <small><b>Note:</b> PayPal takes a 3.4%
@@ -327,24 +353,25 @@ $(document).ready(function() {
             
             <div>
                 <fieldset id="chooseamount">
-                    <label>Enter an amount</label>
-                    <span><b id="currency_sign">&euro;</b><input type="text" name="amount" value="4.00"
+                    <label for="amount">Enter an amount</label>
+                    <span><b id="currency_sign">&euro;</b><input type="text" name="amount" id="amount" value="4"
                         placeholder="4.00" maxlength="7"></span> 
                 </fieldset>
                 <fieldset  id="choosecurr">
                     <label>Choose a currency</label>
                     <ul>
-                        <li class="current"><span data-currency="EUR">&euro;</span></li>
-                        <li><span data-currency="USD">$</span></li>
-                        <li><span data-currency="GBP">£</span></li>
+                        <li class="current"><span data-currency="EUR"  title="EUR">&euro;</span></li>
+                        <li><span data-currency="USD" title="USD (4&euro; is approx. 5.80$)">$</span></li>
+                        <li><span data-currency="GBP" title="GBP (4&euro; is approx. 3.65£)">£</span></li>
+                        <li><span data-currency="JPY" title="JPY (4&euro; is approx. 470&yen;)">&yen;</span></li>
                     </ul>
                 </fieldset>
             </div>
             
             <div>
                 <fieldset id="mecenate">
-                    <label>Your name</label>
-                    <span><input type="text" name="donate_name" maxlength="30" placeholder="anonymous" value="anonymous"></span>
+                    <label for="donate_name">Your name</label>
+                    <span><input type="text" name="donate_name" id="donate_name" maxlength="30" placeholder="anonymous" value="anonymous"></span>
                     <button type="submit" name="submit">Donate via Paypal</button>
                 </fieldset>
                 
@@ -372,13 +399,13 @@ $(document).ready(function() {
             Mosaiqy was developed by <strong>Fabrizio Calderan</strong>, a frontend developer who lives in Italy and works
             for a digital media company located in the middle of bucolic venetian countryside, only one mile far from
             the beautiful <a href="http://goo.gl/u97TM" target="new">lagoon of Venice</a>.
-        <p>
+        </p>
         <p>
             For bug report you can contact me at <strong style="direction: rtl;unicode-bidi: bidi-override;">
             ti.naredlacoizirbaf[ta]<!--thispage@need.moreunicorns.com-->yqiasom</strong>. Other contacts:
             <a href="http://twitter.com/#!/fcalderan" target="new">twitter</a> and <a
             href="http://www.linkedin.com/in/fabriziocalderan" target="new">linkedin</a>
-        <p>
+        </p>
     </section>
     
     <section id="thanks-to">
@@ -396,7 +423,7 @@ $(document).ready(function() {
             target="new">CSS3 Animation With jQuery Fallbacks</a>, <strong>Adam Luikart (adamesque)</strong> for its
             <a href="https://gist.github.com/adamesque" target="new">code gists</a> on jQuery deferred objects</a>.
             Then <strong>Paul irish</strong>, <strong>Robert Casanova</strong>, <strong>Silvio Cioni</strong>, <strong>Silvia Nucci</strong>, <strong>Giulia Alfonsi</strong> for suggestions,
-            testing and brainstorming, <strong>Roberto Butti</strong> for original idea, integration suggestion
+            testing and brainstorming, <strong>Roberto Butti</strong> for sharing the idea and for integration suggestions
             and finally thanks to my wife <strong>Laura</strong> for the patience.
             
         </p>
@@ -444,7 +471,7 @@ $(document).ready(function() {
             rows            : <?php echo $rows ?>,
             cols            : <?php echo $cols ?>,
             avoidDuplicates : true,
-            animationDelay  : 500,
+            animationDelay  : 1000,
             animationSpeed  : 1200,
             loop            : true,
             loadTimeout     : 5000,
@@ -525,7 +552,7 @@ $(document).ready(function() {
                 '190' : 'dot1'
             },
                 
-            key = e.which,
+            key = e.which || e.keycode,
             keynum = (key > 47) && (key < 58),
             keypad = (key > 95) && (key < 106);
             
@@ -533,31 +560,14 @@ $(document).ready(function() {
                 return (0 > val.indexOf('.'))
             }
             
-            if (keynum || keypad) {
-                return (!(/\.\d{2}$/.test(val)));
-            }
-            
             if (!keynum && !keypad) {
                 return (key in editingKeys);
             }
         });
         
-    })
-    
- 
-    window.onload = function() {
-        $('.addthis_counter')
-            .removeAttr('title')
-            .css('cursor', 'default')
-            .get(0).onclick = function() { return false; }
-        
-        $('.addthis_button_expanded')
-            .removeAttr('title')
-            .css('cursor', 'default')
-            .get(0).onclick = function() { return false; }
-    
-    }
-    </script>
+   })
+   
+   </script>
     
      
 </body>
